@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Django," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Django本身不提供全文检索的功能，但django-haystack为其提供了全文检索的框架。django-haystack能为Django提供whoosh,solr,Xapian和Elasticsearc四种全文检索引擎作为后端。其中whoosh为纯python的实现，不是非常大型的应用，是没有问题的。本文将介绍Django1.9中通过django-haystack与whoosh集成以及who">
+<meta name="keywords" content="Django">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Django1.9开发博客10- 全文搜索">
+<meta property="og:url" content="http://www.wujinyu.com/2015/08/21/python/simpleblog-10/index.html">
+<meta property="og:site_name" content="卡布奇诺">
+<meta property="og:description" content="Django本身不提供全文检索的功能，但django-haystack为其提供了全文检索的框架。django-haystack能为Django提供whoosh,solr,Xapian和Elasticsearc四种全文检索引擎作为后端。其中whoosh为纯python的实现，不是非常大型的应用，是没有问题的。本文将介绍Django1.9中通过django-haystack与whoosh集成以及who">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-09-10T13:57:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Django1.9开发博客10- 全文搜索">
+<meta name="twitter:description" content="Django本身不提供全文检索的功能，但django-haystack为其提供了全文检索的框架。django-haystack能为Django提供whoosh,solr,Xapian和Elasticsearc四种全文检索引擎作为后端。其中whoosh为纯python的实现，不是非常大型的应用，是没有问题的。本文将介绍Django1.9中通过django-haystack与whoosh集成以及who">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.wujinyu.com/2015/08/21/python/simpleblog-10/"/>
+
+
+
+
+
+  <title>Django1.9开发博客10- 全文搜索 | 卡布奇诺</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-21552344-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卡布奇诺</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生活心情</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-分类">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-归档">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-标签">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-公益">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-关于">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2015/08/21/python/simpleblog-10/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Django1.9开发博客10- 全文搜索</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-08-21T15:32:28+08:00">
+                2015-08-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Django本身不提供全文检索的功能，但django-haystack为其提供了全文检索的框架。<br>django-haystack能为Django提供whoosh,solr,Xapian和Elasticsearc四种全文检索引擎作为后端。<br>其中whoosh为纯python的实现，不是非常大型的应用，是没有问题的。<br>本文将介绍Django1.9中通过django-haystack与whoosh集成以及whoosh的中文支持。<a id="more"></a></p>
+<h3 id="安装依赖："><a href="#安装依赖：" class="headerlink" title="安装依赖："></a>安装依赖：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pip install django-haystack</span><br><span class="line">pip install whoosh</span><br><span class="line">pip install jieba</span><br></pre></td></tr></table></figure>
+<h3 id="建立模型"><a href="#建立模型" class="headerlink" title="建立模型"></a>建立模型</h3><p>我们以文章为搜索目标，现在我的app名字为blog，<br>模型文件是mysite/blog/models.py ：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding=utf-8</span></span><br><span class="line"><span class="keyword">from</span> django.db <span class="keyword">import</span> models</span><br><span class="line"><span class="meta">@python_2_unicode_compatible</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Post</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Meta</span>:</span></span><br><span class="line">        verbose_name = <span class="string">u'文章'</span></span><br><span class="line">        verbose_name_plural = <span class="string">u'文章'</span></span><br><span class="line">    <span class="comment"># 作者</span></span><br><span class="line">    author = models.ForeignKey(User)</span><br><span class="line">    <span class="comment"># 标题</span></span><br><span class="line">    title = models.CharField(max_length=<span class="number">200</span>)</span><br><span class="line">    <span class="comment"># 正文</span></span><br><span class="line">    text = models.TextField()</span><br><span class="line">    <span class="comment"># 标签</span></span><br><span class="line">    tags = models.ManyToManyField(Tag)</span><br><span class="line">    <span class="comment"># 分类目录</span></span><br><span class="line">    category = models.ForeignKey(Category)</span><br><span class="line">    <span class="comment"># 点击量</span></span><br><span class="line">    click = models.IntegerField(default=<span class="number">0</span>)</span><br><span class="line">    <span class="comment"># 创建时间</span></span><br><span class="line">    created_date = models.DateTimeField(default=timezone.now)</span><br><span class="line">    <span class="comment"># 发布时间</span></span><br><span class="line">    published_date = models.DateTimeField(blank=<span class="keyword">True</span>, null=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">publish</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.published_date = timezone.now()</span><br><span class="line">        self.save()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__str__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.title</span><br></pre></td></tr></table></figure>
+<h3 id="search-indexes-py"><a href="#search-indexes-py" class="headerlink" title="search_indexes.py"></a>search_indexes.py</h3><p>在app目录下建立一个search_indexes.py（mysite/blog/search_indexes.py）代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># -*- encoding: utf-8 -*-</span></span><br><span class="line"><span class="keyword">from</span> models <span class="keyword">import</span> Post</span><br><span class="line"><span class="keyword">from</span> haystack <span class="keyword">import</span> indexes</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostIndex</span><span class="params">(indexes.SearchIndex, indexes.Indexable)</span>:</span></span><br><span class="line">    <span class="comment"># 文章内容</span></span><br><span class="line">    text = indexes.CharField(document=<span class="keyword">True</span>, use_template=<span class="keyword">True</span>)</span><br><span class="line">    <span class="comment"># 对title字段进行索引</span></span><br><span class="line">    title = indexes.CharField(model_attr=<span class="string">'title'</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_model</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> Post</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">index_queryset</span><span class="params">(self, using=None)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.get_model().objects.all()</span><br></pre></td></tr></table></figure>
+<p><em>备注</em>：search_indexes.py文件名不能修改，否则报错：<code>No fields were found in any search_indexes.</code></p>
+<h3 id="post-text-txt"><a href="#post-text-txt" class="headerlink" title="post_text.txt"></a>post_text.txt</h3><p>因为在search_indexes.py使用了use_template=True，所以可以同时使用模板对索引字段进行定义。</p>
+<p>如：<code>mysite/blog/templates/search/indexes/blog/post_text.txt</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123; object.title &#125;&#125;</span><br><span class="line">&#123;&#123; object.text &#125;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="settings-py"><a href="#settings-py" class="headerlink" title="settings.py"></a>settings.py</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Application definition</span></span><br><span class="line">INSTALLED_APPS = (</span><br><span class="line">    ...</span><br><span class="line">    <span class="string">'haystack'</span>,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h3 id="urls-py"><a href="#urls-py" class="headerlink" title="urls.py"></a>urls.py</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">urlpatterns = patterns(</span><br><span class="line">    <span class="string">''</span>,</span><br><span class="line">    url(<span class="string">r'^admin/'</span>, include(admin.site.urls)),</span><br><span class="line">    url(<span class="string">r'^xadmin/'</span>, include(xadmin.site.urls), name=<span class="string">'xadmin'</span>),</span><br><span class="line">    url(<span class="string">r'^accounts/login/$'</span>, <span class="string">'django.contrib.auth.views.login'</span>),</span><br><span class="line">    url(<span class="string">r'^accounts/logout/$'</span>, <span class="string">'django.contrib.auth.views.logout'</span>, &#123;<span class="string">'next_page'</span>: <span class="string">'/'</span>&#125;),</span><br><span class="line">    url(<span class="string">r'^search/'</span>, include(<span class="string">'haystack.urls'</span>)),</span><br><span class="line">    url(<span class="string">r''</span>, include(<span class="string">'blog.urls'</span>)),</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h3 id="jieba中文分词"><a href="#jieba中文分词" class="headerlink" title="jieba中文分词"></a>jieba中文分词</h3><p>jieba其实已经提供了集成whoosh的ChineseAnalyzer，<br>也就是说不需要自己写ChineseAnalyzer了，直接在whoosh_backend.py中直接引用就好；<br>同时，不推荐将whoosh_backend.py放到Lib下面，这样移植性会有问题，自己的代码，还是放在项目下面为妙。</p>
+<p>1. 将文件haystack.backends.whoosh_backend.py拷贝到app下面，并重命名为whoosh_cn_backend.py，<br>如blog/whoosh_cn_backend.py。重点的改造有：</p>
+<ul>
+<li><p>增加：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> jieba.analyse <span class="keyword">import</span> ChineseAnalyzer</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">schema_fields[field_class.index_fieldname] = TEXT(stored=<span class="keyword">True</span>, analyzer=ChineseAnalyzer(), field_boost=field_class.boost, sortable=<span class="keyword">True</span>)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>2. 修改后端引擎，setting.py配置：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># full text search</span></span><br><span class="line">HAYSTACK_CONNECTIONS = &#123;</span><br><span class="line">    <span class="string">'default'</span>: &#123;</span><br><span class="line">        <span class="string">'ENGINE'</span>: <span class="string">'blog.whoosh_cn_backend.WhooshEngine'</span>,</span><br><span class="line">        <span class="string">'PATH'</span>: os.path.join(BASE_DIR, <span class="string">'whoosh_index'</span>),</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="重建索引"><a href="#重建索引" class="headerlink" title="重建索引"></a>重建索引</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python manage.py rebuild_index</span><br></pre></td></tr></table></figure>
+<h3 id="索引更新"><a href="#索引更新" class="headerlink" title="索引更新"></a>索引更新</h3><p>最简单的办法就是在settings.py中添加：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HAYSTACK_SIGNAL_PROCESSOR = <span class="string">'haystack.signals.RealtimeSignalProcessor'</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="自定义搜索示例"><a href="#自定义搜索示例" class="headerlink" title="自定义搜索示例"></a>自定义搜索示例</h3><p>(1) 先定义view：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> haystack.forms <span class="keyword">import</span> SearchForm</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">full_search</span><span class="params">(request)</span>:</span></span><br><span class="line">    <span class="string">"""全局搜索"""</span></span><br><span class="line">    keywords = request.GET[<span class="string">'q'</span>]</span><br><span class="line">    sform = SearchForm(request.GET)</span><br><span class="line">    posts = sform.search()</span><br><span class="line">    <span class="keyword">return</span> render(request, <span class="string">'blog/post_search_list.html'</span>,</span><br><span class="line">                  &#123;<span class="string">'posts'</span>: posts, <span class="string">'list_header'</span>: <span class="string">'关键字 \'&#123;&#125;\' 搜索结果'</span>.format(keywords)&#125;)</span><br></pre></td></tr></table></figure>
+<p>(2) 然后在template页面中：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- searchbox START --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"searchbox"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">"&#123;% url 'blog.views.full_search' %&#125;"</span> <span class="attr">method</span>=<span class="string">"get"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"content"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">label</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">class</span>=<span class="string">"textfield searchtip"</span> <span class="attr">name</span>=<span class="string">"q"</span> <span class="attr">size</span>=<span class="string">"24"</span> <span class="attr">value</span>=<span class="string">""</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"submit"</span> <span class="attr">class</span>=<span class="string">"button"</span> <span class="attr">value</span>=<span class="string">""</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>更详细内容请参考官方文档：<a href="http://django-haystack.readthedocs.org/en/latest/" target="_blank" rel="noopener">http://django-haystack.readthedocs.org/en/latest/</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Django/" rel="tag"># Django</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/08/20/python/simpleblog-09/" rel="next" title="Django1.9开发博客09- 用户认证">
+                <i class="fa fa-chevron-left"></i> Django1.9开发博客09- 用户认证
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/08/22/python/simpleblog-11/" rel="prev" title="Django1.9开发博客11- 富文本与代码高亮">
+                Django1.9开发博客11- 富文本与代码高亮 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://ooky9xe9n.bkt.clouddn.com/avatar.png"
+                alt="卡布奇诺" />
+            
+              <p class="site-author-name" itemprop="name">卡布奇诺</p>
+              <p class="site-description motion-element" itemprop="description">记录编程中遇到的坑</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">133</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/aopao1" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:admin@wujinyu.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装依赖："><span class="nav-number">1.</span> <span class="nav-text">安装依赖：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#建立模型"><span class="nav-number">2.</span> <span class="nav-text">建立模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#search-indexes-py"><span class="nav-number">3.</span> <span class="nav-text">search_indexes.py</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#post-text-txt"><span class="nav-number">4.</span> <span class="nav-text">post_text.txt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#settings-py"><span class="nav-number">5.</span> <span class="nav-text">settings.py</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#urls-py"><span class="nav-number">6.</span> <span class="nav-text">urls.py</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jieba中文分词"><span class="nav-number">7.</span> <span class="nav-text">jieba中文分词</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重建索引"><span class="nav-number">8.</span> <span class="nav-text">重建索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#索引更新"><span class="nav-number">9.</span> <span class="nav-text">索引更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义搜索示例"><span class="nav-number">10.</span> <span class="nav-text">自定义搜索示例</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">卡布奇诺@心情</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="gevent," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="一般将coroutine称之为协程（或微线程，也有称纤程的）。我在python并发编程那篇文章已经详细讲解了进程Process和线程Thread的用法，很早就想再写一篇专门讲解coroutine以及相关的优秀库gevent。 目前常见的coroutine应用都是网络程序中，所以我们先来看看各种不同的网络框架模型，然后再介绍coroutine就会比较理解了。">
+<meta name="keywords" content="gevent">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浅谈coroutine和gevent">
+<meta property="og:url" content="http://www.wujinyu.com/2016/01/02/python/gevent/index.html">
+<meta property="og:site_name" content="卡布奇诺">
+<meta property="og:description" content="一般将coroutine称之为协程（或微线程，也有称纤程的）。我在python并发编程那篇文章已经详细讲解了进程Process和线程Thread的用法，很早就想再写一篇专门讲解coroutine以及相关的优秀库gevent。 目前常见的coroutine应用都是网络程序中，所以我们先来看看各种不同的网络框架模型，然后再介绍coroutine就会比较理解了。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-09-10T13:57:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="浅谈coroutine和gevent">
+<meta name="twitter:description" content="一般将coroutine称之为协程（或微线程，也有称纤程的）。我在python并发编程那篇文章已经详细讲解了进程Process和线程Thread的用法，很早就想再写一篇专门讲解coroutine以及相关的优秀库gevent。 目前常见的coroutine应用都是网络程序中，所以我们先来看看各种不同的网络框架模型，然后再介绍coroutine就会比较理解了。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.wujinyu.com/2016/01/02/python/gevent/"/>
+
+
+
+
+
+  <title>浅谈coroutine和gevent | 卡布奇诺</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-21552344-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卡布奇诺</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生活心情</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-分类">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-归档">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-标签">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-公益">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-关于">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2016/01/02/python/gevent/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">浅谈coroutine和gevent</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-01-02T08:16:18+08:00">
+                2016-01-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>一般将coroutine称之为协程（或微线程，也有称纤程的）。<br>我在python并发编程那篇文章已经详细讲解了进程Process和线程Thread的用法，<br>很早就想再写一篇专门讲解coroutine以及相关的优秀库gevent。</p>
+<p>目前常见的coroutine应用都是网络程序中，所以我们先来看看各种不同的网络框架模型，<br>然后再介绍coroutine就会比较理解了。<a id="more"></a></p>
+<h2 id="不同网络模型"><a href="#不同网络模型" class="headerlink" title="不同网络模型"></a>不同网络模型</h2><h3 id="阻塞式单进程"><a href="#阻塞式单进程" class="headerlink" title="阻塞式单进程"></a>阻塞式单进程</h3><p>这样的网络程序最简单，一个进程一个循环处理网络请求，当然性能也是最差的。<br>现在服务器采用这种模型的基本看不到了。</p>
+<h3 id="阻塞式多进程"><a href="#阻塞式多进程" class="headerlink" title="阻塞式多进程"></a>阻塞式多进程</h3><p>每个请求开一个进程去处理，这样就能同时处理多个请求了，<br>不过缺点就是当请求数变大时CPU花在进程切换开销巨大，效率低下。</p>
+<h3 id="非阻塞式事件驱动"><a href="#非阻塞式事件驱动" class="headerlink" title="非阻塞式事件驱动"></a>非阻塞式事件驱动</h3><p>也是多进程，不过使用一个主进程循环来检查是否有网络I/O事件发生，再来决定怎样处理。<br>省去了上下文切换、进程复制等成本，也不会有死锁、竞争的发生。<br>不过缺点是没有阻塞式进程直观，<a href="https://twistedmatrix.com/trac/" target="_blank" rel="noopener">Twisted</a>就是这样的网络框架。</p>
+<h3 id="非阻塞式Coroutine"><a href="#非阻塞式Coroutine" class="headerlink" title="非阻塞式Coroutine"></a>非阻塞式Coroutine</h3><p>有没有可能既有事件驱动的好处，又有阻塞式编程的直观的模型呢？答案也行就是我要讲的coroutine了。<br>基本上它的本质也是事件驱动，只在单一循环上面检查事件的发生，但是加上了coroutine的概念。<br><a href="http://www.gevent.org/" target="_blank" rel="noopener">gevent</a>就是这种框架的代表。</p>
+<h2 id="Coroutine"><a href="#Coroutine" class="headerlink" title="Coroutine"></a>Coroutine</h2><p>简单来讲，coroutine就是允许你暂时中断之后再继续执行的程序。事实上，python最基础的coroutine就是生成器。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># -*- coding: utf8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">        <span class="comment"># 暂时返回一个值，并将控制权交出去</span></span><br><span class="line">        <span class="keyword">yield</span> i</span><br><span class="line">        print(<span class="string">u'foo: 控制权又回到我手上了，叫我大笨蛋'</span>)</span><br><span class="line"></span><br><span class="line">bar = foo()</span><br><span class="line"><span class="comment"># 执行coroutine</span></span><br><span class="line">print(next(bar))</span><br><span class="line">print(<span class="string">u'main: 现在控制权在我手上，啦啦啦'</span>)</span><br><span class="line">print(<span class="string">'main:hello baby!'</span>)</span><br><span class="line"><span class="comment"># 回到刚刚foo这个coroutine中断的地方继续执行</span></span><br><span class="line">print(next(bar))</span><br><span class="line">print(<span class="string">u'main: 老大我又来了'</span>)</span><br><span class="line">print(next(bar))</span><br></pre></td></tr></table></figure></p>
+<p>执行结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">0</span><br><span class="line">main: 现在控制权在我手上，啦啦啦</span><br><span class="line">main:hello baby!</span><br><span class="line">foo: 控制权又回到我手上了，叫我大笨蛋</span><br><span class="line">1</span><br><span class="line">main: 老大我又来了</span><br><span class="line">foo: 控制权又回到我手上了，叫我大笨蛋</span><br><span class="line">2</span><br></pre></td></tr></table></figure></p>
+<p>看到没有，我们的foo在执行过程中被中断又继续了好几回。<br>你刚开始可能觉得这样做没什么好处呀，thread的上下文切换不是也可以暂停再继续么。<br>其实重点在于：</p>
+<ul>
+<li>thread之间需要context-switch，而且成本很高，但coroutine没有任何上下文切换</li>
+<li>可轻松生成大量的coroutine，基本没什么开销</li>
+<li>所有的coroutine全部都在一个线程中完成</li>
+<li>thread的切换基本靠OS来觉得该执行哪个，而coroutine是自己控制。</li>
+</ul>
+<h2 id="Gevent"><a href="#Gevent" class="headerlink" title="Gevent"></a>Gevent</h2><p>优秀的第三方库gevent就是基于coroutine的Python网络库，<br>它用到Greenlet提供的，封装了libevent事件循环的高层同步API，它的coroutine是由Greenlet负责生成的。</p>
+<p>事实上程序写的跟普通的阻塞式程序一样，但它千真万确是异步的，这是它神奇的地方，我们来看实际的例子:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"""Spawn multiple workers and wait for them to complete"""</span></span><br><span class="line"></span><br><span class="line">urls = [<span class="string">'http://www.gevent.org/'</span>, <span class="string">'http://www.baidu.com'</span>, <span class="string">'http://www.python.org'</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> gevent</span><br><span class="line"><span class="keyword">from</span> gevent <span class="keyword">import</span> monkey</span><br><span class="line"></span><br><span class="line"><span class="comment"># patches stdlib (including socket and ssl modules) to cooperate with other greenlets</span></span><br><span class="line">monkey.patch_all()</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> urllib2</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">print_head</span><span class="params">(url)</span>:</span></span><br><span class="line">    <span class="keyword">print</span>（<span class="string">'Starting %s'</span> % url）</span><br><span class="line">    data = urllib2.urlopen(url).read()</span><br><span class="line">    <span class="keyword">print</span>（<span class="string">'%s: %s bytes: %r'</span> % (url, len(data), data[:<span class="number">50</span>])）</span><br><span class="line"></span><br><span class="line">jobs = [gevent.spawn(print_head, url) <span class="keyword">for</span> url <span class="keyword">in</span> urls]</span><br><span class="line"></span><br><span class="line">gevent.joinall(jobs)</span><br></pre></td></tr></table></figure></p>
+<p>写起来非常简单，不过里面有一句<code>monkey.patch_all()</code>会让人有点疑惑。<br>也就是猴子补丁，因为python内置的各种函数库和IO库一般都是阻塞式的，比如<code>sleep()</code>就会当前进程，<br>而monkey就是负责将这些阻塞函数全部取代替换成gevent中相应的异步函数。</p>
+<p>gevent打了monkey patch之后会设置python相应的模块设置成非阻塞，<br>然后在内部实现epoll的机制，一旦调用非阻塞的IO(比如recv)都会立刻返回，<br>并且设置一个回调函数，这个回调函数用于切换到当前子coroutine，<br>设置好回掉函数之后就把控制权返回给主coroutine，主coroutine继续调度。<br>一旦网络I/O准备就绪，epoll会触发之前设置的回调函数，从而引发主coroutine切换到子coroutine，做相应的操作。</p>
+<p><code>joinall()</code>的意思是等待列表中所有coroutine完成后再返回。</p>
+<h3 id="上下文切换"><a href="#上下文切换" class="headerlink" title="上下文切换"></a>上下文切换</h3><p>gevent里面的上下文切换是非常平滑的。在下面的例子程序中，我们可以看到两个上下文通过调用 gevent.sleep()来互相切换。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gevent</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'Running in foo'</span>)</span><br><span class="line">    gevent.sleep(<span class="number">0</span>)</span><br><span class="line">    print(<span class="string">'Explicit context switch to foo again'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bar</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'Explicit context to bar'</span>)</span><br><span class="line">    gevent.sleep(<span class="number">0</span>)</span><br><span class="line">    print(<span class="string">'Implicit context switch back to bar'</span>)</span><br><span class="line"></span><br><span class="line">gevent.joinall([</span><br><span class="line">    gevent.spawn(foo),</span><br><span class="line">    gevent.spawn(bar),</span><br><span class="line">])</span><br></pre></td></tr></table></figure></p>
+<p>接下来一个例子中可以看到gevent是安排各个任务的执行的：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gevent</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">task</span><span class="params">(pid)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Some non-deterministic task</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    gevent.sleep(random.randint(<span class="number">0</span>,<span class="number">2</span>)*<span class="number">0.001</span>)</span><br><span class="line">    print(<span class="string">'Task'</span>, pid, <span class="string">'done'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">synchronous</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">10</span>):</span><br><span class="line">        task(i)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">asynchronous</span><span class="params">()</span>:</span></span><br><span class="line">    threads = [gevent.spawn(task, i) <span class="keyword">for</span> i <span class="keyword">in</span> xrange(<span class="number">10</span>)]</span><br><span class="line">    gevent.joinall(threads)</span><br><span class="line"></span><br><span class="line">print(<span class="string">'Synchronous:'</span>)</span><br><span class="line">synchronous()</span><br><span class="line"></span><br><span class="line">print(<span class="string">'Asynchronous:'</span>)</span><br><span class="line">asynchronous()</span><br></pre></td></tr></table></figure></p>
+<p>在同步的情况下，任务是按顺序执行的，在执行各个任务的时候会阻塞主线程。</p>
+<p>而 <code>gevent.spawn</code> 的重要功能就是封装了greenlet里面的函数。<br>初始化的greenlet放在了threads这个list里面，<br>被传递给了 <code>gevent.joinall</code> 这个函数，它会阻塞当前的程序来执行所有的greenlet。</p>
+<p>在异步执行的情况下，所有任务的执行顺序是完全随机的。每一个greenlet的都不会阻塞其他greenlet的执行。</p>
+<h3 id="生成greenlet"><a href="#生成greenlet" class="headerlink" title="生成greenlet"></a>生成greenlet</h3><p>上面我们通过<code>gevent.spawn</code>来包装了对于greenlet的生成，<br>另外我们还能可以通过创建Greenlet的子类，并且重写 _run 方法来实现：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gevent</span><br><span class="line"><span class="keyword">from</span> gevent <span class="keyword">import</span> Greenlet</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyGreenlet</span><span class="params">(Greenlet)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, message, n)</span>:</span></span><br><span class="line">        Greenlet.__init__(self)</span><br><span class="line">        self.message = message</span><br><span class="line">        self.n = n</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_run</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(self.message)</span><br><span class="line">        gevent.sleep(self.n)</span><br><span class="line"></span><br><span class="line">g = MyGreenlet(<span class="string">"Hi there!"</span>, <span class="number">3</span>)</span><br><span class="line">g.start()</span><br><span class="line">g.join()</span><br></pre></td></tr></table></figure></p>
+<h3 id="Greenlet-的状态"><a href="#Greenlet-的状态" class="headerlink" title="Greenlet 的状态"></a>Greenlet 的状态</h3><p>greenlet在执行的时候也会出错。Greenlet有可能会无法抛出异常，停止失败，或者消耗了太多的系统资源。</p>
+<p>greenlet的内部状态通常是一个依赖时间的参数。greenlet有一些标记来让你能够监控greenlet的状态</p>
+<ul>
+<li>started – 标志greenlet是否已经启动</li>
+<li>ready – 标志greenlet是否已经被终止</li>
+<li>successful() – 标志greenlet是否已经被终止，并且没有抛出异常</li>
+<li>value – 由greenlet返回的值</li>
+<li>exception – 在greenlet里面没有被捕获的异常</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gevent</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">win</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">'You win!'</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fail</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">raise</span> Exception(<span class="string">'You fail at failing.'</span>)</span><br><span class="line"></span><br><span class="line">winner = gevent.spawn(win)</span><br><span class="line">loser = gevent.spawn(fail)</span><br><span class="line"></span><br><span class="line">print(winner.started) <span class="comment"># True</span></span><br><span class="line">print(loser.started)  <span class="comment"># True</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Exceptions raised in the Greenlet, stay inside the Greenlet.</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    gevent.joinall([winner, loser])</span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">    print(<span class="string">'This will never be reached'</span>)</span><br><span class="line"></span><br><span class="line">print(winner.value) <span class="comment"># 'You win!'</span></span><br><span class="line">print(loser.value)  <span class="comment"># None</span></span><br><span class="line"></span><br><span class="line">print(winner.ready()) <span class="comment"># True</span></span><br><span class="line">print(loser.ready())  <span class="comment"># True</span></span><br><span class="line"></span><br><span class="line">print(winner.successful()) <span class="comment"># True</span></span><br><span class="line">print(loser.successful())  <span class="comment"># False</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># The exception raised in fail, will not propogate outside the</span></span><br><span class="line"><span class="comment"># greenlet. A stack trace will be printed to stdout but it</span></span><br><span class="line"><span class="comment"># will not unwind the stack of the parent.</span></span><br><span class="line"></span><br><span class="line">print(loser.exception)</span><br></pre></td></tr></table></figure>
+<h3 id="终止程序"><a href="#终止程序" class="headerlink" title="终止程序"></a>终止程序</h3><p>在主程序收到一个SIGQUIT 之后会阻塞程序的执行让Greenlet无法继续执行。<br>这会导致僵尸进程的产生，需要在操作系统中将这些僵尸进程清除掉。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gevent</span><br><span class="line"><span class="keyword">import</span> signal</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run_forever</span><span class="params">()</span>:</span></span><br><span class="line">    gevent.sleep(<span class="number">1000</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    gevent.signal(signal.SIGQUIT, gevent.shutdown)</span><br><span class="line">    thread = gevent.spawn(run_forever)</span><br><span class="line">    thread.join()</span><br></pre></td></tr></table></figure></p>
+<h3 id="超时"><a href="#超时" class="headerlink" title="超时"></a>超时</h3><p>在gevent中支持对于coroutine的超时控制，还能使用<code>with</code>上下文，示例：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gevent</span><br><span class="line"><span class="keyword">from</span> gevent <span class="keyword">import</span> Timeout</span><br><span class="line"></span><br><span class="line">time_to_wait = <span class="number">5</span> <span class="comment"># seconds</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TooLong</span><span class="params">(Exception)</span>:</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> Timeout(time_to_wait, TooLong):</span><br><span class="line">    gevent.sleep(<span class="number">10</span>)</span><br></pre></td></tr></table></figure></p>
+<h3 id="猴子补丁"><a href="#猴子补丁" class="headerlink" title="猴子补丁"></a>猴子补丁</h3><p>现在这是gevent里面的一个难点。下面一个例子里可能看到 <code>monkey.patch_socket()`</code> 能够在运行时里面修改基础库socket：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line">print(socket.socket)</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> <span class="string">"After monkey patch"</span></span><br><span class="line"><span class="keyword">from</span> gevent <span class="keyword">import</span> monkey</span><br><span class="line">monkey.patch_socket()</span><br><span class="line"></span><br><span class="line">print(socket.socket)</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> select</span><br><span class="line">print(select.select)</span><br><span class="line">monkey.patch_select()</span><br><span class="line"><span class="keyword">print</span> <span class="string">"After monkey patch"</span></span><br><span class="line">print(select.select)</span><br></pre></td></tr></table></figure></p>
+<p>Python的运行时里面允许能够大部分的对象都是可以修改的，包括模块，类和方法。这通常是一个坏主意，<br>然而在极端的情况下，当有一个库需要加入一些Python基本的功能的时候，monkey patch就能派上用场了。<br>在上面的例子里，gevent能够改变基础库里的一些使用IO阻塞模型的库比如socket，ssl，threading等等并且把它们改成协程的执行方式。</p>
+<h3 id="事件"><a href="#事件" class="headerlink" title="事件"></a>事件</h3><p>有时候我们还需要在多个greenlet直接进行通信，比如某些操作的同步。事件(event)是一个在Greenlet之间异步通信的形式。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gevent</span><br><span class="line"><span class="keyword">from</span> gevent.event <span class="keyword">import</span> Event</span><br><span class="line"></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">Illustrates the use of events</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"></span><br><span class="line">evt = Event()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">setter</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">'''After 3 seconds, wake all threads waiting on the value of evt'''</span></span><br><span class="line">    print(<span class="string">'A: Hey wait for me, I have to do something'</span>)</span><br><span class="line">    gevent.sleep(<span class="number">3</span>)</span><br><span class="line">    print(<span class="string">"Ok, I'm done"</span>)</span><br><span class="line">    evt.set()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">waiter</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">'''After 3 seconds the get call will unblock'''</span></span><br><span class="line">    print(<span class="string">"I'll wait for you"</span>)</span><br><span class="line">    evt.wait()  <span class="comment"># blocking</span></span><br><span class="line">    print(<span class="string">"It's about time"</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    gevent.joinall([</span><br><span class="line">        gevent.spawn(setter),</span><br><span class="line">        gevent.spawn(waiter),</span><br><span class="line">        gevent.spawn(waiter),</span><br><span class="line">        gevent.spawn(waiter),</span><br><span class="line">    ])</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure></p>
+<p>事件对象的一个扩展是AsyncResult，它允许你在唤醒调用上附加一个值。<br>它有时也被称作是future或defered，因为它持有一个指向将来任意时间可设置为任何值的引用。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gevent</span><br><span class="line"><span class="keyword">from</span> gevent.event <span class="keyword">import</span> AsyncResult</span><br><span class="line">a = AsyncResult()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">setter</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    After 3 seconds set the result of a.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    gevent.sleep(<span class="number">3</span>)</span><br><span class="line">    a.set(<span class="string">'Hello!'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">waiter</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    After 3 seconds the get call will unblock after the setter</span></span><br><span class="line"><span class="string">    puts a value into the AsyncResult.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    print(a.get())</span><br><span class="line"></span><br><span class="line">gevent.joinall([</span><br><span class="line">    gevent.spawn(setter),</span><br><span class="line">    gevent.spawn(waiter),</span><br><span class="line">])</span><br></pre></td></tr></table></figure></p>
+<h3 id="队列"><a href="#队列" class="headerlink" title="队列"></a>队列</h3><p>队列是一个排序的数据集合，它有常见的put / get操作，但是它是以在Greenlet之间可以安全操作的方式来实现的。</p>
+<p>举例来说，如果一个Greenlet从队列中取出一项，此项就不会被同时执行的其它Greenlet再取到了。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gevent</span><br><span class="line"><span class="keyword">from</span> gevent.queue <span class="keyword">import</span> Queue</span><br><span class="line"></span><br><span class="line">tasks = Queue()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">worker</span><span class="params">(n)</span>:</span></span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">not</span> tasks.empty():</span><br><span class="line">        task = tasks.get()</span><br><span class="line">        print(<span class="string">'Worker %s got task %s'</span> % (n, task))</span><br><span class="line">        gevent.sleep(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    print(<span class="string">'Quitting time!'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">boss</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">25</span>):</span><br><span class="line">        tasks.put_nowait(i)</span><br><span class="line"></span><br><span class="line">gevent.spawn(boss).join()</span><br><span class="line"></span><br><span class="line">gevent.joinall([</span><br><span class="line">    gevent.spawn(worker, <span class="string">'steve'</span>),</span><br><span class="line">    gevent.spawn(worker, <span class="string">'john'</span>),</span><br><span class="line">    gevent.spawn(worker, <span class="string">'nancy'</span>),</span><br><span class="line">])</span><br></pre></td></tr></table></figure></p>
+<p>如果需要，队列也可以阻塞在put或get操作上。</p>
+<p>put和get操作都有非阻塞的版本，put_nowait和get_nowait不会阻塞，<br>然而在操作不能完成时抛出<code>gevent.queue.Empty</code>或<code>gevent.queue.Full</code>异常。</p>
+<p>我们让boss与多个worker同时运行，并限制了queue不能放入多于3个元素：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gevent</span><br><span class="line"><span class="keyword">from</span> gevent.queue <span class="keyword">import</span> Queue, Empty</span><br><span class="line"></span><br><span class="line">tasks = Queue(maxsize=<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">worker</span><span class="params">(n)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">            task = tasks.get(timeout=<span class="number">1</span>) <span class="comment"># decrements queue size by 1</span></span><br><span class="line">            print(<span class="string">'Worker %s got task %s'</span> % (n, task))</span><br><span class="line">            gevent.sleep(<span class="number">0</span>)</span><br><span class="line">    <span class="keyword">except</span> Empty:</span><br><span class="line">        print(<span class="string">'Quitting time!'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">boss</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Boss will wait to hand out work until a individual worker is</span></span><br><span class="line"><span class="string">    free since the maxsize of the task queue is 3.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> xrange(<span class="number">1</span>,<span class="number">10</span>):</span><br><span class="line">        tasks.put(i)</span><br><span class="line">    print(<span class="string">'Assigned all work in iteration 1'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> xrange(<span class="number">10</span>,<span class="number">20</span>):</span><br><span class="line">        tasks.put(i)</span><br><span class="line">    print(<span class="string">'Assigned all work in iteration 2'</span>)</span><br><span class="line"></span><br><span class="line">gevent.joinall([</span><br><span class="line">    gevent.spawn(boss),</span><br><span class="line">    gevent.spawn(worker, <span class="string">'steve'</span>),</span><br><span class="line">    gevent.spawn(worker, <span class="string">'john'</span>),</span><br><span class="line">    gevent.spawn(worker, <span class="string">'bob'</span>),</span><br><span class="line">])</span><br></pre></td></tr></table></figure></p>
+<h3 id="组和池"><a href="#组和池" class="headerlink" title="组和池"></a>组和池</h3><p>组(group)是一个运行中greenlet的集合，集合中的greenlet像一个组一样会被共同管理和调度。<br>它也兼饰了像Python的multiprocessing库那样的平行调度器的角色:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gevent</span><br><span class="line"><span class="keyword">from</span> gevent.pool <span class="keyword">import</span> Group</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">talk</span><span class="params">(msg)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> xrange(<span class="number">3</span>):</span><br><span class="line">        print(msg)</span><br><span class="line"></span><br><span class="line">g1 = gevent.spawn(talk, <span class="string">'bar'</span>)</span><br><span class="line">g2 = gevent.spawn(talk, <span class="string">'foo'</span>)</span><br><span class="line">g3 = gevent.spawn(talk, <span class="string">'fizz'</span>)</span><br><span class="line"></span><br><span class="line">group = Group()</span><br><span class="line">group.add(g1)</span><br><span class="line">group.add(g2)</span><br><span class="line">group.join()</span><br><span class="line"></span><br><span class="line">group.add(g3)</span><br><span class="line">group.join()</span><br></pre></td></tr></table></figure></p>
+<p>池(pool)是一个为处理数量变化并且需要限制并发的greenlet而设计的结构。<br>在需要并行地做很多受限于网络和IO的任务时常常需要用到它。</p>
+<p>当构造gevent驱动的服务时，经常会将围绕一个池结构的整个服务作为中心。一个例子就是在各个socket上轮询的类。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> gevent.pool <span class="keyword">import</span> Pool</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SocketPool</span><span class="params">(object)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.pool = Pool(<span class="number">1000</span>)</span><br><span class="line">        self.pool.start()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">listen</span><span class="params">(self, socket)</span>:</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">            socket.recv()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">add_handler</span><span class="params">(self, socket)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> self.pool.full():</span><br><span class="line">            <span class="keyword">raise</span> Exception(<span class="string">"At maximum pool size"</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.pool.spawn(self.listen, socket)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">shutdown</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.pool.kill()</span><br></pre></td></tr></table></figure></p>
+<h3 id="锁和信号量"><a href="#锁和信号量" class="headerlink" title="锁和信号量"></a>锁和信号量</h3><p>信号量是一个允许greenlet相互合作，限制并发访问或运行的低层次的同步原语。信号量有两个方法，acquire和release。<br>在信号量是否已经被acquire或release，和拥有资源的数量之间不同，被称为此信号量的范围 (the bound of the semaphore)。<br>如果一个信号量的范围已经降低到0，它会阻塞acquire操作直到另一个已经获得信号量的greenlet作出释放。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> gevent <span class="keyword">import</span> sleep</span><br><span class="line"><span class="keyword">from</span> gevent.pool <span class="keyword">import</span> Pool</span><br><span class="line"><span class="keyword">from</span> gevent.coros <span class="keyword">import</span> BoundedSemaphore</span><br><span class="line"></span><br><span class="line">sem = BoundedSemaphore(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">worker1</span><span class="params">(n)</span>:</span></span><br><span class="line">    sem.acquire()</span><br><span class="line">    print(<span class="string">'Worker %i acquired semaphore'</span> % n)</span><br><span class="line">    sleep(<span class="number">0</span>)</span><br><span class="line">    sem.release()</span><br><span class="line">    print(<span class="string">'Worker %i released semaphore'</span> % n)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">worker2</span><span class="params">(n)</span>:</span></span><br><span class="line">    <span class="keyword">with</span> sem:</span><br><span class="line">        print(<span class="string">'Worker %i acquired semaphore'</span> % n)</span><br><span class="line">        sleep(<span class="number">0</span>)</span><br><span class="line">    print(<span class="string">'Worker %i released semaphore'</span> % n)</span><br><span class="line"></span><br><span class="line">pool = Pool()</span><br><span class="line">pool.map(worker1, xrange(<span class="number">0</span>,<span class="number">2</span>))</span><br><span class="line">pool.map(worker2, xrange(<span class="number">3</span>,<span class="number">6</span>))</span><br></pre></td></tr></table></figure></p>
+<p>范围为1的信号量也称为锁(lock)，它向单个greenlet提供了互斥访问。信号量和锁常常用来保证资源只在程序上下文被单次使用。</p>
+<h3 id="子进程"><a href="#子进程" class="headerlink" title="子进程"></a>子进程</h3><p>自gevent 1.0起，<code>gevent.subprocess</code>，一个Python subprocess模块的修补版本已经添加，它支持协作式的等待子进程。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gevent</span><br><span class="line"><span class="keyword">from</span> gevent.subprocess <span class="keyword">import</span> Popen, PIPE</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">cron</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        print(<span class="string">"cron"</span>)</span><br><span class="line">        gevent.sleep(<span class="number">0.2</span>)</span><br><span class="line"></span><br><span class="line">g = gevent.spawn(cron)</span><br><span class="line">sub = Popen([<span class="string">'sleep 1; uname'</span>], stdout=PIPE, shell=<span class="keyword">True</span>)</span><br><span class="line">out, err = sub.communicate()</span><br><span class="line">g.kill()</span><br><span class="line">print(out.rstrip())</span><br></pre></td></tr></table></figure></p>
+<h3 id="actor模型"><a href="#actor模型" class="headerlink" title="actor模型"></a>actor模型</h3><p>actor模型是一个由于Erlang变得普及的更高层的并发模型。简单的说它的主要思想就是许多个独立的Actor，<br>每个Actor有一个可以从其它Actor接收消息的收件箱。Actor内部的主循环遍历它收到的消息，并根据它期望的行为来采取行动。</p>
+<p>Gevent没有原生的Actor类型，但在一个子类化的Greenlet内使用队列，我们可以定义一个非常简单的。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gevent</span><br><span class="line"><span class="keyword">from</span> gevent.queue <span class="keyword">import</span> Queue</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Actor</span><span class="params">(gevent.Greenlet)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.inbox = Queue()</span><br><span class="line">        Greenlet.__init__(self)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">receive</span><span class="params">(self, message)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        Define in your subclass.</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">raise</span> <span class="built_in">NotImplemented</span>()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_run</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.running = <span class="keyword">True</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> self.running:</span><br><span class="line">            message = self.inbox.get()</span><br><span class="line">            self.receive(message)</span><br></pre></td></tr></table></figure></p>
+<p>接下来使用这个actor的例子：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gevent</span><br><span class="line"><span class="keyword">from</span> gevent.queue <span class="keyword">import</span> Queue</span><br><span class="line"><span class="keyword">from</span> gevent <span class="keyword">import</span> Greenlet</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Pinger</span><span class="params">(Actor)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">receive</span><span class="params">(self, message)</span>:</span></span><br><span class="line">        print(message)</span><br><span class="line">        pong.inbox.put(<span class="string">'ping'</span>)</span><br><span class="line">        gevent.sleep(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Ponger</span><span class="params">(Actor)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">receive</span><span class="params">(self, message)</span>:</span></span><br><span class="line">        print(message)</span><br><span class="line">        ping.inbox.put(<span class="string">'pong'</span>)</span><br><span class="line">        gevent.sleep(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">ping = Pinger()</span><br><span class="line">pong = Ponger()</span><br><span class="line"></span><br><span class="line">ping.start()</span><br><span class="line">pong.start()</span><br><span class="line"></span><br><span class="line">ping.inbox.put(<span class="string">'start'</span>)</span><br><span class="line">gevent.joinall([ping, pong])</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/gevent/" rel="tag"># gevent</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/12/30/python/web/" rel="next" title="python核心 - web开发">
+                <i class="fa fa-chevron-left"></i> python核心 - web开发
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/01/25/linux/selinux/" rel="prev" title="SELinux">
+                SELinux <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://ooky9xe9n.bkt.clouddn.com/avatar.png"
+                alt="卡布奇诺" />
+            
+              <p class="site-author-name" itemprop="name">卡布奇诺</p>
+              <p class="site-description motion-element" itemprop="description">记录编程中遇到的坑</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">133</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/aopao1" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:admin@wujinyu.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#不同网络模型"><span class="nav-number">1.</span> <span class="nav-text">不同网络模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#阻塞式单进程"><span class="nav-number">1.1.</span> <span class="nav-text">阻塞式单进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#阻塞式多进程"><span class="nav-number">1.2.</span> <span class="nav-text">阻塞式多进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#非阻塞式事件驱动"><span class="nav-number">1.3.</span> <span class="nav-text">非阻塞式事件驱动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#非阻塞式Coroutine"><span class="nav-number">1.4.</span> <span class="nav-text">非阻塞式Coroutine</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Coroutine"><span class="nav-number">2.</span> <span class="nav-text">Coroutine</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Gevent"><span class="nav-number">3.</span> <span class="nav-text">Gevent</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#上下文切换"><span class="nav-number">3.1.</span> <span class="nav-text">上下文切换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#生成greenlet"><span class="nav-number">3.2.</span> <span class="nav-text">生成greenlet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Greenlet-的状态"><span class="nav-number">3.3.</span> <span class="nav-text">Greenlet 的状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#终止程序"><span class="nav-number">3.4.</span> <span class="nav-text">终止程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#超时"><span class="nav-number">3.5.</span> <span class="nav-text">超时</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#猴子补丁"><span class="nav-number">3.6.</span> <span class="nav-text">猴子补丁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事件"><span class="nav-number">3.7.</span> <span class="nav-text">事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#队列"><span class="nav-number">3.8.</span> <span class="nav-text">队列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#组和池"><span class="nav-number">3.9.</span> <span class="nav-text">组和池</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#锁和信号量"><span class="nav-number">3.10.</span> <span class="nav-text">锁和信号量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#子进程"><span class="nav-number">3.11.</span> <span class="nav-text">子进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#actor模型"><span class="nav-number">3.12.</span> <span class="nav-text">actor模型</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">卡布奇诺@心情</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

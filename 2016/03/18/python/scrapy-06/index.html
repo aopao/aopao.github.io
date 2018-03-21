@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Scrapy," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="当一个item被蜘蛛爬取到之后会被发送给Item Pipeline，然后多个组件按照顺序处理这个item。每个Item Pipeline组件其实就是一个实现了一个简单方法的Python类。他们接受一个item并在上面执行逻辑，还能决定这个item到底是否还要继续往下传输，如果不要了就直接丢弃。 使用Item Pipeline的常用场景：  清理HTML数据 验证被抓取的数据(检查item是否包含某">
+<meta name="keywords" content="Scrapy">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Scrapy笔记06- Item Pipeline">
+<meta property="og:url" content="http://www.wujinyu.com/2016/03/18/python/scrapy-06/index.html">
+<meta property="og:site_name" content="卡布奇诺">
+<meta property="og:description" content="当一个item被蜘蛛爬取到之后会被发送给Item Pipeline，然后多个组件按照顺序处理这个item。每个Item Pipeline组件其实就是一个实现了一个简单方法的Python类。他们接受一个item并在上面执行逻辑，还能决定这个item到底是否还要继续往下传输，如果不要了就直接丢弃。 使用Item Pipeline的常用场景：  清理HTML数据 验证被抓取的数据(检查item是否包含某">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-09-10T13:57:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Scrapy笔记06- Item Pipeline">
+<meta name="twitter:description" content="当一个item被蜘蛛爬取到之后会被发送给Item Pipeline，然后多个组件按照顺序处理这个item。每个Item Pipeline组件其实就是一个实现了一个简单方法的Python类。他们接受一个item并在上面执行逻辑，还能决定这个item到底是否还要继续往下传输，如果不要了就直接丢弃。 使用Item Pipeline的常用场景：  清理HTML数据 验证被抓取的数据(检查item是否包含某">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.wujinyu.com/2016/03/18/python/scrapy-06/"/>
+
+
+
+
+
+  <title>Scrapy笔记06- Item Pipeline | 卡布奇诺</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-21552344-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卡布奇诺</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生活心情</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-分类">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-归档">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-标签">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-公益">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-关于">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2016/03/18/python/scrapy-06/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Scrapy笔记06- Item Pipeline</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-03-18T01:00:12+08:00">
+                2016-03-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>当一个item被蜘蛛爬取到之后会被发送给Item Pipeline，然后多个组件按照顺序处理这个item。<br>每个Item Pipeline组件其实就是一个实现了一个简单方法的Python类。他们接受一个item并在上面执行逻辑，还能决定这个item到底是否还要继续往下传输，如果不要了就直接丢弃。</p>
+<p>使用Item Pipeline的常用场景：</p>
+<ul>
+<li>清理HTML数据</li>
+<li>验证被抓取的数据(检查item是否包含某些字段)</li>
+<li>重复性检查(然后丢弃)</li>
+<li>将抓取的数据存储到数据库中<a id="more"></a></li>
+</ul>
+<h2 id="编写自己的Pipeline"><a href="#编写自己的Pipeline" class="headerlink" title="编写自己的Pipeline"></a>编写自己的Pipeline</h2><p>定义一个Python类，然后实现方法<code>process_item(self, item, spider)</code>即可，返回一个字典或Item，或者抛出<code>DropItem</code>异常丢弃这个Item。</p>
+<p>或者还可以实现下面几个方法：</p>
+<ul>
+<li><code>open_spider(self, spider)</code> 蜘蛛打开的时执行</li>
+<li><code>close_spider(self, spider)</code> 蜘蛛关闭时执行</li>
+<li><code>from_crawler(cls, crawler)</code> 可访问核心组件比如配置和信号，并注册钩子函数到Scrapy中</li>
+</ul>
+<h2 id="Item-Pipeline示例"><a href="#Item-Pipeline示例" class="headerlink" title="Item Pipeline示例"></a>Item Pipeline示例</h2><h3 id="价格验证"><a href="#价格验证" class="headerlink" title="价格验证"></a>价格验证</h3><p>我们通过一个价格验证例子来看看怎样使用<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> scrapy.exceptions <span class="keyword">import</span> DropItem</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PricePipeline</span><span class="params">(object)</span>:</span></span><br><span class="line"></span><br><span class="line">    vat_factor = <span class="number">1.15</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">process_item</span><span class="params">(self, item, spider)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> item[<span class="string">'price'</span>]:</span><br><span class="line">            <span class="keyword">if</span> item[<span class="string">'price_excludes_vat'</span>]:</span><br><span class="line">                item[<span class="string">'price'</span>] = item[<span class="string">'price'</span>] * self.vat_factor</span><br><span class="line">            <span class="keyword">return</span> item</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">raise</span> DropItem(<span class="string">"Missing price in %s"</span> % item)</span><br></pre></td></tr></table></figure></p>
+<h3 id="将item写入json文件"><a href="#将item写入json文件" class="headerlink" title="将item写入json文件"></a>将item写入json文件</h3><p>下面的这个Pipeline将所有的item写入到一个单独的json文件，一行一个item<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">JsonWriterPipeline</span><span class="params">(object)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.file = open(<span class="string">'items.jl'</span>, <span class="string">'wb'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">process_item</span><span class="params">(self, item, spider)</span>:</span></span><br><span class="line">        line = json.dumps(dict(item)) + <span class="string">"\n"</span></span><br><span class="line">        self.file.write(line)</span><br><span class="line">        <span class="keyword">return</span> item</span><br></pre></td></tr></table></figure></p>
+<h3 id="将item存储到MongoDB中"><a href="#将item存储到MongoDB中" class="headerlink" title="将item存储到MongoDB中"></a>将item存储到MongoDB中</h3><p>这个例子使用<a href="http://api.mongodb.org/python/current/" target="_blank" rel="noopener">pymongo</a>来演示怎样讲item保存到MongoDB中。<br>MongoDB的地址和数据库名在配置中指定，这个例子主要是向你展示怎样使用<code>from_crawler()</code>方法，以及如何清理资源。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pymongo</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MongoPipeline</span><span class="params">(object)</span>:</span></span><br><span class="line"></span><br><span class="line">    collection_name = <span class="string">'scrapy_items'</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, mongo_uri, mongo_db)</span>:</span></span><br><span class="line">        self.mongo_uri = mongo_uri</span><br><span class="line">        self.mongo_db = mongo_db</span><br><span class="line"></span><br><span class="line"><span class="meta">    @classmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">from_crawler</span><span class="params">(cls, crawler)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> cls(</span><br><span class="line">            mongo_uri=crawler.settings.get(<span class="string">'MONGO_URI'</span>),</span><br><span class="line">            mongo_db=crawler.settings.get(<span class="string">'MONGO_DATABASE'</span>, <span class="string">'items'</span>)</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">open_spider</span><span class="params">(self, spider)</span>:</span></span><br><span class="line">        self.client = pymongo.MongoClient(self.mongo_uri)</span><br><span class="line">        self.db = self.client[self.mongo_db]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">close_spider</span><span class="params">(self, spider)</span>:</span></span><br><span class="line">        self.client.close()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">process_item</span><span class="params">(self, item, spider)</span>:</span></span><br><span class="line">        self.db[self.collection_name].insert(dict(item))</span><br><span class="line">        <span class="keyword">return</span> item</span><br></pre></td></tr></table></figure></p>
+<h3 id="重复过滤器"><a href="#重复过滤器" class="headerlink" title="重复过滤器"></a>重复过滤器</h3><p>假设我们的item里面的id字典是唯一的，但是我们的蜘蛛返回了多个相同id的item<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> scrapy.exceptions <span class="keyword">import</span> DropItem</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DuplicatesPipeline</span><span class="params">(object)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.ids_seen = set()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">process_item</span><span class="params">(self, item, spider)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> item[<span class="string">'id'</span>] <span class="keyword">in</span> self.ids_seen:</span><br><span class="line">            <span class="keyword">raise</span> DropItem(<span class="string">"Duplicate item found: %s"</span> % item)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.ids_seen.add(item[<span class="string">'id'</span>])</span><br><span class="line">            <span class="keyword">return</span> item</span><br></pre></td></tr></table></figure></p>
+<h2 id="激活一个Item-Pipeline组件"><a href="#激活一个Item-Pipeline组件" class="headerlink" title="激活一个Item Pipeline组件"></a>激活一个Item Pipeline组件</h2><p>你必须在配置文件中将你需要激活的Pipline组件添加到<code>ITEM_PIPELINES</code>中<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ITEM_PIPELINES = &#123;</span><br><span class="line">    <span class="string">'myproject.pipelines.PricePipeline'</span>: <span class="number">300</span>,</span><br><span class="line">    <span class="string">'myproject.pipelines.JsonWriterPipeline'</span>: <span class="number">800</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>后面的数字表示它的执行顺序，从低到高执行，范围0-1000</p>
+<h2 id="Feed-exports"><a href="#Feed-exports" class="headerlink" title="Feed exports"></a>Feed exports</h2><p>这里顺便提下Feed exports，一般有的爬虫直接将爬取结果序列化到文件中，并保存到某个存储介质中。只需要在settings里面设置几个即可：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">* FEED_FORMAT= json # json|jsonlines|csv|xml|pickle|marshal</span><br><span class="line">* FEED_URI= file:///tmp/export.csv|ftp://user:pass@ftp.example.com/path/to/export.csv|s3://aws_key:aws_secret@mybucket/path/to/export.csv|stdout:</span><br><span class="line">* FEED_EXPORT_FIELDS = [&quot;foo&quot;, &quot;bar&quot;, &quot;baz&quot;] # 这个在导出csv的时候有用</span><br></pre></td></tr></table></figure></p>
+<h2 id="请求和响应"><a href="#请求和响应" class="headerlink" title="请求和响应"></a>请求和响应</h2><p>Scrapy使用<code>Request</code>和<code>Response</code>对象来爬取网站。<code>Request</code>对象被蜘蛛生成，然后被传递给下载器，之后下载器处理这个<code>Request</code>后返回<code>Response</code>对象，然后返回给生成<code>Request</code>的这个蜘蛛。</p>
+<h3 id="给回调函数传递额外的参数"><a href="#给回调函数传递额外的参数" class="headerlink" title="给回调函数传递额外的参数"></a>给回调函数传递额外的参数</h3><p><code>Request</code>对象生成的时候会通过关键字参数<code>callback</code>指定回调函数，<code>Response</code>对象被当做第一个参数传入，有时候我们想传递额外的参数，比如我们构建某个Item的时候，需要两步，第一步是链接属性，第二步是详情属性，可以指定<code>Request.meta</code><!--more--><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse_page1</span><span class="params">(self, response)</span>:</span></span><br><span class="line">    item = MyItem()</span><br><span class="line">    item[<span class="string">'main_url'</span>] = response.url</span><br><span class="line">    request = scrapy.Request(<span class="string">"http://www.example.com/some_page.html"</span>,</span><br><span class="line">                             callback=self.parse_page2)</span><br><span class="line">    request.meta[<span class="string">'item'</span>] = item</span><br><span class="line">    <span class="keyword">return</span> request</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse_page2</span><span class="params">(self, response)</span>:</span></span><br><span class="line">    item = response.meta[<span class="string">'item'</span>]</span><br><span class="line">    item[<span class="string">'other_url'</span>] = response.url</span><br><span class="line">    <span class="keyword">return</span> item</span><br></pre></td></tr></table></figure></p>
+<h3 id="Request子类"><a href="#Request子类" class="headerlink" title="Request子类"></a>Request子类</h3><p>Scrapy为各种不同的场景内置了很多Request子类，你还可以继承它自定义自己的请求类。</p>
+<p><code>FormRequest</code>这个专门为form表单设计，模拟表单提交的示例<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> [FormRequest(url=<span class="string">"http://www.example.com/post/action"</span>,</span><br><span class="line">                    formdata=&#123;<span class="string">'name'</span>: <span class="string">'John Doe'</span>, <span class="string">'age'</span>: <span class="string">'27'</span>&#125;,</span><br><span class="line">                    callback=self.after_post)]</span><br></pre></td></tr></table></figure></p>
+<p>我们再来一个例子模拟用户登录，使用了<code>FormRequest.from_response()</code><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> scrapy</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LoginSpider</span><span class="params">(scrapy.Spider)</span>:</span></span><br><span class="line">    name = <span class="string">'example.com'</span></span><br><span class="line">    start_urls = [<span class="string">'http://www.example.com/users/login.php'</span>]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">parse</span><span class="params">(self, response)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> scrapy.FormRequest.from_response(</span><br><span class="line">            response,</span><br><span class="line">            formdata=&#123;<span class="string">'username'</span>: <span class="string">'john'</span>, <span class="string">'password'</span>: <span class="string">'secret'</span>&#125;,</span><br><span class="line">            callback=self.after_login</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">after_login</span><span class="params">(self, response)</span>:</span></span><br><span class="line">        <span class="comment"># check login succeed before going on</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">"authentication failed"</span> <span class="keyword">in</span> response.body:</span><br><span class="line">            self.logger.error(<span class="string">"Login failed"</span>)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># continue scraping with authenticated session...</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="Response子类"><a href="#Response子类" class="headerlink" title="Response子类"></a>Response子类</h3><p>一个<code>scrapy.http.Response</code>对象代表了一个HTTP相应，通常是被下载器下载后得到，并交给Spider做进一步的处理。Response也有很多默认的子类，用于表示各种不同的响应类型。</p>
+<ul>
+<li>TextResponse 在基本<code>Response</code>类基础之上增加了编码功能，专门用于二进制数据比如图片、声音或其他媒体文件</li>
+<li>HtmlResponse 此类是<code>TextResponse</code>的子类，通过查询HTML的<code>meta http-equiv</code>属性实现了编码自动发现</li>
+<li>XmlResponse  此类是<code>TextResponse</code>的子类，通过查询XML声明实现编码自动发现</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Scrapy/" rel="tag"># Scrapy</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/03/16/python/scrapy-05/" rel="next" title="Scrapy笔记05- Item详解">
+                <i class="fa fa-chevron-left"></i> Scrapy笔记05- Item详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/03/19/python/scrapy-07/" rel="prev" title="Scrapy笔记07- 内置服务">
+                Scrapy笔记07- 内置服务 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://ooky9xe9n.bkt.clouddn.com/avatar.png"
+                alt="卡布奇诺" />
+            
+              <p class="site-author-name" itemprop="name">卡布奇诺</p>
+              <p class="site-description motion-element" itemprop="description">记录编程中遇到的坑</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">133</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/aopao1" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:admin@wujinyu.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#编写自己的Pipeline"><span class="nav-number">1.</span> <span class="nav-text">编写自己的Pipeline</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Item-Pipeline示例"><span class="nav-number">2.</span> <span class="nav-text">Item Pipeline示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#价格验证"><span class="nav-number">2.1.</span> <span class="nav-text">价格验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#将item写入json文件"><span class="nav-number">2.2.</span> <span class="nav-text">将item写入json文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#将item存储到MongoDB中"><span class="nav-number">2.3.</span> <span class="nav-text">将item存储到MongoDB中</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重复过滤器"><span class="nav-number">2.4.</span> <span class="nav-text">重复过滤器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#激活一个Item-Pipeline组件"><span class="nav-number">3.</span> <span class="nav-text">激活一个Item Pipeline组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Feed-exports"><span class="nav-number">4.</span> <span class="nav-text">Feed exports</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#请求和响应"><span class="nav-number">5.</span> <span class="nav-text">请求和响应</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#给回调函数传递额外的参数"><span class="nav-number">5.1.</span> <span class="nav-text">给回调函数传递额外的参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Request子类"><span class="nav-number">5.2.</span> <span class="nav-text">Request子类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Response子类"><span class="nav-number">5.3.</span> <span class="nav-text">Response子类</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">卡布奇诺@心情</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

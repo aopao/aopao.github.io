@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Linux,Mail," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="在 Debian / Ubuntu 系统：apt-get install mailutils apt-get install sharutils  #支持附件发送，使用uuencode apt-get install sendmail apt-get install sendmail-cf">
+<meta name="keywords" content="Linux,Mail">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux mail命令发送邮件">
+<meta property="og:url" content="http://www.wujinyu.com/2016/05/14/linux/linux-mail/index.html">
+<meta property="og:site_name" content="卡布奇诺">
+<meta property="og:description" content="在 Debian / Ubuntu 系统：apt-get install mailutils apt-get install sharutils  #支持附件发送，使用uuencode apt-get install sendmail apt-get install sendmail-cf">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.wujinyu.com/images/mail/email.png">
+<meta property="og:image" content="http://www.wujinyu.com/images/mail/mailutils.png">
+<meta property="og:updated_time" content="2017-09-10T13:57:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="linux mail命令发送邮件">
+<meta name="twitter:description" content="在 Debian / Ubuntu 系统：apt-get install mailutils apt-get install sharutils  #支持附件发送，使用uuencode apt-get install sendmail apt-get install sendmail-cf">
+<meta name="twitter:image" content="http://www.wujinyu.com/images/mail/email.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.wujinyu.com/2016/05/14/linux/linux-mail/"/>
+
+
+
+
+
+  <title>linux mail命令发送邮件 | 卡布奇诺</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-21552344-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卡布奇诺</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生活心情</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-分类">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-归档">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-标签">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-公益">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-关于">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2016/05/14/linux/linux-mail/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">linux mail命令发送邮件</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-14T14:43:53+08:00">
+                2016-05-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="/images/mail/email.png" alt="email info"></p>
+<h2 id="在-Debian-Ubuntu-系统："><a href="#在-Debian-Ubuntu-系统：" class="headerlink" title="在 Debian / Ubuntu 系统："></a>在 Debian / Ubuntu 系统：</h2><pre><code>apt-get install mailutils
+apt-get install sharutils  #支持附件发送，使用uuencode
+apt-get install sendmail
+apt-get install sendmail-cf
+</code></pre><a id="more"></a>
+<h2 id="sendmail"><a href="#sendmail" class="headerlink" title="sendmail"></a>sendmail</h2><p>启用sendmail</p>
+<pre><code>service start sendmail #systemctl start sendmail.service
+</code></pre><p>sendmail配置</p>
+<p>sendmail默认只会为本机用户发送邮件，只有把它扩展到整个Internet，才会成为真正的邮件服务器,sendmail的配置文件：/etc/mail/sendmail.mc</p>
+<pre><code>DAEMON_OPTIONS(`Family=inet,  Name=MTA-v4, Port=smtp,Addr=127.0.0.1&apos;)dnl
+</code></pre><p>将Addr=127.0.0.1修改成0.0.0.0</p>
+<p>修改之后产生新的配置文件：</p>
+<pre><code>mv sendmail.cf sendmail.cf~   #做一个备份
+m4 sendmail.mc &gt; sendmail.cf  #&gt;的左右有空格，提示错误没有安装sendmail-cf
+</code></pre><h2 id="安装mailutils"><a href="#安装mailutils" class="headerlink" title="安装mailutils"></a>安装mailutils</h2><p>安装过程中会让你选择一种配置类型。一般情况下，我们需要选择第二种类型：<strong>Internet Site</strong></p>
+<p><img src="/images/mail/mailutils.png" alt="mailutils"></p>
+<pre><code>No configuration 表示不要做任何配置；
+Internet Site 表示直接使用本地SMTP服务器发送和接收邮件；
+Internet with smarthost 表示使用本地SMTP服务器接收邮件，但发送邮件时不直接使用本地SMTP服务器，
+    而是使用第三方smart host来转发邮件；
+Satellite system 表示邮件的发送和接收都是由第三方smarthost来完成。
+Local only 表示邮件只能在本机用户之间发送和接收。
+</code></pre><h2 id="发送有主题的邮件"><a href="#发送有主题的邮件" class="headerlink" title="发送有主题的邮件"></a>发送有主题的邮件</h2><pre><code>echo &quot;Email text&quot; | mail -s &quot;Test Subject&quot; user@example.com #-s的用处是指定邮件的主题
+</code></pre><h2 id="从文件中读取邮件内容并发送"><a href="#从文件中读取邮件内容并发送" class="headerlink" title="从文件中读取邮件内容并发送"></a>从文件中读取邮件内容并发送</h2><pre><code>mail -s &quot;message send from file&quot; user@example.com &lt; /path/to/file
+</code></pre><h2 id="将从管道获取到的echo命令输出作为邮件内容发送"><a href="#将从管道获取到的echo命令输出作为邮件内容发送" class="headerlink" title="将从管道获取到的echo命令输出作为邮件内容发送"></a>将从管道获取到的echo命令输出作为邮件内容发送</h2><pre><code>echo &quot;This is message body&quot; | mail -s &quot;This is Subject&quot;
+user@example.com
+</code></pre><h2 id="发送带附件的邮件"><a href="#发送带附件的邮件" class="headerlink" title="发送带附件的邮件"></a>发送带附件的邮件</h2><pre><code>echo &quot;Body with attachment&quot;| mail -a foo.tar.gz -s &quot;attached file&quot; user@example.com
+</code></pre><h2 id="uuencode"><a href="#uuencode" class="headerlink" title="uuencode"></a>uuencode</h2><p>邮件传输系统最初是被设计来传送7位编码（类似ASCII）的内容的。这就意味这它是用来发送文本内容，而不能发会使用8位的二进制内容（如程序文件或者图片）。uuencode（“UNIX to UNIX encoding”，UNIX之间使用的编码方式）程序用来解决这个限制。使用uuencode，发送端将二进制格式的转换成文本格式来传输，接收端再转换回去。<br>我们可以简单地使用uuencode和mailx或者mutt配合，来发送二进制内容，类似这样：</p>
+<pre><code>uuencode example.jpeg example.jpeg | mail user@example.com
+</code></pre><p><strong>注意：</strong><br>1、/etc/hosts中修改为：</p>
+<pre><code>127.0.0.1    localhost localhost.localdomain jason #jason计算机主机名
+</code></pre><p>参考资料</p>
+<p>1、<a href="https://linux.cn/article-5502-1.html" target="_blank" rel="noopener">发送邮件的命令行工具</a><br>2、<a href="https://www.linuxdashen.com/ubuntu搭建简易postfix邮箱服务器" target="_blank" rel="noopener">ubuntu搭建简易postfix邮箱服务器</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+            <a href="/tags/Mail/" rel="tag"># Mail</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/09/python/pyenv/" rel="next" title="使用pyenv创建多版本python环境">
+                <i class="fa fa-chevron-left"></i> 使用pyenv创建多版本python环境
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/20/python/pyfunny/" rel="prev" title="一些有趣的python技巧">
+                一些有趣的python技巧 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://ooky9xe9n.bkt.clouddn.com/avatar.png"
+                alt="卡布奇诺" />
+            
+              <p class="site-author-name" itemprop="name">卡布奇诺</p>
+              <p class="site-description motion-element" itemprop="description">记录编程中遇到的坑</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">133</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/aopao1" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:admin@wujinyu.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#在-Debian-Ubuntu-系统："><span class="nav-number">1.</span> <span class="nav-text">在 Debian / Ubuntu 系统：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sendmail"><span class="nav-number">2.</span> <span class="nav-text">sendmail</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装mailutils"><span class="nav-number">3.</span> <span class="nav-text">安装mailutils</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发送有主题的邮件"><span class="nav-number">4.</span> <span class="nav-text">发送有主题的邮件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#从文件中读取邮件内容并发送"><span class="nav-number">5.</span> <span class="nav-text">从文件中读取邮件内容并发送</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#将从管道获取到的echo命令输出作为邮件内容发送"><span class="nav-number">6.</span> <span class="nav-text">将从管道获取到的echo命令输出作为邮件内容发送</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发送带附件的邮件"><span class="nav-number">7.</span> <span class="nav-text">发送带附件的邮件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#uuencode"><span class="nav-number">8.</span> <span class="nav-text">uuencode</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">卡布奇诺@心情</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

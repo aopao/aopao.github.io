@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Scrapy," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Item是保存结构数据的地方，Scrapy可以将解析结果以字典形式返回，但是Python中字典缺少结构，在大型爬虫系统中很不方便。 Item提供了类字典的API，并且可以很方便的声明字段，很多Scrapy组件可以利用Item的其他信息。">
+<meta name="keywords" content="Scrapy">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Scrapy笔记05- Item详解">
+<meta property="og:url" content="http://www.wujinyu.com/2016/03/16/python/scrapy-05/index.html">
+<meta property="og:site_name" content="卡布奇诺">
+<meta property="og:description" content="Item是保存结构数据的地方，Scrapy可以将解析结果以字典形式返回，但是Python中字典缺少结构，在大型爬虫系统中很不方便。 Item提供了类字典的API，并且可以很方便的声明字段，很多Scrapy组件可以利用Item的其他信息。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-09-10T13:57:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Scrapy笔记05- Item详解">
+<meta name="twitter:description" content="Item是保存结构数据的地方，Scrapy可以将解析结果以字典形式返回，但是Python中字典缺少结构，在大型爬虫系统中很不方便。 Item提供了类字典的API，并且可以很方便的声明字段，很多Scrapy组件可以利用Item的其他信息。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.wujinyu.com/2016/03/16/python/scrapy-05/"/>
+
+
+
+
+
+  <title>Scrapy笔记05- Item详解 | 卡布奇诺</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-21552344-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卡布奇诺</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生活心情</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-分类">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-归档">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-标签">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-公益">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-关于">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2016/03/16/python/scrapy-05/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Scrapy笔记05- Item详解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-03-16T01:00:15+08:00">
+                2016-03-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Item是保存结构数据的地方，Scrapy可以将解析结果以字典形式返回，但是Python中字典缺少结构，在大型爬虫系统中很不方便。</p>
+<p>Item提供了类字典的API，并且可以很方便的声明字段，很多Scrapy组件可以利用Item的其他信息。<a id="more"></a></p>
+<h2 id="定义Item"><a href="#定义Item" class="headerlink" title="定义Item"></a>定义Item</h2><p>定义Item非常简单，只需要继承<code>scrapy.Item</code>类，并将所有字段都定义为<code>scrapy.Field</code>类型即可<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> scrapy</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Product</span><span class="params">(scrapy.Item)</span>:</span></span><br><span class="line">    name = scrapy.Field()</span><br><span class="line">    price = scrapy.Field()</span><br><span class="line">    stock = scrapy.Field()</span><br><span class="line">    last_updated = scrapy.Field(serializer=str)</span><br></pre></td></tr></table></figure></p>
+<h2 id="Item-Fields"><a href="#Item-Fields" class="headerlink" title="Item Fields"></a>Item Fields</h2><p><code>Field</code>对象可用来对每个字段指定元数据。例如上面<code>last_updated</code>的序列化函数指定为<code>str</code>，可任意指定元数据，不过每种元数据对于不同的组件意义不一样。</p>
+<h2 id="Item使用示例"><a href="#Item使用示例" class="headerlink" title="Item使用示例"></a>Item使用示例</h2><p>你会看到Item的使用跟Python中的字典API非常类似</p>
+<h3 id="创建Item"><a href="#创建Item" class="headerlink" title="创建Item"></a>创建Item</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>product = Product(name=<span class="string">'Desktop PC'</span>, price=<span class="number">1000</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> product</span><br><span class="line">Product(name=<span class="string">'Desktop PC'</span>, price=<span class="number">1000</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="获取值"><a href="#获取值" class="headerlink" title="获取值"></a>获取值</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>product[<span class="string">'name'</span>]</span><br><span class="line">Desktop PC</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>product.get(<span class="string">'name'</span>)</span><br><span class="line">Desktop PC</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>product[<span class="string">'price'</span>]</span><br><span class="line"><span class="number">1000</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>product[<span class="string">'last_updated'</span>]</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">    ...</span><br><span class="line">KeyError: <span class="string">'last_updated'</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>product.get(<span class="string">'last_updated'</span>, <span class="string">'not set'</span>)</span><br><span class="line"><span class="keyword">not</span> set</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>product[<span class="string">'lala'</span>] <span class="comment"># getting unknown field</span></span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">    ...</span><br><span class="line">KeyError: <span class="string">'lala'</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>product.get(<span class="string">'lala'</span>, <span class="string">'unknown field'</span>)</span><br><span class="line"><span class="string">'unknown field'</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'name'</span> <span class="keyword">in</span> product  <span class="comment"># is name field populated?</span></span><br><span class="line"><span class="keyword">True</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'last_updated'</span> <span class="keyword">in</span> product  <span class="comment"># is last_updated populated?</span></span><br><span class="line"><span class="keyword">False</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'last_updated'</span> <span class="keyword">in</span> product.fields  <span class="comment"># is last_updated a declared field?</span></span><br><span class="line"><span class="keyword">True</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'lala'</span> <span class="keyword">in</span> product.fields  <span class="comment"># is lala a declared field?</span></span><br><span class="line"><span class="keyword">False</span></span><br></pre></td></tr></table></figure>
+<h3 id="设置值"><a href="#设置值" class="headerlink" title="设置值"></a>设置值</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>product[<span class="string">'last_updated'</span>] = <span class="string">'today'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>product[<span class="string">'last_updated'</span>]</span><br><span class="line">today</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>product[<span class="string">'lala'</span>] = <span class="string">'test'</span> <span class="comment"># setting unknown field</span></span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">    ...</span><br><span class="line">KeyError: <span class="string">'Product does not support field: lala'</span></span><br></pre></td></tr></table></figure>
+<h3 id="访问所有的值"><a href="#访问所有的值" class="headerlink" title="访问所有的值"></a>访问所有的值</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>product.keys()</span><br><span class="line">[<span class="string">'price'</span>, <span class="string">'name'</span>]</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>product.items()</span><br><span class="line">[(<span class="string">'price'</span>, <span class="number">1000</span>), (<span class="string">'name'</span>, <span class="string">'Desktop PC'</span>)]</span><br></pre></td></tr></table></figure>
+<h2 id="Item-Loader"><a href="#Item-Loader" class="headerlink" title="Item Loader"></a>Item Loader</h2><p>Item Loader为我们提供了生成Item的相当便利的方法。Item为抓取的数据提供了容器，而Item Loader可以让我们非常方便的将输入填充到容器中。</p>
+<p>下面我们通过一个例子来展示一般使用方法：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> scrapy.loader <span class="keyword">import</span> ItemLoader</span><br><span class="line"><span class="keyword">from</span> myproject.items <span class="keyword">import</span> Product</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse</span><span class="params">(self, response)</span>:</span></span><br><span class="line">    l = ItemLoader(item=Product(), response=response)</span><br><span class="line">    l.add_xpath(<span class="string">'name'</span>, <span class="string">'//div[@class="product_name"]'</span>)</span><br><span class="line">    l.add_xpath(<span class="string">'name'</span>, <span class="string">'//div[@class="product_title"]'</span>)</span><br><span class="line">    l.add_xpath(<span class="string">'price'</span>, <span class="string">'//p[@id="price"]'</span>)</span><br><span class="line">    l.add_css(<span class="string">'stock'</span>, <span class="string">'p#stock]'</span>)</span><br><span class="line">    l.add_value(<span class="string">'last_updated'</span>, <span class="string">'today'</span>) <span class="comment"># you can also use literal values</span></span><br><span class="line">    <span class="keyword">return</span> l.load_item()</span><br></pre></td></tr></table></figure></p>
+<p>注意上面的<code>name</code>字段是从两个xpath路径添累加后得到。</p>
+<h2 id="输入-输出处理器"><a href="#输入-输出处理器" class="headerlink" title="输入/输出处理器"></a>输入/输出处理器</h2><p>每个Item Loader对每个<code>Field</code>都有一个输入处理器和一个输出处理器。输入处理器在数据被接受到时执行，当数据收集完后调用<code>ItemLoader.load_item()</code>时再执行输出处理器，返回最终结果。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">l = ItemLoader(Product(), some_selector)</span><br><span class="line">l.add_xpath(<span class="string">'name'</span>, xpath1) <span class="comment"># (1)</span></span><br><span class="line">l.add_xpath(<span class="string">'name'</span>, xpath2) <span class="comment"># (2)</span></span><br><span class="line">l.add_css(<span class="string">'name'</span>, css) <span class="comment"># (3)</span></span><br><span class="line">l.add_value(<span class="string">'name'</span>, <span class="string">'test'</span>) <span class="comment"># (4)</span></span><br><span class="line"><span class="keyword">return</span> l.load_item() <span class="comment"># (5)</span></span><br></pre></td></tr></table></figure></p>
+<p>执行流程是这样的：</p>
+<ol>
+<li><code>xpath1</code>中的数据被提取出来，然后传输到<code>name</code>字段的输入处理器中，在输入处理器处理完后生成结果放在Item Loader里面(这时候没有赋值给item)</li>
+<li><code>xpath2</code>数据被提取出来，然后传输给(1)中同样的输入处理器，因为它们都是<code>name</code>字段的处理器，然后处理结果被附加到(1)的结果后面</li>
+<li>跟2一样</li>
+<li>跟3一样，不过这次是直接的字面字符串值，先转换成一个单元素的可迭代对象再传给输入处理器</li>
+<li>上面4步的数据被传输给<code>name</code>的输出处理器，将最终的结果赋值给<code>name</code>字段</li>
+</ol>
+<h2 id="自定义Item-Loader"><a href="#自定义Item-Loader" class="headerlink" title="自定义Item Loader"></a>自定义Item Loader</h2><p>使用类定义语法，下面是一个例子<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> scrapy.loader <span class="keyword">import</span> ItemLoader</span><br><span class="line"><span class="keyword">from</span> scrapy.loader.processors <span class="keyword">import</span> TakeFirst, MapCompose, Join</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ProductLoader</span><span class="params">(ItemLoader)</span>:</span></span><br><span class="line"></span><br><span class="line">    default_output_processor = TakeFirst()</span><br><span class="line"></span><br><span class="line">    name_in = MapCompose(unicode.title)</span><br><span class="line">    name_out = Join()</span><br><span class="line"></span><br><span class="line">    price_in = MapCompose(unicode.strip)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># ...</span></span><br></pre></td></tr></table></figure></p>
+<p>通过<code>_in</code>和<code>_out</code>后缀来定义输入和输出处理器，并且还可以定义默认的<code>ItemLoader.default_input_processor</code>和<code>ItemLoader.default_input_processor</code>.</p>
+<h2 id="在Field定义中声明输入-输出处理器"><a href="#在Field定义中声明输入-输出处理器" class="headerlink" title="在Field定义中声明输入/输出处理器"></a>在Field定义中声明输入/输出处理器</h2><p>还有个地方可以非常方便的添加输入/输出处理器，那就是直接在Field定义中<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> scrapy</span><br><span class="line"><span class="keyword">from</span> scrapy.loader.processors <span class="keyword">import</span> Join, MapCompose, TakeFirst</span><br><span class="line"><span class="keyword">from</span> w3lib.html <span class="keyword">import</span> remove_tags</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">filter_price</span><span class="params">(value)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> value.isdigit():</span><br><span class="line">        <span class="keyword">return</span> value</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Product</span><span class="params">(scrapy.Item)</span>:</span></span><br><span class="line">    name = scrapy.Field(</span><br><span class="line">        input_processor=MapCompose(remove_tags),</span><br><span class="line">        output_processor=Join(),</span><br><span class="line">    )</span><br><span class="line">    price = scrapy.Field(</span><br><span class="line">        input_processor=MapCompose(remove_tags, filter_price),</span><br><span class="line">        output_processor=TakeFirst(),</span><br><span class="line">    )</span><br></pre></td></tr></table></figure></p>
+<p>优先级：</p>
+<ol>
+<li>在Item Loader中定义的<code>field_in</code>和<code>field_out</code></li>
+<li>Filed元数据(<code>input_processor</code>和<code>output_processor</code>关键字)</li>
+<li>Item Loader中的默认的</li>
+</ol>
+<p>Tips：一般来讲，将输入处理器定义在Item Loader的定义中<code>field_in</code>，然后将输出处理器定义在Field元数据中</p>
+<h2 id="Item-Loader上下文"><a href="#Item-Loader上下文" class="headerlink" title="Item Loader上下文"></a>Item Loader上下文</h2><p>Item Loader上下文被所有输入/输出处理器共享，比如你有一个解析长度的函数<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse_length</span><span class="params">(text, loader_context)</span>:</span></span><br><span class="line">    unit = loader_context.get(<span class="string">'unit'</span>, <span class="string">'m'</span>)</span><br><span class="line">    <span class="comment"># ... length parsing code goes here ...</span></span><br><span class="line">    <span class="keyword">return</span> parsed_length</span><br></pre></td></tr></table></figure></p>
+<p>初始化和修改上下文的值<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">loader = ItemLoader(product)</span><br><span class="line">loader.context[<span class="string">'unit'</span>] = <span class="string">'cm'</span></span><br><span class="line"></span><br><span class="line">loader = ItemLoader(product, unit=<span class="string">'cm'</span>)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ProductLoader</span><span class="params">(ItemLoader)</span>:</span></span><br><span class="line">    length_out = MapCompose(parse_length, unit=<span class="string">'cm'</span>)</span><br></pre></td></tr></table></figure></p>
+<h2 id="内置的处理器"><a href="#内置的处理器" class="headerlink" title="内置的处理器"></a>内置的处理器</h2><ol>
+<li><code>Identity</code> 啥也不做</li>
+<li><code>TakeFirst</code> 返回第一个非空值，通常用作输出处理器</li>
+<li><code>Join</code> 将结果连起来，默认使用空格’ ‘</li>
+<li><code>Compose</code> 将函数链接起来形成管道流，产生最后的输出</li>
+<li><code>MapCompose</code> 跟上面的<code>Compose</code>类似，区别在于内部结果在函数中的传递方式.<br>它的输入值是可迭代的，首先将第一个函数依次作用于所有值，产生新的可迭代输入，作为第二个函数的输入，最后生成的结果连起来返回最终值，一般用在输入处理器中。</li>
+<li><code>SelectJmes</code> 使用json路径来查询值并返回结果</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Scrapy/" rel="tag"># Scrapy</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/03/14/python/scrapy-04/" rel="next" title="Scrapy笔记04- Selector详解">
+                <i class="fa fa-chevron-left"></i> Scrapy笔记04- Selector详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/03/18/python/scrapy-06/" rel="prev" title="Scrapy笔记06- Item Pipeline">
+                Scrapy笔记06- Item Pipeline <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://ooky9xe9n.bkt.clouddn.com/avatar.png"
+                alt="卡布奇诺" />
+            
+              <p class="site-author-name" itemprop="name">卡布奇诺</p>
+              <p class="site-description motion-element" itemprop="description">记录编程中遇到的坑</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">133</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/aopao1" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:admin@wujinyu.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#定义Item"><span class="nav-number">1.</span> <span class="nav-text">定义Item</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Item-Fields"><span class="nav-number">2.</span> <span class="nav-text">Item Fields</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Item使用示例"><span class="nav-number">3.</span> <span class="nav-text">Item使用示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建Item"><span class="nav-number">3.1.</span> <span class="nav-text">创建Item</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取值"><span class="nav-number">3.2.</span> <span class="nav-text">获取值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置值"><span class="nav-number">3.3.</span> <span class="nav-text">设置值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#访问所有的值"><span class="nav-number">3.4.</span> <span class="nav-text">访问所有的值</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Item-Loader"><span class="nav-number">4.</span> <span class="nav-text">Item Loader</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#输入-输出处理器"><span class="nav-number">5.</span> <span class="nav-text">输入/输出处理器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义Item-Loader"><span class="nav-number">6.</span> <span class="nav-text">自定义Item Loader</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在Field定义中声明输入-输出处理器"><span class="nav-number">7.</span> <span class="nav-text">在Field定义中声明输入/输出处理器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Item-Loader上下文"><span class="nav-number">8.</span> <span class="nav-text">Item Loader上下文</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内置的处理器"><span class="nav-number">9.</span> <span class="nav-text">内置的处理器</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">卡布奇诺@心情</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

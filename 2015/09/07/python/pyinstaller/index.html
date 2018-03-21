@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Python," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="PyInstaller是一个能将Python程序转换成单个可执行文件的程序，操作系统支持Windows, Linux, Mac OS X, Solaris和AIX。并且很多包都支持开箱即用，不依赖环境。 环境为windows7操作系统，python2.7.8 virtual environment 官网：https://github.com/pyinstaller/pyinstaller">
+<meta name="keywords" content="Python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用PyInstaller打包Python程序">
+<meta property="og:url" content="http://www.wujinyu.com/2015/09/07/python/pyinstaller/index.html">
+<meta property="og:site_name" content="卡布奇诺">
+<meta property="og:description" content="PyInstaller是一个能将Python程序转换成单个可执行文件的程序，操作系统支持Windows, Linux, Mac OS X, Solaris和AIX。并且很多包都支持开箱即用，不依赖环境。 环境为windows7操作系统，python2.7.8 virtual environment 官网：https://github.com/pyinstaller/pyinstaller">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-09-10T13:57:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用PyInstaller打包Python程序">
+<meta name="twitter:description" content="PyInstaller是一个能将Python程序转换成单个可执行文件的程序，操作系统支持Windows, Linux, Mac OS X, Solaris和AIX。并且很多包都支持开箱即用，不依赖环境。 环境为windows7操作系统，python2.7.8 virtual environment 官网：https://github.com/pyinstaller/pyinstaller">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.wujinyu.com/2015/09/07/python/pyinstaller/"/>
+
+
+
+
+
+  <title>使用PyInstaller打包Python程序 | 卡布奇诺</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-21552344-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卡布奇诺</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生活心情</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-分类">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-归档">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-标签">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-公益">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-关于">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2015/09/07/python/pyinstaller/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">使用PyInstaller打包Python程序</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-09-07T10:22:26+08:00">
+                2015-09-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>PyInstaller是一个能将Python程序转换成单个可执行文件的程序，<br>操作系统支持Windows, Linux, Mac OS X, Solaris和AIX。并且很多包都支持开箱即用，不依赖环境。</p>
+<p>环境为windows7操作系统，python2.7.8 virtual environment</p>
+<p>官网：<a href="https://github.com/pyinstaller/pyinstaller" target="_blank" rel="noopener">https://github.com/pyinstaller/pyinstaller</a><br><a id="more"></a></p>
+<h3 id="详细步骤："><a href="#详细步骤：" class="headerlink" title="详细步骤："></a>详细步骤：</h3><p>1. win7下面先安装这个依赖：pywin32，下载下来后切换到venv2.7，然后使用easy_install xxx.exe安装</p>
+<p>2. pip安装PyInstaller：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install pyinstaller</span><br></pre></td></tr></table></figure></p>
+<p>3. 打包过程中可能会出现msvcp90.dll找不到的问题，<br>去<a href="http://cn.dll-files.com/msvcp90.dll.html" target="_blank" rel="noopener">http://cn.dll-files.com/msvcp90.dll.html</a>下载第三个zip文件，<br>解压后放到C:\Windows\System32，如果是64位的还要放到C:\Windows\SysWOW64目录下。</p>
+<p>4. 再次运行报MSVCR90.dll找不到，同理去<a href="http://cn.dll-files.com/MSVCR90.dll.html" target="_blank" rel="noopener">http://cn.dll-files.com/MSVCR90.dll.html</a>下载MSVCR90.dll，<br>放到C:\Windows\System32和C:\Windows\SysWOW64中。</p>
+<p>5. 将你的整个程序先复制到某个临时文件夹下面，比如D:\tmp\core-wxpython，此目录下有个main.py是执行入口</p>
+<p>6. 执行build命令，并添加必要的搜索路径，外加执行文件的图标：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd D:\tmp\core-wxpython</span><br><span class="line">pyinstaller -F -w -i d:\tmp\main.ico main.py</span><br></pre></td></tr></table></figure></p>
+<p>如果还想添加自定义的依赖库，就要加上-p参数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pyinstaller -F -w -p D:\tmp\core-python\libs -i d:\tmp\main.ico main.py</span><br></pre></td></tr></table></figure></p>
+<p>参数说明：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-F 表示生成单个可执行文件</span><br><span class="line">-w 表示去掉控制台窗口，这在GUI界面时非常有用。不过如果是命令行程序的话那就把这个选项删除吧！</span><br><span class="line">-p 表示你自己自定义需要加载的类路径，一般情况下用不到</span><br><span class="line">-i 表示可执行文件的图标</span><br></pre></td></tr></table></figure></p>
+<p><em>注意的事情</em></p>
+<p>1). 检查生成的\XXX\build\pyi.win32\XXX\warnXXX.txt(XXX是你的项目名）中，<br>是否缺少了必要的模块。如果有缺少的，那么去如上所述，添加必要的搜素路径，<br>使得pyinstaller在运行时，可以找到对应的模块并集成进来。</p>
+<p>2). 此处我这里没有UPX，暂时没去折腾。估计是用UPX去压缩，压缩后所生成的exe文件的大小，会小得多。</p>
+<p>7. 如果发现报错：pywintypes.error: (193, ‘LoadLibraryEx’… )<br>原因是添加图标后缀必须是xxx.ico才行，重新去网上下载一个ico格式的图片，再次运行就好了。</p>
+<p>8. 我测试了一个使用wxpython写的gui程序，源码里面引用了一张图片，<br>使用wx.Image(os.path.abspath(<strong>file</strong>/me.jpg), wx.BITMAP_TYPE_JPEG)来加载，<br>然后打包成exe后发现找不到图片了，报错。</p>
+<p>解决办法：</p>
+<p>第一步，在程序中将资源文件都放到一个单独的文件夹中，比如项目根目录下面的resources</p>
+<p>第二步，修改程序中引用这些资源文件比如图片的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">resource_path</span><span class="params">(relative_path)</span>:</span></span><br><span class="line">    <span class="string">"""定义一个读取相对路径的函数"""</span></span><br><span class="line">    <span class="keyword">if</span> hasattr(sys, <span class="string">"_MEIPASS"</span>):</span><br><span class="line">        base_path = sys._MEIPASS</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        base_path = os.path.abspath(<span class="string">"."</span>)</span><br><span class="line">    <span class="keyword">return</span> os.path.join(base_path, relative_path)</span><br></pre></td></tr></table></figure>
+<p>然后每次在获取图片的时候，这么引用它的目录：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">img = wx.Image(resource_path(<span class="string">'resources/me.jpg'</span>), wx.BITMAP_TYPE_JPEG)</span><br></pre></td></tr></table></figure></p>
+<p>第三步，先运行第6步生成一个main.spec文件</p>
+<p>第四步，修改main.spec文件：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- mode: python -*-</span></span><br><span class="line">a = Analysis([<span class="string">'main.py'</span>],</span><br><span class="line">             pathex=[<span class="string">'d:\\tmp\\core-wxpython'</span>],</span><br><span class="line">             hiddenimports=[],</span><br><span class="line">             hookspath=<span class="keyword">None</span>,</span><br><span class="line">             runtime_hooks=<span class="keyword">None</span>)</span><br><span class="line">pyz = PYZ(a.pure)</span><br><span class="line">exe = EXE(pyz,</span><br><span class="line">          a.scripts,</span><br><span class="line">          a.binaries,</span><br><span class="line">          a.zipfiles,</span><br><span class="line">          a.datas,</span><br><span class="line">          [(<span class="string">'\\resources\\me.jpg'</span>,<span class="string">'D:\\tmp\\core-wxpython\\resources\\me.jpg'</span>,<span class="string">'DATA'</span>)],</span><br><span class="line">          name=<span class="string">'main.exe'</span>,</span><br><span class="line">          debug=<span class="keyword">False</span>,</span><br><span class="line">          strip=<span class="keyword">None</span>,</span><br><span class="line">          upx=<span class="keyword">True</span>,</span><br><span class="line">          console=<span class="keyword">True</span> , icon=<span class="string">'d:\\tmp\\main.ico'</span>)</span><br></pre></td></tr></table></figure></p>
+<p>注意：我在a.datas下面添加了那行配置，具体的路径自己去修改下。</p>
+<p>上面是添加单个文件，如果有多个文件，可以一个个的添加。不过如果文件多了话，那么就使用下面的方法：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- mode: python -*-</span></span><br><span class="line">a = Analysis([<span class="string">'main.py'</span>],</span><br><span class="line">             pathex=[<span class="string">'d:\\tmp\\core-wxpython'</span>],</span><br><span class="line">             hiddenimports=[],</span><br><span class="line">             hookspath=<span class="keyword">None</span>,</span><br><span class="line">             runtime_hooks=<span class="keyword">None</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">extra_datas</span><span class="params">(mydir)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">rec_glob</span><span class="params">(p, files)</span>:</span></span><br><span class="line">        <span class="keyword">import</span> os</span><br><span class="line">        <span class="keyword">import</span> glob</span><br><span class="line">        <span class="keyword">for</span> d <span class="keyword">in</span> glob.glob(p):</span><br><span class="line">            <span class="keyword">if</span> os.path.isfile(d):</span><br><span class="line">                files.append(d)</span><br><span class="line">            rec_glob(<span class="string">"%s/*"</span> % d, files)</span><br><span class="line">    files = []</span><br><span class="line">    rec_glob(<span class="string">"%s/*"</span> % mydir, files)</span><br><span class="line">    extra_datas = []</span><br><span class="line">    <span class="keyword">for</span> f <span class="keyword">in</span> files:</span><br><span class="line">        extra_datas.append((f, f, <span class="string">'DATA'</span>))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> extra_datas</span><br><span class="line"></span><br><span class="line"><span class="comment"># append the 'resources' dir</span></span><br><span class="line">a.datas += extra_datas(<span class="string">'resources'</span>)</span><br><span class="line"></span><br><span class="line">pyz = PYZ(a.pure)</span><br><span class="line">exe = EXE(pyz,</span><br><span class="line">          a.scripts,</span><br><span class="line">          a.binaries,</span><br><span class="line">          a.zipfiles,</span><br><span class="line">          a.datas,</span><br><span class="line">          name=<span class="string">'main.exe'</span>,</span><br><span class="line">          debug=<span class="keyword">False</span>,</span><br><span class="line">          strip=<span class="keyword">None</span>,</span><br><span class="line">          upx=<span class="keyword">True</span>,</span><br><span class="line">          console=<span class="keyword">True</span> , icon=<span class="string">'d:\\tmp\\main.ico'</span>)</span><br></pre></td></tr></table></figure></p>
+<p>它会把某个指定的文件下的所有文件递归的添加到最终的包中。省去很多事情！</p>
+<p>第五步，执行：pyinstaller D:\tmp\core-wxpython\main.spec</p>
+<p>然后就大功告成了！！！在dist目录下面有个main.exe单独的可执行文件，打开它吧。^_^</p>
+<p>如果在执行过程中出错，或者双击打开没任何反应。<br>可以先去掉-w参数后，在控制台窗口打开这个可执行文件，会输出详细出错信息去调试。</p>
+<h3 id="其他问题记录"><a href="#其他问题记录" class="headerlink" title="其他问题记录"></a>其他问题记录</h3><p>1. 找不到pkg_resources<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ImportError: No module named pkg_resources</span><br></pre></td></tr></table></figure></p>
+<p>解决办法是在安装pycrypto之前，先安装distribute库<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl https://svn.apache.org/repos/asf/oodt/tools/oodtsite.publisher/trunk/distribute_setup.py | python</span><br></pre></td></tr></table></figure></p>
+<p>然后再安装windows下面对应的pycrypto库<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># http://www.voidspace.org.uk/python/modules.shtml#pycrypto</span><br><span class="line">easy_install http://www.voidspace.org.uk/downloads/pycrypto26/pycrypto-2.6.win-amd64-py2.7.exe</span><br></pre></td></tr></table></figure></p>
+<p>2. 打包时加上-w选项去掉console时出错</p>
+<p>不要在程序中使用任何print语句，或者是你将stdout重定向到一个日志、文件或任何其他非控制台地方。</p>
+<p>最好的方法是利用日志功能，将输出定向到日志文件中去，在main函数开头添加如下代码：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"><span class="keyword">import</span> tempfile</span><br><span class="line">logging.basicConfig(level=logging.INFO,</span><br><span class="line">                    filename=tempfile.TemporaryFile().name,</span><br><span class="line">                    format=<span class="string">'%(asctime)s %(message)s'</span>)</span><br></pre></td></tr></table></figure></p>
+<p>用到logging的时候，需要配置日志到文件中，而不是console：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> logging</span><br><span class="line">_LOGGING = logging.getLogger(__file__)</span><br></pre></td></tr></table></figure></p>
+<p>3. pyinstaller用one file方式打包的程式如果有用到subprocess.Popen會有問題</p>
+<p>问题参考：<a href="http://www.pyinstaller.org/ticket/597" target="_blank" rel="noopener">http://www.pyinstaller.org/ticket/597</a></p>
+<p>最後找到的方法是<br><a href="http://code.activestate.com/recipes/578300-python-subprocess-hide-console-on-windows/" target="_blank" rel="noopener">http://code.activestate.com/recipes/578300-python-subprocess-hide-console-on-windows/</a></p>
+<p>建立一個隐藏窗口，就正常了~</p>
+<p>最后用pyinstaller設one folder &amp; no console打包都不跳出小窗口了</p>
+<p>解决办法就是自定义一个subprocess_call函数来代替subprocess的call调用，不适用Popen了：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">subprocess_call</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">    <span class="comment"># also works for Popen. It creates a new *hidden* window,</span></span><br><span class="line">    <span class="comment"># so it will work in frozen apps (.exe).</span></span><br><span class="line">    <span class="keyword">if</span> IS_WIN32:</span><br><span class="line">        _LOGGING.info(<span class="string">'subprocess_call==IS_WIN32'</span>)</span><br><span class="line">        startupinfo = subprocess.STARTUPINFO()</span><br><span class="line">        startupinfo.dwFlags = subprocess.CREATE_NEW_CONSOLE | subprocess.STARTF_USESHOWWINDOW</span><br><span class="line">        startupinfo.wShowWindow = subprocess.SW_HIDE</span><br><span class="line">        kwargs[<span class="string">'startupinfo'</span>] = startupinfo</span><br><span class="line">    retcode = subprocess.call(*args, **kwargs)</span><br><span class="line">    <span class="keyword">return</span> retcode</span><br></pre></td></tr></table></figure></p>
+<p>调用方法：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exresult = subprocess_call(exe_command, shell=<span class="keyword">True</span>)</span><br></pre></td></tr></table></figure></p>
+<p>这个方法会等命令执行完成，返回值为0表示正常结束！</p>
+<p>4. 打包后不能放到中文路径下执行<br>解决办法是下载安装PyInstaller的中文支持库，安装后再重新执行pyinstaller打包命令：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/dkw72n/pyinstaller.git</span><br><span class="line">python setup.py install</span><br><span class="line">pyinstaller -F -w -i d:\tmp\main.ico main.py</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag"># Python</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/08/26/python/simpleblog-14/" rel="next" title="Django1.9开发博客14- 集成Xadmin">
+                <i class="fa fa-chevron-left"></i> Django1.9开发博客14- 集成Xadmin
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/09/16/linux/lvs-keepalived/" rel="prev" title="CentOS6.5上LVS和KeepAlived搭建高可用负载均衡集群">
+                CentOS6.5上LVS和KeepAlived搭建高可用负载均衡集群 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://ooky9xe9n.bkt.clouddn.com/avatar.png"
+                alt="卡布奇诺" />
+            
+              <p class="site-author-name" itemprop="name">卡布奇诺</p>
+              <p class="site-description motion-element" itemprop="description">记录编程中遇到的坑</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">133</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/aopao1" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:admin@wujinyu.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#详细步骤："><span class="nav-number">1.</span> <span class="nav-text">详细步骤：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他问题记录"><span class="nav-number">2.</span> <span class="nav-text">其他问题记录</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">卡布奇诺@心情</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

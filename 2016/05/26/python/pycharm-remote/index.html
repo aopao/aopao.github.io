@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Python," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="你是否经常要在Windows 7或MAC OS X上面开发Python或Web应用程序，但是它们最后需要在linux上面来运行呢？我们经常会碰到开发时没有问题但是到了正式的Linux环境下面却出现问题。那么怎样保证开发环境跟运行环境的一致呢？ 通常有两种方法解决。一种是使用PyCharm内置支持的Vagrant，这个教程可以参考Vagrant开发环境配置。不过很遗憾的是我自己在试验过程中启动Vir">
+<meta name="keywords" content="Python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用PyCharm进行远程开发和调试">
+<meta property="og:url" content="http://www.wujinyu.com/2016/05/26/python/pycharm-remote/index.html">
+<meta property="og:site_name" content="卡布奇诺">
+<meta property="og:description" content="你是否经常要在Windows 7或MAC OS X上面开发Python或Web应用程序，但是它们最后需要在linux上面来运行呢？我们经常会碰到开发时没有问题但是到了正式的Linux环境下面却出现问题。那么怎样保证开发环境跟运行环境的一致呢？ 通常有两种方法解决。一种是使用PyCharm内置支持的Vagrant，这个教程可以参考Vagrant开发环境配置。不过很遗憾的是我自己在试验过程中启动Vir">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://xnstatic-1253397658.file.myqcloud.com/pcr001.png">
+<meta property="og:image" content="https://xnstatic-1253397658.file.myqcloud.com/pcr002.png">
+<meta property="og:image" content="https://xnstatic-1253397658.file.myqcloud.com/pcr003.png">
+<meta property="og:image" content="https://xnstatic-1253397658.file.myqcloud.com/pcr004.png">
+<meta property="og:image" content="https://xnstatic-1253397658.file.myqcloud.com/pcr005.png">
+<meta property="og:image" content="https://xnstatic-1253397658.file.myqcloud.com/pcr006.png">
+<meta property="og:image" content="https://xnstatic-1253397658.file.myqcloud.com/pcr007.png">
+<meta property="og:image" content="https://xnstatic-1253397658.file.myqcloud.com/pcr009.png">
+<meta property="og:image" content="https://xnstatic-1253397658.file.myqcloud.com/pcr010.png">
+<meta property="og:updated_time" content="2017-09-10T13:57:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用PyCharm进行远程开发和调试">
+<meta name="twitter:description" content="你是否经常要在Windows 7或MAC OS X上面开发Python或Web应用程序，但是它们最后需要在linux上面来运行呢？我们经常会碰到开发时没有问题但是到了正式的Linux环境下面却出现问题。那么怎样保证开发环境跟运行环境的一致呢？ 通常有两种方法解决。一种是使用PyCharm内置支持的Vagrant，这个教程可以参考Vagrant开发环境配置。不过很遗憾的是我自己在试验过程中启动Vir">
+<meta name="twitter:image" content="https://xnstatic-1253397658.file.myqcloud.com/pcr001.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.wujinyu.com/2016/05/26/python/pycharm-remote/"/>
+
+
+
+
+
+  <title>使用PyCharm进行远程开发和调试 | 卡布奇诺</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-21552344-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卡布奇诺</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生活心情</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-分类">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-归档">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-标签">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-公益">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-关于">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2016/05/26/python/pycharm-remote/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">使用PyCharm进行远程开发和调试</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-26T10:02:42+08:00">
+                2016-05-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>你是否经常要在Windows 7或MAC OS X上面开发Python或Web应用程序，但是它们最后需要在linux上面来运行呢？<br>我们经常会碰到开发时没有问题但是到了正式的Linux环境下面却出现问题。那么怎样保证开发环境跟运行环境的一致呢？</p>
+<p>通常有两种方法解决。一种是使用PyCharm内置支持的<code>Vagrant</code>，这个教程可以参考<a href="https://github.com/astaxie/Go-in-Action/blob/master/ebook/zh/01.0.md" target="_blank" rel="noopener">Vagrant开发环境配置</a>。<br>不过很遗憾的是我自己在试验过程中启动VirtualBox虚拟机时候老是报错，暂时还没解决，读者可以自己试着测试看行不行。<br>第二种方式就是通过PyCharm的远程解释器加上文件同步功能，实现本地编辑代码-&gt;同步到服务器-&gt;通过远程debug来调试测试程序。目前我选择的是第二种，虽然比第一种更笨拙点。<a id="more"></a></p>
+<p>远程调试的功能在Eclipse、IntelliJ IDEA等大型IDE中均有支持，实现原理都基本相同，这里采用PyCharm进行说明。</p>
+<h3 id="远程服务器的同步配置"><a href="#远程服务器的同步配置" class="headerlink" title="远程服务器的同步配置"></a>远程服务器的同步配置</h3><p>远程服务器IP地址192.168.203.95，开启ssh服务，安装python版本2.7。我用一个在PyCharm里面的core-python项目来做演示。</p>
+<p>首先我们需要配置PyCharm通服务器的代码同步，打开Tools | Deployment | Configuration</p>
+<p>点击左边的“+”添加一个部署配置，输入名字，类型选SFTP<br><img src="https://xnstatic-1253397658.file.myqcloud.com/pcr001.png" alt=""></p>
+<p>确定之后，再配置远程服务器的ip、端口、用户名和密码。root path是文件上传的根目录，注意这个目录必须用户名有权限创建文件。<br><img src="https://xnstatic-1253397658.file.myqcloud.com/pcr002.png" alt=""></p>
+<p>然后配置映射，local path是你的工程目录，就是需要将本地这个目录同步到服务器上面，我填的是项目根目录。<br>Deploy path on server 这里填写相对于root path的目录，下面那个web path不用管先<br><img src="https://xnstatic-1253397658.file.myqcloud.com/pcr003.png" alt=""></p>
+<p>如果你还有一些文件或文件夹不想同步，那么在配置对话框的第三个tab页“Excluded path”里面添加即可，可同时指定本地和远程。</p>
+<p>还有一个设置，打开Tools | Deployment | Options，将”Create Empty directories”打上勾，要是指定的文件夹不存在，会自动创建。</p>
+<h3 id="上传和下载文件"><a href="#上传和下载文件" class="headerlink" title="上传和下载文件"></a>上传和下载文件</h3><p>有几种方法可以实现本地和远程文件的同步，手动和当文件保存后自动触发。这里我选择了手动，因为自动触发比如影响性能，PyCharm会卡，感觉不爽。</p>
+<p>手动上传方式很简单，选择需要同步的文件或文件夹，然后选择 Tools | Deployment | Upload to sftp(这个是刚刚配置的部署名称)<br><img src="https://xnstatic-1253397658.file.myqcloud.com/pcr004.png" alt=""></p>
+<p>下载文件也是一样，选择 Tools | Deployment | Download from sftp</p>
+<h3 id="比较远程和本地文件"><a href="#比较远程和本地文件" class="headerlink" title="比较远程和本地文件"></a>比较远程和本地文件</h3><p>有时候你并不确定远程和本地版本的完全一致，需要去比较看看。PyCharm提供了对比视图来为你解决这个问题。</p>
+<p>选择Tools | Deployment | Browse Remote Host，打开远程文件视图，在右侧窗口就能看到远程主机中的文件<br><img src="https://xnstatic-1253397658.file.myqcloud.com/pcr005.png" alt=""></p>
+<p>选择一个你想要对比的文件夹，点击右键-&gt;Sync with Local，打开同步对比窗口，使用左右箭头来同步内容。</p>
+<p>上面是服务器与本地对比，那么本地文件通服务器对比，就先在PyCharm里面选择文件或文件夹，然后右键-&gt;Deployment-&gt;Sync with deployed to即可</p>
+<h3 id="PyCharm远程调试"><a href="#PyCharm远程调试" class="headerlink" title="PyCharm远程调试"></a>PyCharm远程调试</h3><p>在PyCharm中进行远程调试有两种选择：</p>
+<ol>
+<li>使用远程的解释器</li>
+<li>使用Python调试服务器</li>
+</ol>
+<p>这里简单起见我只演示第一种，使用远程解释器，也就是使用服务器上面安装的python解释器。</p>
+<h4 id="配置远程Python解释器"><a href="#配置远程Python解释器" class="headerlink" title="配置远程Python解释器"></a>配置远程Python解释器</h4><p>选择File | Settings，选择Project | Project Interpreter，然后在右边，点击那个小齿轮设置，如下<br><img src="https://xnstatic-1253397658.file.myqcloud.com/pcr006.png" alt=""></p>
+<p>然后点击”Add Remote”，填写主机的ssh配置<br><img src="https://xnstatic-1253397658.file.myqcloud.com/pcr007.png" alt=""></p>
+<p>如果之前配置过SFTP的话就直接选“Deployment configuration”，然后选择刚刚的模板名称就可以了，由于我上面配置过就直接选模板，<br>这里请仔细看我的Python解释器是虚拟环境virtualenv，这个要在服务器上面先创建好虚拟环境。<br><img src="https://xnstatic-1253397658.file.myqcloud.com/pcr009.png" alt=""></p>
+<h4 id="开始调试"><a href="#开始调试" class="headerlink" title="开始调试"></a>开始调试</h4><p>完成之后选择这个远程的解释器作为工程的解释器即可,然后配置一个运行实例，打断点调试。<br>这里我以另外一个django工程为例来说明，名字为zspace，因为用一个web工程来说明更具代表性。</p>
+<p>选择“Run/Debug Configuration”，添加一个“Django server”，然后配置像下面这样写<br><img src="https://xnstatic-1253397658.file.myqcloud.com/pcr010.png" alt=""><br>请注意图中标出的几个点，具体什么意思就不用多解释了吧，^_^</p>
+<p>然后你就可以像本地调试一样打断点做调试了。这个步骤太简单就不截图了，记得修改源码后同步到服务器继续下一次的调试。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag"># Python</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/20/python/pyfunny/" rel="next" title="一些有趣的python技巧">
+                <i class="fa fa-chevron-left"></i> 一些有趣的python技巧
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/02/linux/vim/" rel="prev" title="vim简易教程">
+                vim简易教程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://ooky9xe9n.bkt.clouddn.com/avatar.png"
+                alt="卡布奇诺" />
+            
+              <p class="site-author-name" itemprop="name">卡布奇诺</p>
+              <p class="site-description motion-element" itemprop="description">记录编程中遇到的坑</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">133</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/aopao1" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:admin@wujinyu.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#远程服务器的同步配置"><span class="nav-number">1.</span> <span class="nav-text">远程服务器的同步配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#上传和下载文件"><span class="nav-number">2.</span> <span class="nav-text">上传和下载文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#比较远程和本地文件"><span class="nav-number">3.</span> <span class="nav-text">比较远程和本地文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PyCharm远程调试"><span class="nav-number">4.</span> <span class="nav-text">PyCharm远程调试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#配置远程Python解释器"><span class="nav-number">4.1.</span> <span class="nav-text">配置远程Python解释器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#开始调试"><span class="nav-number">4.2.</span> <span class="nav-text">开始调试</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">卡布奇诺@心情</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="负载均衡," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="操作系统：CentOS 6.5_x86_64 前提：提前准备好编译环境，防火墙和selinux都关闭 主机IP：两台机器，192.168.203.103、192.168.203.104 安装软件：jdk-8u51-linux-x64, apache-tomcat-8.0.24, tomcat-connectors-1.2.41, httpd-2.2.15, httpd-devel-2.2.15">
+<meta name="keywords" content="负载均衡">
+<meta property="og:type" content="article">
+<meta property="og:title" content="利用httpd对Tomcat进行负载均衡">
+<meta property="og:url" content="http://www.wujinyu.com/2015/10/13/linux/httpd-tomcat/index.html">
+<meta property="og:site_name" content="卡布奇诺">
+<meta property="og:description" content="操作系统：CentOS 6.5_x86_64 前提：提前准备好编译环境，防火墙和selinux都关闭 主机IP：两台机器，192.168.203.103、192.168.203.104 安装软件：jdk-8u51-linux-x64, apache-tomcat-8.0.24, tomcat-connectors-1.2.41, httpd-2.2.15, httpd-devel-2.2.15">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-09-10T13:57:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="利用httpd对Tomcat进行负载均衡">
+<meta name="twitter:description" content="操作系统：CentOS 6.5_x86_64 前提：提前准备好编译环境，防火墙和selinux都关闭 主机IP：两台机器，192.168.203.103、192.168.203.104 安装软件：jdk-8u51-linux-x64, apache-tomcat-8.0.24, tomcat-connectors-1.2.41, httpd-2.2.15, httpd-devel-2.2.15">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.wujinyu.com/2015/10/13/linux/httpd-tomcat/"/>
+
+
+
+
+
+  <title>利用httpd对Tomcat进行负载均衡 | 卡布奇诺</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-21552344-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卡布奇诺</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生活心情</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-分类">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-归档">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-标签">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-公益">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-关于">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2015/10/13/linux/httpd-tomcat/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">利用httpd对Tomcat进行负载均衡</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-10-13T10:59:15+08:00">
+                2015-10-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>操作系统：CentOS 6.5_x86_64</p>
+<p>前提：提前准备好编译环境，防火墙和selinux都关闭</p>
+<p>主机IP：两台机器，192.168.203.103、192.168.203.104</p>
+<p>安装软件：jdk-8u51-linux-x64, apache-tomcat-8.0.24, tomcat-connectors-1.2.41, httpd-2.2.15, httpd-devel-2.2.15<br><a id="more"></a></p>
+<h3 id="一、两台机器都安装JAVA8"><a href="#一、两台机器都安装JAVA8" class="headerlink" title="一、两台机器都安装JAVA8"></a>一、两台机器都安装JAVA8</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo rpm -qa | grep jdk</span><br><span class="line">jdk-1.7.0_45-fcs.x86_64</span><br><span class="line">sudo rpm -e jdk-1.7.0_45</span><br></pre></td></tr></table></figure>
+<p>下载JDK8的包</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget --no-cookies --no-check-certificate --header <span class="string">"Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie"</span> <span class="string">"http://download.oracle.com/otn-pub/java/jdk/8u60-b27/jdk-8u60-linux-x64.tar.gz"</span></span><br></pre></td></tr></table></figure>
+<p>如果上述链接失效，请去官网下载最新的源码包。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /opt/</span><br><span class="line">tar xzf jdk-8u51-linux-x64.tar.gz</span><br><span class="line"><span class="built_in">cd</span> /opt/jdk1.8.0_51/</span><br><span class="line">sudo chown -R root:root /opt/jdk1.8.0_51/</span><br><span class="line">sudo alternatives --install /usr/bin/java java /opt/jdk1.8.0_51/bin/java 2</span><br><span class="line">sudo alternatives --config java</span><br></pre></td></tr></table></figure>
+<p>得到以下输出，选择刚刚安装的jdk8即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">There are 3 programs which provide &apos;java&apos;.</span><br><span class="line"></span><br><span class="line">  Selection    Command</span><br><span class="line">-----------------------------------------------</span><br><span class="line">*  1           /opt/jdk1.7.0_71/bin/java</span><br><span class="line"> + 2           /opt/jdk1.8.0_25/bin/java</span><br><span class="line">   3           /opt/jdk1.8.0_51/bin/java</span><br><span class="line"></span><br><span class="line">Enter to keep the current selection[+], or type selection number: 3</span><br></pre></td></tr></table></figure>
+<p>然后再配置下javac和jar</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo alternatives --install /usr/bin/jar jar /opt/jdk1.8.0_51/bin/jar 2</span><br><span class="line">sudo alternatives --install /usr/bin/javac javac /opt/jdk1.8.0_51/bin/javac 2</span><br><span class="line">sudo alternatives --<span class="built_in">set</span> jar /opt/jdk1.8.0_51/bin/jar</span><br><span class="line">sudo alternatives --<span class="built_in">set</span> javac /opt/jdk1.8.0_51/bin/javac</span><br></pre></td></tr></table></figure>
+<p>查看下JDK版本<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -version</span><br></pre></td></tr></table></figure></p>
+<p>修改环境变量<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /etc/profile</span><br></pre></td></tr></table></figure></p>
+<p>输入以下内容<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> JAVA_HOME=/opt/jdk1.8.0_51</span><br><span class="line"><span class="built_in">export</span> JRE_HOME=/opt/jdk1.8.0_51/jre</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:<span class="variable">$JAVA_HOME</span>/bin</span><br></pre></td></tr></table></figure></p>
+<p>执行<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure></p>
+<h3 id="二、两台机器安装tomcat"><a href="#二、两台机器安装tomcat" class="headerlink" title="二、两台机器安装tomcat"></a>二、两台机器安装tomcat</h3><p>1.下载安装tomcat<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">wget http://mirrors.cnnic.cn/apache/tomcat/tomcat-8/v8.0.24/bin/apache-tomcat-8.0.24.tar.gz</span><br><span class="line">tar xf apache-tomcat-8.0.24.tar.gz -C /usr/<span class="built_in">local</span>/</span><br><span class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/</span><br><span class="line">ln -sv apache-tomcat-8.0.24 tomcat</span><br></pre></td></tr></table></figure></p>
+<p>2.配置环境变量<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/profile.d/tomcat.sh</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CATALINA_BASE=/usr/<span class="built_in">local</span>/tomcat</span><br><span class="line">PATH=<span class="variable">$CATALINA_BASE</span>/bin:<span class="variable">$PATH</span></span><br><span class="line"><span class="built_in">export</span> PATH CATALINA_BASE</span><br></pre></td></tr></table></figure>
+<p>执行：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">. /etc/profile.d/tomcat.sh</span><br></pre></td></tr></table></figure></p>
+<p>3.查看状态：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">catalina.sh version</span><br></pre></td></tr></table></figure></p>
+<p>4.提供启动脚本</p>
+<p>sudo vim /etc/init.d/tomcat</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line"><span class="comment"># Tomcat init script for linux</span></span><br><span class="line"><span class="comment"># chkconfig: 2345 96 14</span></span><br><span class="line"><span class="comment"># description: The Apache Tomcat servlet/JSP container</span></span><br><span class="line"><span class="comment"># JAVA_OPTS='-Xms64m -Xmx128m'</span></span><br><span class="line">JAVA_HOME=/opt/jdk</span><br><span class="line">CATALINA_HOME=/usr/<span class="built_in">local</span>/tomcat</span><br><span class="line"><span class="built_in">export</span> JAVA_HOME CATALINA_HOME</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="variable">$1</span> <span class="keyword">in</span></span><br><span class="line">start)</span><br><span class="line">  <span class="built_in">exec</span> <span class="variable">$CATALINA_HOME</span>/bin/catalina.sh start ;;</span><br><span class="line">stop)</span><br><span class="line">  <span class="built_in">exec</span> <span class="variable">$CATALINA_HOME</span>/bin/catalina.sh stop ;;</span><br><span class="line">restart)</span><br><span class="line">  <span class="built_in">echo</span> <span class="string">"stoping tomcat ..."</span></span><br><span class="line">  ps aux |grep tomcat/bin |grep -v <span class="string">"grep tomcat/bin"</span> |<span class="keyword">while</span> <span class="built_in">read</span> line</span><br><span class="line">  <span class="keyword">do</span></span><br><span class="line">    linewords=(<span class="variable">$line</span>)</span><br><span class="line">    pid=<span class="string">"<span class="variable">$&#123;linewords[1]&#125;</span>"</span></span><br><span class="line">    <span class="built_in">kill</span> -9 <span class="variable">$pid</span></span><br><span class="line">  <span class="keyword">done</span></span><br><span class="line">  <span class="comment"># $CATALINA_HOME/bin/catalina.sh stop</span></span><br><span class="line">  sleep 2</span><br><span class="line">  <span class="built_in">echo</span> <span class="string">"starting tomcat ..."</span></span><br><span class="line">  <span class="built_in">exec</span> <span class="variable">$CATALINA_HOME</span>/bin/catalina.sh start ;;</span><br><span class="line">*)</span><br><span class="line">  <span class="built_in">echo</span> <span class="string">"Usage: <span class="variable">$0</span> &#123;start|stop|restart&#125;"</span></span><br><span class="line">  <span class="built_in">exit</span> 1</span><br><span class="line">  ;;</span><br><span class="line"><span class="keyword">esac</span></span><br></pre></td></tr></table></figure>
+<p>执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">sudo chmod +x /etc/init.d/tomcat</span><br><span class="line">sudo chkconfig --add tomcat</span><br></pre></td></tr></table></figure>
+<p>5.编辑tomcat配置文件，只添加jvmRoute参数：</p>
+<p>在第一台机子上面：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /usr/<span class="built_in">local</span>/tomcat/conf/server.xml</span><br></pre></td></tr></table></figure>
+<p>修改下面这句：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;Engine name=&quot;Catalina&quot; defaultHost=&quot;localhost&quot; jvmRoute=&quot;TomcatA&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>在第二台机子上面：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /usr/<span class="built_in">local</span>/tomcat/conf/server.xml</span><br></pre></td></tr></table></figure>
+<p>修改下面这句：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;Engine name=&quot;Catalina&quot; defaultHost=&quot;localhost&quot; jvmRoute=&quot;TomcatB&quot;&gt;</span><br></pre></td></tr></table></figure></p>
+<p>6.提供测试页面</p>
+<p>第一台机器上：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir -pv /usr/<span class="built_in">local</span>/tomcat/webapps/<span class="built_in">test</span>/WEB-INF/&#123;classes,lib&#125;</span><br><span class="line">sudo vim /usr/<span class="built_in">local</span>/tomcat/webapps/<span class="built_in">test</span>/index.jsp</span><br></pre></td></tr></table></figure></p>
+<p>写一个简单的JSP页面：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">%@</span> <span class="attr">page</span> <span class="attr">language</span>=<span class="string">"java"</span> %&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">%@</span> <span class="attr">page</span> <span class="attr">import</span>=<span class="string">"java.util.*"</span> %&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>test<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">%</span></span></span><br><span class="line"><span class="tag">            <span class="attr">out.println</span>("<span class="attr">This</span> <span class="attr">is</span> <span class="attr">TomcatA</span>");</span></span><br><span class="line"><span class="tag">        %&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>然后启动tomcat<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service tomcat start</span><br></pre></td></tr></table></figure></p>
+<p>这时候可以通过访问 <code>http://192.168.203.103:8080/test</code> 访问到这个页面</p>
+<p>第二台机器上：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir -pv /usr/<span class="built_in">local</span>/tomcat/webapps/<span class="built_in">test</span>/WEB-INF/&#123;classes,lib&#125;</span><br><span class="line">sudo vim /usr/<span class="built_in">local</span>/tomcat/webapps/<span class="built_in">test</span>/index.jsp</span><br></pre></td></tr></table></figure></p>
+<p>写一个简单的JSP页面：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">%@</span> <span class="attr">page</span> <span class="attr">language</span>=<span class="string">"java"</span> %&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">%@</span> <span class="attr">page</span> <span class="attr">import</span>=<span class="string">"java.util.*"</span> %&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>test<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">%</span></span></span><br><span class="line"><span class="tag">            <span class="attr">out.println</span>("<span class="attr">This</span> <span class="attr">is</span> <span class="attr">TomcatB</span>");</span></span><br><span class="line"><span class="tag">        %&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>然后启动tomcat<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service tomcat start</span><br></pre></td></tr></table></figure></p>
+<p>这时候可以通过访问<code>http://192.168.203.104:8080/test</code>访问到这个页面</p>
+<h3 id="三、利用mod-jk模块对tomcat进行负载均衡"><a href="#三、利用mod-jk模块对tomcat进行负载均衡" class="headerlink" title="三、利用mod_jk模块对tomcat进行负载均衡"></a>三、利用mod_jk模块对tomcat进行负载均衡</h3><p>利用httpd反向代理tomcat时有两种方法，分别要用到mod_proxy和mod_jk这两个模块。<br>mod_jk需要额外编译安装，不过它功能更强大，所以推荐mod_jk。<br>此模块只需要在一台机器上安装，我们这里在第一台机器（103）上安装。</p>
+<p>1.安装httpd：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install httpd httpd-devel</span><br></pre></td></tr></table></figure>
+<p>2.安装mod_jk.so模块：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wget http://mirrors.cnnic.cn/apache/tomcat/tomcat-connectors/jk/tomcat-connectors-1.2.41-src.tar.gz</span><br><span class="line">tar xf tomcat-connectors-1.2.41-src.tar.gz</span><br><span class="line"><span class="built_in">cd</span> tomcat-connectors-1.2.41-src/native/</span><br><span class="line">./configure --with-apxs=/usr/sbin/apxs</span><br><span class="line">sudo make &amp;&amp; sudo make install</span><br></pre></td></tr></table></figure>
+<p>3.提供额外的httpd模块配置文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/httpd/conf.d/httpd-jk.conf</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># Load the mod_jk</span><br><span class="line">LoadModule  jk_module  modules/mod_jk.so</span><br><span class="line">JkWorkersFile  /etc/httpd/conf.d/workers.properties</span><br><span class="line">JkLogFile  logs/mod_jk.log</span><br><span class="line">JkLogLevel  debug</span><br><span class="line">JkMount  /*  lb1</span><br><span class="line">JkMount  /status/  stat1</span><br></pre></td></tr></table></figure>
+<p>4.配置mod_jk模块的配置文件workers.properties：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/httpd/conf.d/workers.properties</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">worker.list = lb1,stat1</span><br><span class="line">worker.TomcatA.type = ajp13</span><br><span class="line">worker.TomcatA.host = 192.168.203.103</span><br><span class="line">worker.TomcatA.port = 8009</span><br><span class="line">worker.TomcatA.lbfactor = 1</span><br><span class="line">worker.TomcatB.type = ajp13</span><br><span class="line">worker.TomcatB.host = 192.168.203.104</span><br><span class="line">worker.TomcatB.port = 8009</span><br><span class="line">worker.TomcatB.lbfactor = 1</span><br><span class="line">worker.lb1.type = lb</span><br><span class="line">worker.lb1.sticky_session = 0</span><br><span class="line">worker.lb1.balance_workers = TomcatA, TomcatB</span><br><span class="line">worker.stat1.type = status</span><br></pre></td></tr></table></figure>
+<p>5.启动httpd测试：<br>我们先去修改下hostname，还有httpd的domainname，<code>sudo vim /etc/hosts</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1	localhost centos03</span><br></pre></td></tr></table></figure></p>
+<p>然后修改httpd的配置文件，<code>sudo vim /etc/httpd/conf/httpd.conf</code><br>修改这一行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ServerName localhost:80</span><br></pre></td></tr></table></figure></p>
+<p>最后我们启动httpd服务：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service httpd start</span><br></pre></td></tr></table></figure></p>
+<p>用浏览器打开<code>http://192.168.203.103/test</code>，我们不断刷新，可以看到效果。</p>
+<p>6.修改httpd默认端口号方法</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /etc/httpd/conf/httpd.conf</span><br></pre></td></tr></table></figure>
+<p>修改两个地方</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#Listen 12.34.56.78:80</span><br><span class="line">Listen 80</span><br><span class="line">#把80改为你设置的端口，我设置端口为8088</span><br><span class="line"></span><br><span class="line">Listen 8088</span><br><span class="line"></span><br><span class="line">NameVirtualHost *:80</span><br><span class="line">#把80改为你设置的端口，我设置端口为8088</span><br><span class="line">NameVirtualHost *:8088</span><br></pre></td></tr></table></figure>
+<p>保存修改，退出，重启httpd服务。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/负载均衡/" rel="tag"># 负载均衡</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/10/10/python/centos-python/" rel="next" title="centos6.x安装python2.7">
+                <i class="fa fa-chevron-left"></i> centos6.x安装python2.7
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/10/22/python/functional/" rel="prev" title="python核心 - 函数式编程">
+                python核心 - 函数式编程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://ooky9xe9n.bkt.clouddn.com/avatar.png"
+                alt="卡布奇诺" />
+            
+              <p class="site-author-name" itemprop="name">卡布奇诺</p>
+              <p class="site-description motion-element" itemprop="description">记录编程中遇到的坑</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">133</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/aopao1" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:admin@wujinyu.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、两台机器都安装JAVA8"><span class="nav-number">1.</span> <span class="nav-text">一、两台机器都安装JAVA8</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、两台机器安装tomcat"><span class="nav-number">2.</span> <span class="nav-text">二、两台机器安装tomcat</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、利用mod-jk模块对tomcat进行负载均衡"><span class="nav-number">3.</span> <span class="nav-text">三、利用mod_jk模块对tomcat进行负载均衡</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">卡布奇诺@心情</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

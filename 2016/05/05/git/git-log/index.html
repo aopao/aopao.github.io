@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Git,Log," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Git多颜色输出git默认的输出是单一颜色的，不仅不够美观，也不容易阅读。实际上，git本身就支持用多种颜色来显示其输出的信息，只需在命令行中运行以下命令来修改git的设置，即可开启多颜色输出： git config --global color.status auto git config --global color.diff auto git config --global color.br">
+<meta name="keywords" content="Git,Log">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git日志格式、颜色设置">
+<meta property="og:url" content="http://www.wujinyu.com/2016/05/05/git/git-log/index.html">
+<meta property="og:site_name" content="卡布奇诺">
+<meta property="og:description" content="Git多颜色输出git默认的输出是单一颜色的，不仅不够美观，也不容易阅读。实际上，git本身就支持用多种颜色来显示其输出的信息，只需在命令行中运行以下命令来修改git的设置，即可开启多颜色输出： git config --global color.status auto git config --global color.diff auto git config --global color.br">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.wujinyu.com/images/git-log/git-log.png">
+<meta property="og:image" content="http://www.wujinyu.com/images/git-log/git-log-change.png">
+<meta property="og:updated_time" content="2017-09-10T13:57:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Git日志格式、颜色设置">
+<meta name="twitter:description" content="Git多颜色输出git默认的输出是单一颜色的，不仅不够美观，也不容易阅读。实际上，git本身就支持用多种颜色来显示其输出的信息，只需在命令行中运行以下命令来修改git的设置，即可开启多颜色输出： git config --global color.status auto git config --global color.diff auto git config --global color.br">
+<meta name="twitter:image" content="http://www.wujinyu.com/images/git-log/git-log.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.wujinyu.com/2016/05/05/git/git-log/"/>
+
+
+
+
+
+  <title>Git日志格式、颜色设置 | 卡布奇诺</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-21552344-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卡布奇诺</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生活心情</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-分类">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-归档">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-标签">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-公益">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-关于">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2016/05/05/git/git-log/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Git日志格式、颜色设置</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-05T20:39:19+08:00">
+                2016-05-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Git/" itemprop="url" rel="index">
+                    <span itemprop="name">Git</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Git多颜色输出"><a href="#Git多颜色输出" class="headerlink" title="Git多颜色输出"></a>Git多颜色输出</h2><p>git默认的输出是单一颜色的，不仅不够美观，也不容易阅读。实际上，git本身就支持用多种颜色来显示其输出的信息，只需在命令行中运行以下命令来修改git的设置，即可开启多颜色输出：</p>
+<pre><code>git config --global color.status auto
+git config --global color.diff auto
+git config --global color.branch auto
+git config --global color.interactive auto
+</code></pre><a id="more"></a>
+<h2 id="自定义log格式"><a href="#自定义log格式" class="headerlink" title="自定义log格式"></a>自定义log格式</h2><p>完成上述步骤后，git log命令的输出虽然有了点颜色，但还是显得枯燥(见下图)。</p>
+<p><img src="/images/git-log/git-log.png" alt="git log"></p>
+<p>git提供了自定义log格式的功能，尝试输入以下命令：</p>
+<pre><code>git log --color --graph --pretty=format:&apos;%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)&lt;%an&gt;%Creset&apos; --abbrev-commit
+</code></pre><p>把上面命令设置一个别名lg:</p>
+<pre><code>git config --global alias.lg &quot;log --color --graph --pretty=format:&apos;%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)&lt;%an&gt;%Creset&apos; --abbrev-commit&quot;
+</code></pre><p>设置之后git lg即可查看log，而且显示的更加友好：</p>
+<p><img src="/images/git-log/git-log-change.png" alt="git log
+change"></p>
+<p>如果要查看更详细的log，即：git lg/log -p    </p>
+<h2 id="Git-log-输出格式化"><a href="#Git-log-输出格式化" class="headerlink" title="Git log 输出格式化:"></a>Git log 输出格式化:</h2><table>
+<thead>
+<tr>
+<th>参数</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>%H</td>
+<td style="text-align:left">commit hash</td>
+</tr>
+<tr>
+<td>%h</td>
+<td style="text-align:left">commit short hash</td>
+</tr>
+<tr>
+<td>%T</td>
+<td style="text-align:left">tree hash</td>
+</tr>
+<tr>
+<td>%t</td>
+<td style="text-align:left">tree short hash</td>
+</tr>
+<tr>
+<td>%P</td>
+<td style="text-align:left">parent hash</td>
+</tr>
+<tr>
+<td>%p</td>
+<td style="text-align:left">parent short hash</td>
+</tr>
+<tr>
+<td>%an</td>
+<td style="text-align:left">作者名字</td>
+</tr>
+<tr>
+<td>%aN</td>
+<td style="text-align:left">.mailmap 中对应的作者名字</td>
+</tr>
+<tr>
+<td>%ae</td>
+<td style="text-align:left">作者邮箱</td>
+</tr>
+<tr>
+<td>%aE</td>
+<td style="text-align:left">.mailmap 中对应的作者邮箱</td>
+</tr>
+<tr>
+<td>%ad</td>
+<td style="text-align:left">–date=制定的日期格式</td>
+</tr>
+<tr>
+<td>%aD</td>
+<td style="text-align:left">RFC2822 日期格式</td>
+</tr>
+<tr>
+<td>%ar</td>
+<td style="text-align:left">日期格式，例如：1 day ago</td>
+</tr>
+<tr>
+<td>%at</td>
+<td style="text-align:left">UNIX timestamp 日期格式</td>
+</tr>
+<tr>
+<td>%ai</td>
+<td style="text-align:left">ISO 8601 日期格式</td>
+</tr>
+<tr>
+<td>%cn</td>
+<td style="text-align:left">提交者名字</td>
+</tr>
+<tr>
+<td>%cN</td>
+<td style="text-align:left">.mailmap 对应的提交的名字</td>
+</tr>
+<tr>
+<td>%ce</td>
+<td style="text-align:left">提交者邮箱</td>
+</tr>
+<tr>
+<td>%cE</td>
+<td style="text-align:left">.mailmap 对应的提交者的邮箱</td>
+</tr>
+<tr>
+<td>%cd</td>
+<td style="text-align:left">–data=制定的提交日期的格式</td>
+</tr>
+<tr>
+<td>%cD</td>
+<td style="text-align:left">RFC2822 提交日期的格式</td>
+</tr>
+<tr>
+<td>%cr</td>
+<td style="text-align:left">提交日期的格式，例如：1day ago</td>
+</tr>
+<tr>
+<td>%ct</td>
+<td style="text-align:left">UNIX timestamp 提交日期的格式</td>
+</tr>
+<tr>
+<td>%ci</td>
+<td style="text-align:left">ISO 8601 提交日期的格式</td>
+</tr>
+<tr>
+<td>%d</td>
+<td style="text-align:left">ref 名称</td>
+</tr>
+<tr>
+<td>%e</td>
+<td style="text-align:left">encoding</td>
+</tr>
+<tr>
+<td>%s</td>
+<td style="text-align:left">commit 信息标题</td>
+</tr>
+<tr>
+<td>%f</td>
+<td style="text-align:left">过滤commit信息的标题使之可以作为文件名</td>
+</tr>
+<tr>
+<td>%b</td>
+<td style="text-align:left">commit 信息内容</td>
+</tr>
+<tr>
+<td>%N</td>
+<td style="text-align:left">commit notes</td>
+</tr>
+<tr>
+<td>%gD</td>
+<td style="text-align:left">reflog selector, e.g., refs/stash@{1}</td>
+</tr>
+<tr>
+<td>%gd</td>
+<td style="text-align:left">shortened reflog selector, e.g., stash@{1}</td>
+</tr>
+<tr>
+<td>%gs</td>
+<td style="text-align:left">reflog subject</td>
+</tr>
+<tr>
+<td>%Cred</td>
+<td style="text-align:left">切换至红色</td>
+</tr>
+<tr>
+<td>%Cgreen</td>
+<td style="text-align:left">切换至绿色</td>
+</tr>
+<tr>
+<td>%Cblue</td>
+<td style="text-align:left">切换至蓝色</td>
+</tr>
+<tr>
+<td>%Creset</td>
+<td style="text-align:left">重设颜色</td>
+</tr>
+<tr>
+<td>%C(color)</td>
+<td style="text-align:left">制定颜色，as described in color.branch.* config option</td>
+</tr>
+<tr>
+<td>%m</td>
+<td style="text-align:left">left right or boundary mark</td>
+</tr>
+<tr>
+<td>%n</td>
+<td style="text-align:left">换行</td>
+</tr>
+<tr>
+<td>%%</td>
+<td style="text-align:left">a raw %</td>
+</tr>
+<tr>
+<td>%x00</td>
+<td style="text-align:left">print a byte from a hex code</td>
+</tr>
+<tr>
+<td>%w([[,[,]]])</td>
+<td style="text-align:left">switch line wrapping, like the -w option of git-shortlog(1).</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Git-log-命令支持的选项"><a href="#Git-log-命令支持的选项" class="headerlink" title="Git log 命令支持的选项"></a>Git log 命令支持的选项</h2><p>-p 按补丁格式显示每个更新之间的差异。<br>–stat 显示每次更新的文件修改统计信息。<br>–shortstat 只显示 –stat 中最后的行数修改添加移除统计。<br>–name-only 仅在提交信息后显示已修改的文件清单。<br>–name-status 显示新增、修改、删除的文件清单。<br>–abbrev-commit 仅显示 SHA-1 的前几个字符，而非所有的 40 个字符。<br>–relative-date 使用较短的相对时间显示（比如，“2 weeks ago”）。<br>–graph 显示 ASCII 图形表示的分支合并历史。<br>–pretty 使用其他格式显示历史提交信息。可用的选项包括oneline，short，full，fuller 和 format（后跟指定格式）。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Git/" rel="tag"># Git</a>
+          
+            <a href="/tags/Log/" rel="tag"># Log</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/04/php/php-curl-file/" rel="next" title="PHP的cURL文件上传">
+                <i class="fa fa-chevron-left"></i> PHP的cURL文件上传
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/09/python/pyenv/" rel="prev" title="使用pyenv创建多版本python环境">
+                使用pyenv创建多版本python环境 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://ooky9xe9n.bkt.clouddn.com/avatar.png"
+                alt="卡布奇诺" />
+            
+              <p class="site-author-name" itemprop="name">卡布奇诺</p>
+              <p class="site-description motion-element" itemprop="description">记录编程中遇到的坑</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">133</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/aopao1" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:admin@wujinyu.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Git多颜色输出"><span class="nav-number">1.</span> <span class="nav-text">Git多颜色输出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义log格式"><span class="nav-number">2.</span> <span class="nav-text">自定义log格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Git-log-输出格式化"><span class="nav-number">3.</span> <span class="nav-text">Git log 输出格式化:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Git-log-命令支持的选项"><span class="nav-number">4.</span> <span class="nav-text">Git log 命令支持的选项</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">卡布奇诺@心情</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

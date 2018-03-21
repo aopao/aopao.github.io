@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="ztree," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="经常有这个需求，用用到树形菜单做展示或者选择，基于jquery的一个控件zTree非常简单好用，这里做一下记录。 官网介绍，zTree 是一个依靠 jQuery 实现的多功能“树插件”。优异的性能、灵活的配置、多种功能的组合是 zTree 最大优点。 官网地址：http://www.treejs.cn/v3/main.php 另外还有好多实际效果的演示，可以去看看。">
+<meta name="keywords" content="ztree">
+<meta property="og:type" content="article">
+<meta property="og:title" content="树形控件zTree使用">
+<meta property="og:url" content="http://www.wujinyu.com/2016/06/09/web/ztree/index.html">
+<meta property="og:site_name" content="卡布奇诺">
+<meta property="og:description" content="经常有这个需求，用用到树形菜单做展示或者选择，基于jquery的一个控件zTree非常简单好用，这里做一下记录。 官网介绍，zTree 是一个依靠 jQuery 实现的多功能“树插件”。优异的性能、灵活的配置、多种功能的组合是 zTree 最大优点。 官网地址：http://www.treejs.cn/v3/main.php 另外还有好多实际效果的演示，可以去看看。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://xnstatic-1253397658.file.myqcloud.com/ztree01.png">
+<meta property="og:updated_time" content="2017-09-10T13:57:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="树形控件zTree使用">
+<meta name="twitter:description" content="经常有这个需求，用用到树形菜单做展示或者选择，基于jquery的一个控件zTree非常简单好用，这里做一下记录。 官网介绍，zTree 是一个依靠 jQuery 实现的多功能“树插件”。优异的性能、灵活的配置、多种功能的组合是 zTree 最大优点。 官网地址：http://www.treejs.cn/v3/main.php 另外还有好多实际效果的演示，可以去看看。">
+<meta name="twitter:image" content="https://xnstatic-1253397658.file.myqcloud.com/ztree01.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.wujinyu.com/2016/06/09/web/ztree/"/>
+
+
+
+
+
+  <title>树形控件zTree使用 | 卡布奇诺</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-21552344-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卡布奇诺</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生活心情</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-分类">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-归档">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-标签">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-公益">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-关于">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2016/06/09/web/ztree/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">树形控件zTree使用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-06-09T17:55:22+08:00">
+                2016-06-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web/" itemprop="url" rel="index">
+                    <span itemprop="name">web</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>经常有这个需求，用用到树形菜单做展示或者选择，基于jquery的一个控件zTree非常简单好用，这里做一下记录。</p>
+<p>官网介绍，zTree 是一个依靠 jQuery 实现的多功能“树插件”。优异的性能、灵活的配置、多种功能的组合是 zTree 最大优点。</p>
+<p>官网地址：<a href="http://www.treejs.cn/v3/main.php" target="_blank" rel="noopener">http://www.treejs.cn/v3/main.php</a></p>
+<p>另外还有好多实际效果的演示，可以去看看。<a id="more"></a></p>
+<h2 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h2><p>直接去github下载源码：<a href="https://github.com/zTree/zTree_v3" target="_blank" rel="noopener">https://github.com/zTree/zTree_v3</a></p>
+<p>选取了一个最基本的例子，带metro风格的，比较好看。</p>
+<p><a href="https://github.com/zTree/zTree_v3/blob/master/demo/cn/super/metro.html" target="_blank" rel="noopener">https://github.com/zTree/zTree_v3/blob/master/demo/cn/super/metro.html</a></p>
+<p>提取最核心的东东</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">HTML</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">HEAD</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">TITLE</span>&gt;</span> ZTREE DEMO - Simple Data<span class="tag">&lt;/<span class="name">TITLE</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"content-type"</span> <span class="attr">content</span>=<span class="string">"text/html; charset=UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">href</span>=<span class="string">"./css/demo.css"</span> <span class="attr">type</span>=<span class="string">"text/css"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">href</span>=<span class="string">"./css/metroStyle.css"</span> <span class="attr">type</span>=<span class="string">"text/css"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"./js/jquery-1.11.1.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"./js/jquery.ztree.core.min.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"./js/jquery.ztree.excheck.min.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">SCRIPT</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> setting = &#123;</span></span><br><span class="line"><span class="undefined">            view: &#123;</span></span><br><span class="line"><span class="javascript">                selectedMulti: <span class="literal">false</span>,</span></span><br><span class="line"><span class="javascript">				showLine: <span class="literal">false</span></span></span><br><span class="line"><span class="undefined">            &#125;,</span></span><br><span class="line"><span class="undefined">            check: &#123;</span></span><br><span class="line"><span class="javascript">                enable: <span class="literal">true</span></span></span><br><span class="line"><span class="undefined">            &#125;,</span></span><br><span class="line"><span class="undefined">            data: &#123;</span></span><br><span class="line"><span class="undefined">                simpleData: &#123;</span></span><br><span class="line"><span class="javascript">                    enable: <span class="literal">true</span></span></span><br><span class="line"><span class="undefined">                &#125;</span></span><br><span class="line"><span class="undefined">            &#125;,</span></span><br><span class="line"><span class="undefined">            edit: &#123;</span></span><br><span class="line"><span class="javascript">                enable: <span class="literal">false</span></span></span><br><span class="line"><span class="undefined">            &#125;</span></span><br><span class="line"><span class="undefined">        &#125;;</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> zNodes =[</span></span><br><span class="line"><span class="javascript">            &#123; <span class="attr">id</span>:<span class="number">1</span>, <span class="attr">pId</span>:<span class="number">0</span>, <span class="attr">name</span>:<span class="string">"父节点1"</span>, <span class="attr">open</span>:<span class="literal">true</span>&#125;,</span></span><br><span class="line"><span class="javascript">            &#123; <span class="attr">id</span>:<span class="number">11</span>, <span class="attr">pId</span>:<span class="number">1</span>, <span class="attr">name</span>:<span class="string">"父节点11"</span>&#125;,</span></span><br><span class="line"><span class="javascript">            &#123; <span class="attr">id</span>:<span class="number">111</span>, <span class="attr">pId</span>:<span class="number">11</span>, <span class="attr">name</span>:<span class="string">"叶子节点111"</span>&#125;,</span></span><br><span class="line"><span class="javascript">            &#123; <span class="attr">id</span>:<span class="number">112</span>, <span class="attr">pId</span>:<span class="number">11</span>, <span class="attr">name</span>:<span class="string">"叶子节点112"</span>&#125;,</span></span><br><span class="line"><span class="javascript">            &#123; <span class="attr">id</span>:<span class="number">113</span>, <span class="attr">pId</span>:<span class="number">11</span>, <span class="attr">name</span>:<span class="string">"叶子节点113"</span>&#125;,</span></span><br><span class="line"><span class="javascript">            &#123; <span class="attr">id</span>:<span class="number">114</span>, <span class="attr">pId</span>:<span class="number">11</span>, <span class="attr">name</span>:<span class="string">"叶子节点114"</span>&#125;,</span></span><br><span class="line"><span class="javascript">            &#123; <span class="attr">id</span>:<span class="number">12</span>, <span class="attr">pId</span>:<span class="number">1</span>, <span class="attr">name</span>:<span class="string">"父节点12"</span>&#125;,</span></span><br><span class="line"><span class="javascript">            &#123; <span class="attr">id</span>:<span class="number">121</span>, <span class="attr">pId</span>:<span class="number">12</span>, <span class="attr">name</span>:<span class="string">"叶子节点121"</span>&#125;,</span></span><br><span class="line"><span class="javascript">            &#123; <span class="attr">id</span>:<span class="number">122</span>, <span class="attr">pId</span>:<span class="number">12</span>, <span class="attr">name</span>:<span class="string">"叶子节点122"</span>&#125;,</span></span><br><span class="line"><span class="javascript">            &#123; <span class="attr">id</span>:<span class="number">123</span>, <span class="attr">pId</span>:<span class="number">12</span>, <span class="attr">name</span>:<span class="string">"叶子节点123"</span>&#125;,</span></span><br><span class="line"><span class="javascript">            &#123; <span class="attr">id</span>:<span class="number">124</span>, <span class="attr">pId</span>:<span class="number">12</span>, <span class="attr">name</span>:<span class="string">"叶子节点124"</span>&#125;,</span></span><br><span class="line"><span class="javascript">            &#123; <span class="attr">id</span>:<span class="number">13</span>, <span class="attr">pId</span>:<span class="number">1</span>, <span class="attr">name</span>:<span class="string">"父节点13"</span>, <span class="attr">isParent</span>:<span class="literal">true</span>&#125;,</span></span><br><span class="line"><span class="javascript">            &#123; <span class="attr">id</span>:<span class="number">2</span>, <span class="attr">pId</span>:<span class="number">0</span>, <span class="attr">name</span>:<span class="string">"父节点2"</span>&#125;,</span></span><br><span class="line"><span class="javascript">            &#123; <span class="attr">id</span>:<span class="number">21</span>, <span class="attr">pId</span>:<span class="number">2</span>, <span class="attr">name</span>:<span class="string">"父节点21"</span>, <span class="attr">open</span>:<span class="literal">true</span>&#125;,</span></span><br><span class="line"><span class="javascript">            &#123; <span class="attr">id</span>:<span class="number">211</span>, <span class="attr">pId</span>:<span class="number">21</span>, <span class="attr">name</span>:<span class="string">"叶子节点211"</span>&#125;,</span></span><br><span class="line"><span class="javascript">            &#123; <span class="attr">id</span>:<span class="number">212</span>, <span class="attr">pId</span>:<span class="number">21</span>, <span class="attr">name</span>:<span class="string">"叶子节点212"</span>&#125;,</span></span><br><span class="line"><span class="javascript">            &#123; <span class="attr">id</span>:<span class="number">213</span>, <span class="attr">pId</span>:<span class="number">21</span>, <span class="attr">name</span>:<span class="string">"叶子节点213"</span>&#125;,</span></span><br><span class="line"><span class="javascript">            &#123; <span class="attr">id</span>:<span class="number">214</span>, <span class="attr">pId</span>:<span class="number">21</span>, <span class="attr">name</span>:<span class="string">"叶子节点214"</span>&#125;,</span></span><br><span class="line"><span class="javascript">            &#123; <span class="attr">id</span>:<span class="number">22</span>, <span class="attr">pId</span>:<span class="number">2</span>, <span class="attr">name</span>:<span class="string">"父节点22"</span>&#125;,</span></span><br><span class="line"><span class="javascript">            &#123; <span class="attr">id</span>:<span class="number">221</span>, <span class="attr">pId</span>:<span class="number">22</span>, <span class="attr">name</span>:<span class="string">"叶子节点221"</span>&#125;,</span></span><br><span class="line"><span class="javascript">            &#123; <span class="attr">id</span>:<span class="number">222</span>, <span class="attr">pId</span>:<span class="number">22</span>, <span class="attr">name</span>:<span class="string">"叶子节点222"</span>&#125;,</span></span><br><span class="line"><span class="javascript">            &#123; <span class="attr">id</span>:<span class="number">223</span>, <span class="attr">pId</span>:<span class="number">22</span>, <span class="attr">name</span>:<span class="string">"叶子节点223"</span>&#125;,</span></span><br><span class="line"><span class="javascript">            &#123; <span class="attr">id</span>:<span class="number">224</span>, <span class="attr">pId</span>:<span class="number">22</span>, <span class="attr">name</span>:<span class="string">"叶子节点224"</span>&#125;,</span></span><br><span class="line"><span class="javascript">            &#123; <span class="attr">id</span>:<span class="number">23</span>, <span class="attr">pId</span>:<span class="number">2</span>, <span class="attr">name</span>:<span class="string">"父节点23"</span>&#125;,</span></span><br><span class="line"><span class="javascript">            &#123; <span class="attr">id</span>:<span class="number">231</span>, <span class="attr">pId</span>:<span class="number">23</span>, <span class="attr">name</span>:<span class="string">"叶子节点231"</span>&#125;,</span></span><br><span class="line"><span class="javascript">            &#123; <span class="attr">id</span>:<span class="number">232</span>, <span class="attr">pId</span>:<span class="number">23</span>, <span class="attr">name</span>:<span class="string">"叶子节点232"</span>&#125;,</span></span><br><span class="line"><span class="javascript">            &#123; <span class="attr">id</span>:<span class="number">233</span>, <span class="attr">pId</span>:<span class="number">23</span>, <span class="attr">name</span>:<span class="string">"叶子节点233"</span>&#125;,</span></span><br><span class="line"><span class="javascript">            &#123; <span class="attr">id</span>:<span class="number">234</span>, <span class="attr">pId</span>:<span class="number">23</span>, <span class="attr">name</span>:<span class="string">"叶子节点234"</span>&#125;,</span></span><br><span class="line"><span class="undefined">        ];</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="javascript">        $(<span class="built_in">document</span>).ready(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span></span><br><span class="line"><span class="javascript">            $.fn.zTree.init($(<span class="string">"#treeDemo"</span>), setting, zNodes);</span></span><br><span class="line"><span class="undefined">        &#125;);</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">SCRIPT</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">HEAD</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">BODY</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"content_wrap"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">""</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">ul</span> <span class="attr">id</span>=<span class="string">"treeDemo"</span> <span class="attr">class</span>=<span class="string">"ztree"</span>&gt;</span><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">BODY</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">HTML</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>记住引入<code>metroStyle.css</code>，还有metro的图片文件夹也引入，另外自己还自定义了一些样式：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.ztree</span> <span class="selector-tag">li</span><span class="selector-class">.title</span> &#123;<span class="attribute">list-style</span>: none;&#125;</span><br><span class="line"><span class="selector-class">.ztree</span> <span class="selector-tag">ul</span><span class="selector-class">.ztree</span> &#123;<span class="attribute">margin-top</span>: <span class="number">10px</span>;<span class="attribute">border</span>: <span class="number">1px</span> solid <span class="number">#617775</span>;<span class="attribute">background</span>: <span class="number">#f0f6e4</span>;<span class="attribute">width</span>:<span class="number">220px</span>;<span class="attribute">height</span>:<span class="number">360px</span>;<span class="attribute">overflow-y</span>:scroll;<span class="attribute">overflow-x</span>:auto;&#125;</span><br><span class="line"><span class="selector-class">.ztree</span> <span class="selector-tag">ul</span><span class="selector-class">.log</span> &#123;<span class="attribute">border</span>: <span class="number">1px</span> solid <span class="number">#617775</span>;<span class="attribute">background</span>: <span class="number">#f0f6e4</span>;<span class="attribute">width</span>:<span class="number">300px</span>;<span class="attribute">height</span>:<span class="number">170px</span>;<span class="attribute">overflow</span>: hidden;&#125;</span><br><span class="line"><span class="selector-class">.ztree</span> <span class="selector-tag">ul</span><span class="selector-class">.log</span><span class="selector-class">.small</span> &#123;<span class="attribute">height</span>:<span class="number">45px</span>;&#125;</span><br><span class="line"><span class="selector-class">.ztree</span> <span class="selector-tag">ul</span><span class="selector-class">.log</span> <span class="selector-tag">li</span> &#123;<span class="attribute">color</span>: <span class="number">#666666</span>;<span class="attribute">list-style</span>: none;<span class="attribute">padding-left</span>: <span class="number">10px</span>;&#125;</span><br><span class="line"><span class="selector-class">.ztree</span> <span class="selector-tag">ul</span><span class="selector-class">.log</span> <span class="selector-tag">li</span><span class="selector-class">.dark</span> &#123;<span class="attribute">background-color</span>: <span class="number">#E3E3E3</span>;&#125;</span><br><span class="line"><span class="selector-tag">ul</span><span class="selector-class">.ztree</span> <span class="selector-tag">li</span> <span class="selector-tag">a</span> &#123;<span class="attribute">text-decoration</span>: none; <span class="attribute">cursor</span>: default;&#125;</span><br><span class="line"><span class="selector-tag">ul</span><span class="selector-class">.ztree</span> <span class="selector-tag">li</span> <span class="selector-tag">a</span><span class="selector-pseudo">:hover</span> &#123;<span class="attribute">text-decoration</span>: none; <span class="attribute">cursor</span>: default;&#125;</span><br><span class="line"><span class="selector-tag">ul</span><span class="selector-class">.ztree</span> <span class="selector-tag">li</span> <span class="selector-tag">a</span><span class="selector-pseudo">:active</span> &#123;<span class="attribute">text-decoration</span>: none; <span class="attribute">cursor</span>: default;&#125;</span><br><span class="line"><span class="selector-tag">ul</span><span class="selector-class">.ztree</span> <span class="selector-tag">li</span> <span class="selector-tag">a</span><span class="selector-pseudo">:visited</span> &#123;<span class="attribute">text-decoration</span>: none; <span class="attribute">color</span>: <span class="number">#333</span>; <span class="attribute">background-color</span>: <span class="number">#fff</span>&#125;</span><br><span class="line"><span class="selector-tag">ul</span><span class="selector-class">.ztree</span> <span class="selector-tag">li</span> <span class="selector-tag">a</span><span class="selector-class">.curSelectedNode</span> &#123; <span class="attribute">color</span>: <span class="number">#333</span>; <span class="attribute">opacity</span>: <span class="number">1</span>; <span class="attribute">background-color</span>: <span class="number">#fff</span>;&#125;</span><br><span class="line"><span class="selector-tag">ul</span><span class="selector-class">.ztree</span> <span class="selector-tag">li</span> <span class="selector-tag">span</span> &#123;<span class="attribute">cursor</span>: default;&#125;</span><br><span class="line"><span class="selector-tag">ul</span><span class="selector-class">.ztree</span> <span class="selector-tag">li</span> <span class="selector-tag">span</span><span class="selector-class">.button</span><span class="selector-class">.chk</span> &#123;<span class="attribute">cursor</span>: default;&#125;</span><br><span class="line"><span class="selector-tag">ul</span><span class="selector-class">.ztree</span> <span class="selector-tag">li</span> <span class="selector-tag">span</span><span class="selector-class">.button</span> &#123;<span class="attribute">cursor</span>: default&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="API"><a href="#API" class="headerlink" title="API"></a>API</h2><p>zTree的API介绍也很详细，<a href="http://www.treejs.cn/v3/api.php" target="_blank" rel="noopener">http://www.treejs.cn/v3/api.php</a></p>
+<p>这里我弄两个最典型的来讲，一个是获取所有的选择节点，另一个是将所有选择的叶子节点id拿出来。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 通过id号来获取这个树</span></span><br><span class="line"><span class="keyword">var</span> treeObj2 = $.fn.zTree.getZTreeObj(<span class="string">"treeDemo"</span>);</span><br><span class="line"><span class="comment">// 获取所有已经选择了的节点，获得一个node列表</span></span><br><span class="line"><span class="keyword">var</span> nodes2 = treeObj2.getCheckedNodes(<span class="literal">true</span>);</span><br><span class="line"><span class="comment">// 如果是叶子节点就把id拿出来</span></span><br><span class="line"><span class="keyword">var</span> idlist = [];</span><br><span class="line">$.each(nodes2, <span class="function"><span class="keyword">function</span> (<span class="params">i, item</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!item.isParent) &#123;</span><br><span class="line">        <span class="comment">//alert(item.id + ","  + item.name);</span></span><br><span class="line">        idlist.push(item.id);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(idlist);</span><br></pre></td></tr></table></figure>
+<p>使用很简单，如果有其他需求直接去参考官网API文档即可。</p>
+<p>最后来张效果图:</p>
+<p><img src="https://xnstatic-1253397658.file.myqcloud.com/ztree01.png" alt=""></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ztree/" rel="tag"># ztree</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/07/linux/systemd/" rel="next" title="centos7上systemd详解">
+                <i class="fa fa-chevron-left"></i> centos7上systemd详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/15/git/git-stash/" rel="prev" title="Git stash用法">
+                Git stash用法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://ooky9xe9n.bkt.clouddn.com/avatar.png"
+                alt="卡布奇诺" />
+            
+              <p class="site-author-name" itemprop="name">卡布奇诺</p>
+              <p class="site-description motion-element" itemprop="description">记录编程中遇到的坑</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">133</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/aopao1" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:admin@wujinyu.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#下载"><span class="nav-number">1.</span> <span class="nav-text">下载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#API"><span class="nav-number">2.</span> <span class="nav-text">API</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">卡布奇诺@心情</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

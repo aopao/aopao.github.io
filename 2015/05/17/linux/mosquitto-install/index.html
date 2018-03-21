@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="mqtt," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Mosquitto是一个开源(BSD许可证)的消息代理，实现MQTT(消息队列遥测传输)协议版本3.1.1。 MQTT（MQ Telemetry Transport），消息队列遥测传输协议，轻量级的发布/订阅协议，适用于一些条件比较苛刻的环境，进行低带宽、不可靠或间歇性的通信。目前已经是物联网消息通信事实上的标准协议了。 值得一提的是mqtt提供三种不同质量的消息服务：  “至多一次”：消息发布完">
+<meta name="keywords" content="mqtt">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mqtt消息中间件mosquitto的安装和配置">
+<meta property="og:url" content="http://www.wujinyu.com/2015/05/17/linux/mosquitto-install/index.html">
+<meta property="og:site_name" content="卡布奇诺">
+<meta property="og:description" content="Mosquitto是一个开源(BSD许可证)的消息代理，实现MQTT(消息队列遥测传输)协议版本3.1.1。 MQTT（MQ Telemetry Transport），消息队列遥测传输协议，轻量级的发布/订阅协议，适用于一些条件比较苛刻的环境，进行低带宽、不可靠或间歇性的通信。目前已经是物联网消息通信事实上的标准协议了。 值得一提的是mqtt提供三种不同质量的消息服务：  “至多一次”：消息发布完">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-09-10T13:57:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="mqtt消息中间件mosquitto的安装和配置">
+<meta name="twitter:description" content="Mosquitto是一个开源(BSD许可证)的消息代理，实现MQTT(消息队列遥测传输)协议版本3.1.1。 MQTT（MQ Telemetry Transport），消息队列遥测传输协议，轻量级的发布/订阅协议，适用于一些条件比较苛刻的环境，进行低带宽、不可靠或间歇性的通信。目前已经是物联网消息通信事实上的标准协议了。 值得一提的是mqtt提供三种不同质量的消息服务：  “至多一次”：消息发布完">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.wujinyu.com/2015/05/17/linux/mosquitto-install/"/>
+
+
+
+
+
+  <title>mqtt消息中间件mosquitto的安装和配置 | 卡布奇诺</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-21552344-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卡布奇诺</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生活心情</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-分类">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-归档">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-标签">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-公益">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-关于">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2015/05/17/linux/mosquitto-install/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">mqtt消息中间件mosquitto的安装和配置</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-05-17T16:33:07+08:00">
+                2015-05-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Mosquitto是一个开源(BSD许可证)的消息代理，实现MQTT(消息队列遥测传输)协议版本3.1.1。</p>
+<p>MQTT（MQ Telemetry Transport），消息队列遥测传输协议，轻量级的发布/订阅协议，<br>适用于一些条件比较苛刻的环境，进行低带宽、不可靠或间歇性的通信。目前已经是物联网消息通信事实上的标准协议了。</p>
+<p>值得一提的是mqtt提供三种不同质量的消息服务：</p>
+<ul>
+<li>“至多一次”：消息发布完全依赖底层 TCP/IP 网络。会发生消息丢失或重复。这一级别可用于如下情况，环境传感器数据，丢失一次读记录无所谓，因为不久后还会有第二次发送。</li>
+<li>“至少一次”：确保消息到达，但消息重复可能会发生。</li>
+<li>“只有一次”：确保消息到达一次。这一级别可用于如下情况，在计费系统中，消息重复或丢失会导致不正确的结果。<a id="more"></a>
+</li>
+</ul>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>参考官网 <a href="http://mosquitto.org/download/" target="_blank" rel="noopener">http://mosquitto.org/download/</a></p>
+<p>服务器操作系统为CentOS6.4，使用最简单的yum安装</p>
+<h4 id="1，先加入yum源："><a href="#1，先加入yum源：" class="headerlink" title="1，先加入yum源："></a>1，先加入yum源：</h4><p>在<code>/etc/yum.repos.d/</code>目录中新建一个<code>mosquitto.repo</code>文件，里面写入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[home_oojah_mqtt]</span><br><span class="line">name=mqtt (CentOS_CentOS-6)</span><br><span class="line">type=rpm-md</span><br><span class="line">baseurl=http://download.opensuse.org/repositories/home:/oojah:/mqtt/CentOS_CentOS-6/</span><br><span class="line">gpgcheck=1</span><br><span class="line">gpgkey=http://download.opensuse.org/repositories/home:/oojah:/mqtt/CentOS_CentOS-6/repodata/repomd.xml.key</span><br><span class="line">enabled=1</span><br></pre></td></tr></table></figure></p>
+<h4 id="2，开始安装"><a href="#2，开始安装" class="headerlink" title="2，开始安装"></a>2，开始安装</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo yum search all mosquitto</span><br><span class="line">sudo yum install mosquitto mosquitto-clients libmosquitto-devel libmosquittopp-devel python-mosquitto</span><br></pre></td></tr></table></figure>
+<h4 id="3，配置"><a href="#3，配置" class="headerlink" title="3，配置"></a>3，配置</h4><p>安装完成之后，所有配置文件会被放置于/etc/mosquitto/目录下，<br>其中最重要的就是Mosquitto的配置文件，即mosquitto.conf，以下是详细的配置参数说明。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br></pre></td><td class="code"><pre><span class="line"># =================================================================</span><br><span class="line"># General configuration</span><br><span class="line"># =================================================================</span><br><span class="line"></span><br><span class="line"># 客户端心跳的间隔时间</span><br><span class="line">#retry_interval 20</span><br><span class="line"></span><br><span class="line"># 系统状态的刷新时间</span><br><span class="line">#sys_interval 10</span><br><span class="line"></span><br><span class="line"># 系统资源的回收时间，0表示尽快处理</span><br><span class="line">#store_clean_interval 10</span><br><span class="line"></span><br><span class="line"># 服务进程的PID</span><br><span class="line">#pid_file /var/run/mosquitto.pid</span><br><span class="line"></span><br><span class="line"># 服务进程的系统用户</span><br><span class="line">#user mosquitto</span><br><span class="line"></span><br><span class="line"># 客户端心跳消息的最大并发数</span><br><span class="line">#max_inflight_messages 10</span><br><span class="line"></span><br><span class="line"># 客户端心跳消息缓存队列</span><br><span class="line">#max_queued_messages 100</span><br><span class="line"></span><br><span class="line"># 用于设置客户端长连接的过期时间，默认永不过期</span><br><span class="line">#persistent_client_expiration</span><br><span class="line"></span><br><span class="line"># =================================================================</span><br><span class="line"># Default listener</span><br><span class="line"># =================================================================</span><br><span class="line"></span><br><span class="line"># 服务绑定的IP地址</span><br><span class="line">#bind_address</span><br><span class="line"></span><br><span class="line"># 服务绑定的端口号</span><br><span class="line">#port 1883</span><br><span class="line"></span><br><span class="line"># 允许的最大连接数，-1表示没有限制</span><br><span class="line">#max_connections -1</span><br><span class="line"></span><br><span class="line"># cafile：CA证书文件</span><br><span class="line"># capath：CA证书目录</span><br><span class="line"># certfile：PEM证书文件</span><br><span class="line"># keyfile：PEM密钥文件</span><br><span class="line">#cafile</span><br><span class="line">#capath</span><br><span class="line">#certfile</span><br><span class="line">#keyfile</span><br><span class="line"></span><br><span class="line"># 必须提供证书以保证数据安全性</span><br><span class="line">#require_certificate false</span><br><span class="line"></span><br><span class="line"># 若require_certificate值为true，use_identity_as_username也必须为true</span><br><span class="line">#use_identity_as_username false</span><br><span class="line"></span><br><span class="line"># 启用PSK（Pre-shared-key）支持</span><br><span class="line">#psk_hint</span><br><span class="line"></span><br><span class="line"># SSL/TSL加密算法，可以使用“openssl ciphers”命令获取</span><br><span class="line"># as the output of that command.</span><br><span class="line">#ciphers</span><br><span class="line"></span><br><span class="line"># =================================================================</span><br><span class="line"># Persistence</span><br><span class="line"># =================================================================</span><br><span class="line"></span><br><span class="line"># 消息自动保存的间隔时间</span><br><span class="line">#autosave_interval 1800</span><br><span class="line"></span><br><span class="line"># 消息自动保存功能的开关</span><br><span class="line">#autosave_on_changes false</span><br><span class="line"></span><br><span class="line"># 持久化功能的开关</span><br><span class="line">persistence true</span><br><span class="line"></span><br><span class="line"># 持久化DB文件</span><br><span class="line">#persistence_file mosquitto.db</span><br><span class="line"></span><br><span class="line"># 持久化DB文件目录</span><br><span class="line">#persistence_location /var/lib/mosquitto/</span><br><span class="line"></span><br><span class="line"># =================================================================</span><br><span class="line"># Logging</span><br><span class="line"># =================================================================</span><br><span class="line"></span><br><span class="line"># 4种日志模式：stdout、stderr、syslog、topic</span><br><span class="line"># none 则表示不记日志，此配置可以提升些许性能</span><br><span class="line">log_dest none</span><br><span class="line"></span><br><span class="line"># 选择日志的级别（可设置多项）</span><br><span class="line">#log_type error</span><br><span class="line">#log_type warning</span><br><span class="line">#log_type notice</span><br><span class="line">#log_type information</span><br><span class="line"></span><br><span class="line"># 是否记录客户端连接信息</span><br><span class="line">#connection_messages true</span><br><span class="line"></span><br><span class="line"># 是否记录日志时间</span><br><span class="line">#log_timestamp true</span><br><span class="line"></span><br><span class="line"># =================================================================</span><br><span class="line"># Security</span><br><span class="line"># =================================================================</span><br><span class="line"></span><br><span class="line"># 客户端ID的前缀限制，可用于保证安全性</span><br><span class="line">#clientid_prefixes</span><br><span class="line"></span><br><span class="line"># 允许匿名用户</span><br><span class="line">#allow_anonymous true</span><br><span class="line"></span><br><span class="line"># 用户/密码文件，默认格式：username:password</span><br><span class="line">#password_file</span><br><span class="line"></span><br><span class="line"># PSK格式密码文件，默认格式：identity:key</span><br><span class="line">#psk_file</span><br><span class="line"></span><br><span class="line"># pattern write sensor/%u/data</span><br><span class="line"># ACL权限配置，常用语法如下：</span><br><span class="line"># 用户限制：user &lt;username&gt;</span><br><span class="line"># 话题限制：topic [read|write] &lt;topic&gt;</span><br><span class="line"># 正则限制：pattern write sensor/%u/data</span><br><span class="line">#acl_file</span><br><span class="line"></span><br><span class="line"># =================================================================</span><br><span class="line"># Bridges</span><br><span class="line"># =================================================================</span><br><span class="line"></span><br><span class="line"># 允许服务之间使用“桥接”模式（可用于分布式部署）</span><br><span class="line">#connection &lt;name&gt;</span><br><span class="line">#address &lt;host&gt;[:&lt;port&gt;]</span><br><span class="line">#topic &lt;topic&gt; [[[out | in | both] qos-level] local-prefix remote-prefix]</span><br><span class="line"></span><br><span class="line"># 设置桥接的客户端ID</span><br><span class="line">#clientid</span><br><span class="line"></span><br><span class="line"># 桥接断开时，是否清除远程服务器中的消息</span><br><span class="line">#cleansession false</span><br><span class="line"></span><br><span class="line"># 是否发布桥接的状态信息</span><br><span class="line">#notifications true</span><br><span class="line"></span><br><span class="line"># 设置桥接模式下，消息将会发布到的话题地址</span><br><span class="line"># $SYS/broker/connection/&lt;clientid&gt;/state</span><br><span class="line">#notification_topic</span><br><span class="line"></span><br><span class="line"># 设置桥接的keepalive数值</span><br><span class="line">#keepalive_interval 60</span><br><span class="line"></span><br><span class="line"># 桥接模式，目前有三种：automatic、lazy、once</span><br><span class="line">#start_type automatic</span><br><span class="line"></span><br><span class="line"># 桥接模式automatic的超时时间</span><br><span class="line">#restart_timeout 30</span><br><span class="line"></span><br><span class="line"># 桥接模式lazy的超时时间</span><br><span class="line">#idle_timeout 60</span><br><span class="line"></span><br><span class="line"># 桥接客户端的用户名</span><br><span class="line">#username</span><br><span class="line"></span><br><span class="line"># 桥接客户端的密码</span><br><span class="line">#password</span><br><span class="line"></span><br><span class="line"># bridge_cafile：桥接客户端的CA证书文件</span><br><span class="line"># bridge_capath：桥接客户端的CA证书目录</span><br><span class="line"># bridge_certfile：桥接客户端的PEM证书文件</span><br><span class="line"># bridge_keyfile：桥接客户端的PEM密钥文件</span><br><span class="line">#bridge_cafile</span><br><span class="line">#bridge_capath</span><br><span class="line">#bridge_certfile</span><br><span class="line">#bridge_keyfile</span><br><span class="line"></span><br><span class="line"># 自己的配置可以放到以下目录中</span><br><span class="line">include_dir /etc/mosquitto/conf.d</span><br></pre></td></tr></table></figure></p>
+<h4 id="4，启动服务，两种方式"><a href="#4，启动服务，两种方式" class="headerlink" title="4，启动服务，两种方式"></a>4，启动服务，两种方式</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mosquitto -c /etc/mosquitto/mosquitto.conf -d</span><br><span class="line">sudo /etc/init.d/mosquitto start</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="演示部分"><a href="#演示部分" class="headerlink" title="演示部分"></a>演示部分</h3><p>前面已经开启了服务，如果没有请参考前面步骤。</p>
+<p>一、开启另一个终端窗口，运行订阅程序mosquitto_sub:</p>
+<p><em>注意</em>：</p>
+<p>消息推送的发布和订阅要有主题，选项[-t] 主题，即：mosquitto -t 主题</p>
+<p>如需指定用户名称则加选项[-i] 用户名，即：mosquitto_sub -t 主题 -i 订阅端<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mosquitto_sub -t mqtt</span><br></pre></td></tr></table></figure></p>
+<p>二、开启另一个终端窗口，运行发布程序mosquitto_pub:</p>
+<p>指定消息推送的主题，发布端用户名和消息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mosquitto_pub -t 主题 -i 发布端 -h 主机 -m 你好</span><br></pre></td></tr></table></figure>
+<p>*注意：如果消息中间有空格则消息要用引号括起来。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mosquitto_pub -t 主题 -i 发布端 -h host -m &apos;我是发布端，你好。&apos;</span><br><span class="line">mosquitto_pub -h localhost -t mqtt -m &quot;hello world.&quot;</span><br></pre></td></tr></table></figure></p>
+<p>这时候前面那个订阅窗口就可以收到”hello world”的消息了。</p>
+<p>演示成功！！！</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/mqtt/" rel="tag"># mqtt</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/04/19/nosql/memecached-client/" rel="next" title="使用xmemcached客户端">
+                <i class="fa fa-chevron-left"></i> 使用xmemcached客户端
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/07/01/nosql/redis01/" rel="prev" title="redis笔记01 - 入门与安装">
+                redis笔记01 - 入门与安装 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://ooky9xe9n.bkt.clouddn.com/avatar.png"
+                alt="卡布奇诺" />
+            
+              <p class="site-author-name" itemprop="name">卡布奇诺</p>
+              <p class="site-description motion-element" itemprop="description">记录编程中遇到的坑</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">133</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/aopao1" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:admin@wujinyu.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装"><span class="nav-number">1.</span> <span class="nav-text">安装</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1，先加入yum源："><span class="nav-number">1.1.</span> <span class="nav-text">1，先加入yum源：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2，开始安装"><span class="nav-number">1.2.</span> <span class="nav-text">2，开始安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3，配置"><span class="nav-number">1.3.</span> <span class="nav-text">3，配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4，启动服务，两种方式"><span class="nav-number">1.4.</span> <span class="nav-text">4，启动服务，两种方式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#演示部分"><span class="nav-number">2.</span> <span class="nav-text">演示部分</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">卡布奇诺@心情</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

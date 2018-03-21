@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="awk," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="awk是一种样式扫描与处理工具。但其功能却大大强于sed和grep。awk提供了极其强大的功能，它几乎可以完成grep和sed所能完成的全部工作，同时，它还可以可以进行样式装入、流控制、数学运算符、进程控制语句甚至于内置的变量和函数。它具备了一个完整的语言所应具有的几乎所有精美特性。实际上，awk的确拥有自己的语言：样式扫描和处理语言。它允许您创建简短的程序，这些程序读取输入文件、为数据排序、处理">
+<meta name="keywords" content="awk">
+<meta property="og:type" content="article">
+<meta property="og:title" content="awk命令笔记">
+<meta property="og:url" content="http://www.wujinyu.com/2016/09/22/linux/awk/index.html">
+<meta property="og:site_name" content="卡布奇诺">
+<meta property="og:description" content="awk是一种样式扫描与处理工具。但其功能却大大强于sed和grep。awk提供了极其强大的功能，它几乎可以完成grep和sed所能完成的全部工作，同时，它还可以可以进行样式装入、流控制、数学运算符、进程控制语句甚至于内置的变量和函数。它具备了一个完整的语言所应具有的几乎所有精美特性。实际上，awk的确拥有自己的语言：样式扫描和处理语言。它允许您创建简短的程序，这些程序读取输入文件、为数据排序、处理">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-09-10T13:57:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="awk命令笔记">
+<meta name="twitter:description" content="awk是一种样式扫描与处理工具。但其功能却大大强于sed和grep。awk提供了极其强大的功能，它几乎可以完成grep和sed所能完成的全部工作，同时，它还可以可以进行样式装入、流控制、数学运算符、进程控制语句甚至于内置的变量和函数。它具备了一个完整的语言所应具有的几乎所有精美特性。实际上，awk的确拥有自己的语言：样式扫描和处理语言。它允许您创建简短的程序，这些程序读取输入文件、为数据排序、处理">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.wujinyu.com/2016/09/22/linux/awk/"/>
+
+
+
+
+
+  <title>awk命令笔记 | 卡布奇诺</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-21552344-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卡布奇诺</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生活心情</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-分类">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-归档">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-标签">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-公益">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-关于">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2016/09/22/linux/awk/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">awk命令笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-22T22:22:22+08:00">
+                2016-09-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>awk是一种样式扫描与处理工具。但其功能却大大强于sed和grep。awk提供了极其强大的功能，它几乎可以完成grep和sed所能完成的全部工作，<br>同时，它还可以可以进行样式装入、流控制、数学运算符、进程控制语句甚至于内置的变量和函数。<br>它具备了一个完整的语言所应具有的几乎所有精美特性。实际上，awk的确拥有自己的语言：样式扫描和处理语言。<br>它允许您创建简短的程序，这些程序读取输入文件、为数据排序、处理数据、对输入执行计算以及生成报表，还有无数其他的功能。</p>
+<p>简单来说awk就是把文件逐行的读入，以空格为默认分隔符将每行切片，切开的部分再进行各种分析处理。<a id="more"></a></p>
+<h2 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h2><p>从<code>netstat -tnlp &gt; netstat.txt</code>命令中提取了如下信息作为用例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name</span><br><span class="line">tcp        0      0 0.0.0.0:8778            0.0.0.0:*               LISTEN      2689/python</span><br><span class="line">tcp        0      0 0.0.0.0:3306            0.0.0.0:*               LISTEN      2265/mysqld</span><br><span class="line">tcp        0      0 0.0.0.0:139             0.0.0.0:*               LISTEN      18777/smbd</span><br><span class="line">tcp        0      0 127.0.0.1:35437         0.0.0.0:*               LISTEN      23842/python2</span><br><span class="line">tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      1916/nginx: master</span><br><span class="line">tcp        0      0 0.0.0.0:4369            0.0.0.0:*               LISTEN      1704/epmd</span><br><span class="line">tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      973/sshd</span><br><span class="line">tcp        0      0 127.0.0.1:58205         0.0.0.0:*               LISTEN      23681/python2</span><br><span class="line">tcp        0      0 0.0.0.0:445             0.0.0.0:*               LISTEN      18777/smbd</span><br><span class="line">tcp        0      0 0.0.0.0:33443           0.0.0.0:*               LISTEN      13976/phantomjs</span><br><span class="line">tcp        0      0 0.0.0.0:8008            0.0.0.0:*               LISTEN      2548/unicorn_rails</span><br><span class="line">tcp        0      0 192.168.217.161:5673    0.0.0.0:*               LISTEN      951/beam.smp</span><br><span class="line">tcp        0      0 0.0.0.0:25673           0.0.0.0:*               LISTEN      951/beam.smp</span><br><span class="line">tcp6       0      0 :::139                  :::*                    LISTEN      18777/smbd</span><br><span class="line">tcp6       0      0 :::4369                 :::*                    LISTEN      1704/epmd</span><br><span class="line">tcp6       0      0 :::22                   :::*                    LISTEN      973/sshd</span><br><span class="line">tcp6       0      0 :::3128                 :::*                    LISTEN      2268/(squid-1)</span><br><span class="line">tcp6       0      0 :::1017                 :::*                    LISTEN      988/xnServer</span><br><span class="line">tcp6       0      0 :::443                  :::*                    LISTEN      950/httpd</span><br><span class="line">tcp6       0      0 :::445                  :::*                    LISTEN      18777/smbd</span><br></pre></td></tr></table></figure></p>
+<p>下面是最简单最常用的awk示例，比如要想输出第1列和第4列：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ awk <span class="string">'&#123;print $1, $4&#125;'</span> netstat.txt</span><br></pre></td></tr></table></figure></p>
+<p>我们再来看看awk的格式化输出，和C语言的printf没什么两样：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ awk <span class="string">'&#123;printf "%-6s %-6s %-6s %-22s %-16s %-12s\n",$1,$2,$3,$4,$5,$6&#125;'</span> netstat.txt</span><br><span class="line">Proto  Recv-Q Send-Q Local                  Address          Foreign</span><br><span class="line">tcp    0      0      0.0.0.0:8778           0.0.0.0:*        LISTEN</span><br><span class="line">tcp    0      0      0.0.0.0:3306           0.0.0.0:*        LISTEN</span><br><span class="line">tcp    0      0      0.0.0.0:139            0.0.0.0:*        LISTEN</span><br><span class="line">tcp    0      0      127.0.0.1:35437        0.0.0.0:*        LISTEN</span><br><span class="line">tcp    0      0      0.0.0.0:80             0.0.0.0:*        LISTEN</span><br><span class="line">tcp    0      0      0.0.0.0:4369           0.0.0.0:*        LISTEN</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<h2 id="内置变量"><a href="#内置变量" class="headerlink" title="内置变量"></a>内置变量</h2><p>awk经常会使用到一些内置变量，下面是它们的含义：</p>
+<table>
+<thead>
+<tr>
+<th>内置变量</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$0</td>
+<td>当前记录（这个变量中存放着整个行的内容）</td>
+</tr>
+<tr>
+<td>$1~$n</td>
+<td>当前记录的第n个字段，字段间由FS分隔</td>
+</tr>
+<tr>
+<td>FS</td>
+<td>输入字段分隔符，默认是空格或Tab</td>
+</tr>
+<tr>
+<td>NF</td>
+<td>当前记录中的字段个数，就是有多少列</td>
+</tr>
+<tr>
+<td>NR</td>
+<td>已经读出的记录数，就是行号，从1开始，如果有多个文件话，这个值也是不断累加中</td>
+</tr>
+<tr>
+<td>FNR</td>
+<td>当前记录数，与NR不同的是，这个值会是各个文件自己的行号</td>
+</tr>
+<tr>
+<td>RS</td>
+<td>输入的记录分隔符，默认为换行符</td>
+</tr>
+<tr>
+<td>OFS</td>
+<td>输出字段分隔符，默认也是空格</td>
+</tr>
+<tr>
+<td>ORS</td>
+<td>输出的记录分隔符，默认为换行符</td>
+</tr>
+<tr>
+<td>FILENAME</td>
+<td>当前输入文件的名字</td>
+</tr>
+</tbody>
+</table>
+<h2 id="过滤记录"><a href="#过滤记录" class="headerlink" title="过滤记录"></a>过滤记录</h2><p>如何过滤记录（下面过滤条件为：第三列的值为0 &amp;&amp; 第7列包含字符串’python’）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ awk <span class="string">'$3==0 &amp;&amp; $7 ~ /python/'</span> netstat.txt</span><br><span class="line">tcp        0      0 0.0.0.0:8778            0.0.0.0:*    LISTEN      2689/python</span><br><span class="line">tcp        0      0 127.0.0.1:35437         0.0.0.0:*    LISTEN      23842/python2</span><br><span class="line">tcp        0      0 127.0.0.1:58205         0.0.0.0:*    LISTEN      23681/python2</span><br></pre></td></tr></table></figure>
+<p>其中的“==”为比较运算符，其他比较运算符：!=, &gt;, &lt;, &gt;=, &lt;=</p>
+<p>还有”~“表示正则匹配，这个就相当强大了。</p>
+<p>如果我们需要表头的话，我们可以引入内建变量NR：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ awk <span class="string">'$3==0 &amp;&amp; $6=="LISTEN" || NR==1 '</span> netstat.txt</span><br><span class="line">Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name</span><br><span class="line">tcp        0      0 0.0.0.0:8778            0.0.0.0:*               LISTEN      2689/python</span><br><span class="line">tcp        0      0 0.0.0.0:3306            0.0.0.0:*               LISTEN      2265/mysqld</span><br><span class="line">tcp        0      0 0.0.0.0:139             0.0.0.0:*               LISTEN      18777/smbd</span><br><span class="line">tcp        0      0 127.0.0.1:35437         0.0.0.0:*               LISTEN      23842/python2</span><br><span class="line">tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      1916/nginx: master</span><br><span class="line">tcp        0      0 0.0.0.0:4369            0.0.0.0:*               LISTEN      1704/epmd</span><br><span class="line">tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      973/sshd</span><br><span class="line">tcp        0      0 127.0.0.1:58205         0.0.0.0:*               LISTEN      23681/python2</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<p>再加上格式化输出：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ awk <span class="string">'$3==0 &amp;&amp; $6=="LISTEN" || NR==1 &#123;printf "%-20s %-20s %s\n",$4,$5,$6&#125;'</span> netstat.txt</span><br><span class="line">Local                Address              Foreign</span><br><span class="line">0.0.0.0:8778         0.0.0.0:*            LISTEN</span><br><span class="line">0.0.0.0:3306         0.0.0.0:*            LISTEN</span><br><span class="line">0.0.0.0:139          0.0.0.0:*            LISTEN</span><br><span class="line">127.0.0.1:35437      0.0.0.0:*            LISTEN</span><br><span class="line">0.0.0.0:80           0.0.0.0:*            LISTEN</span><br><span class="line">0.0.0.0:4369         0.0.0.0:*            LISTEN</span><br><span class="line">0.0.0.0:22           0.0.0.0:*            LISTEN</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<h2 id="指定分隔符"><a href="#指定分隔符" class="headerlink" title="指定分隔符"></a>指定分隔符</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ awk <span class="string">'BEGIN&#123;FS=":"&#125; &#123;print $1,$3,$6&#125;'</span> /etc/passwd</span><br><span class="line">root 0 /root</span><br><span class="line">bin 1 /bin</span><br><span class="line">daemon 2 /sbin</span><br><span class="line">adm 3 /var/adm</span><br><span class="line">lp 4 /var/spool/lpd</span><br><span class="line">sync 5 /sbin</span><br><span class="line">shutdown 6 /sbin</span><br><span class="line">halt 7 /sbin</span><br><span class="line">mail 8 /var/spool/mail</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>上面的命令也等价于：（-F的意思就是指定分隔符）<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ awk -F: <span class="string">'&#123;print $1,$3,$6&#125;'</span> /etc/passwd</span><br></pre></td></tr></table></figure></p>
+<p>注：如果你要指定多个分隔符，你可以这样来：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk -F <span class="string">'[;:]'</span></span><br></pre></td></tr></table></figure></p>
+<p>再来看一个以\t作为分隔符输出的例子（下面使用了/etc/passwd文件，这个文件是以:分隔的）：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ awk -F: <span class="string">'&#123;print $1,$3,$6&#125;'</span> OFS=<span class="string">"\t"</span> /etc/passwd</span><br><span class="line">root    0    /root</span><br><span class="line">bin     1    /bin</span><br><span class="line">daemon  2    /sbin</span><br><span class="line">adm     3    /var/adm</span><br><span class="line">lp      4    /var/spool/lpd</span><br><span class="line">sync    5    /sbin</span><br></pre></td></tr></table></figure></p>
+<h2 id="字符串匹配"><a href="#字符串匹配" class="headerlink" title="字符串匹配"></a>字符串匹配</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ awk <span class="string">'$7 ~ /python/ || NR==1 &#123;print NR,$4,$5,$6&#125;'</span> OFS=<span class="string">"\t"</span> netstat.txt</span><br><span class="line">1	Local	Address	Foreign</span><br><span class="line">2	0.0.0.0:8778	0.0.0.0:*	LISTEN</span><br><span class="line">5	127.0.0.1:35437	0.0.0.0:*	LISTEN</span><br><span class="line">9	127.0.0.1:58205	0.0.0.0:*	LISTEN</span><br></pre></td></tr></table></figure>
+<p>上面示例第7列匹配”python“字符串，其实 ~ 表示模式开始。/ /中是模式，这就是一个正则表达式的匹配。</p>
+<p>其实awk可以像grep一样的去匹配一整行，就像这样：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ awk <span class="string">'/python/'</span> netstat.txt</span><br><span class="line">tcp   0      0 0.0.0.0:8778     0.0.0.0:*     LISTEN      2689/python</span><br><span class="line">tcp   0      0 127.0.0.1:35437  0.0.0.0:*     LISTEN      23842/python2</span><br><span class="line">tcp   0      0 127.0.0.1:58205  0.0.0.0:*     LISTEN      23681/python2</span><br></pre></td></tr></table></figure></p>
+<p>再来看看模式取反的例子:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">'!/python/'</span> netstat.txt</span><br></pre></td></tr></table></figure></p>
+<h2 id="统计"><a href="#统计" class="headerlink" title="统计"></a>统计</h2><p>下面的命令计算所有的.py文件和.txt文件大小总和:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ls -l *.py *.txt | awk <span class="string">'&#123;sum+=$5&#125; END &#123;print sum&#125;'</span></span><br><span class="line">3369</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/awk/" rel="tag"># awk</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/20/linux/sed/" rel="next" title="sed命令笔记">
+                <i class="fa fa-chevron-left"></i> sed命令笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/10/12/linux/supervisor/" rel="prev" title="使用supervisor管理进程">
+                使用supervisor管理进程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://ooky9xe9n.bkt.clouddn.com/avatar.png"
+                alt="卡布奇诺" />
+            
+              <p class="site-author-name" itemprop="name">卡布奇诺</p>
+              <p class="site-description motion-element" itemprop="description">记录编程中遇到的坑</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">133</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/aopao1" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:admin@wujinyu.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本用法"><span class="nav-number">1.</span> <span class="nav-text">基本用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内置变量"><span class="nav-number">2.</span> <span class="nav-text">内置变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#过滤记录"><span class="nav-number">3.</span> <span class="nav-text">过滤记录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#指定分隔符"><span class="nav-number">4.</span> <span class="nav-text">指定分隔符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字符串匹配"><span class="nav-number">5.</span> <span class="nav-text">字符串匹配</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#统计"><span class="nav-number">6.</span> <span class="nav-text">统计</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">卡布奇诺@心情</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

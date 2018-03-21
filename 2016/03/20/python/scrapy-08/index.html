@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Scrapy," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Scrapy为我们提供了可重用的item pipelines为某个特定的Item去下载文件。通常来说你会选择使用Files Pipeline或Images Pipeline。 这两个管道都实现了：  避免重复下载 可以指定下载后保存的地方(文件系统目录中,Amazon S3中)  Images Pipeline为处理图片提供了额外的功能：">
+<meta name="keywords" content="Scrapy">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Scrapy笔记08- 文件与图片">
+<meta property="og:url" content="http://www.wujinyu.com/2016/03/20/python/scrapy-08/index.html">
+<meta property="og:site_name" content="卡布奇诺">
+<meta property="og:description" content="Scrapy为我们提供了可重用的item pipelines为某个特定的Item去下载文件。通常来说你会选择使用Files Pipeline或Images Pipeline。 这两个管道都实现了：  避免重复下载 可以指定下载后保存的地方(文件系统目录中,Amazon S3中)  Images Pipeline为处理图片提供了额外的功能：">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-09-10T13:57:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Scrapy笔记08- 文件与图片">
+<meta name="twitter:description" content="Scrapy为我们提供了可重用的item pipelines为某个特定的Item去下载文件。通常来说你会选择使用Files Pipeline或Images Pipeline。 这两个管道都实现了：  避免重复下载 可以指定下载后保存的地方(文件系统目录中,Amazon S3中)  Images Pipeline为处理图片提供了额外的功能：">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.wujinyu.com/2016/03/20/python/scrapy-08/"/>
+
+
+
+
+
+  <title>Scrapy笔记08- 文件与图片 | 卡布奇诺</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-21552344-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卡布奇诺</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生活心情</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-分类">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-归档">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-标签">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-公益">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-关于">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2016/03/20/python/scrapy-08/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Scrapy笔记08- 文件与图片</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-03-20T01:16:12+08:00">
+                2016-03-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Scrapy为我们提供了可重用的<a href="http://doc.scrapy.org/en/1.0/topics/item-pipeline.html" target="_blank" rel="noopener">item pipelines</a>为某个特定的Item去下载文件。<br>通常来说你会选择使用Files Pipeline或Images Pipeline。</p>
+<p>这两个管道都实现了：</p>
+<ul>
+<li>避免重复下载</li>
+<li>可以指定下载后保存的地方(文件系统目录中,Amazon S3中)</li>
+</ul>
+<p>Images Pipeline为处理图片提供了额外的功能：<a id="more"></a></p>
+<ul>
+<li>将所有下载的图片格式转换成普通的JPG并使用RGB颜色模式</li>
+<li>生成缩略图</li>
+<li>检查图片的宽度和高度确保它们满足最小的尺寸限制</li>
+</ul>
+<p>管道同时会在内部保存一个被调度下载的URL列表，然后将包含相同媒体的相应关联到这个队列上来，从而防止了多个item共享这个媒体时重复下载。</p>
+<h2 id="使用Files-Pipeline"><a href="#使用Files-Pipeline" class="headerlink" title="使用Files Pipeline"></a>使用Files Pipeline</h2><p>一般我们会按照下面的步骤来使用文件管道：</p>
+<ol>
+<li>在某个Spider中，你爬取一个item后，将相应的文件URL放入<code>file_urls</code>字段中</li>
+<li>item被返回之后就会转交给item pipeline</li>
+<li>当这个item到达<code>FilesPipeline</code>时，在<code>file_urls</code>字段中的URL列表会通过标准的Scrapy调度器和下载器来调度下载，并且优先级很高，在抓取其他页面前就被处理。而这个<code>item</code>会一直在这个pipeline中被锁定，直到所有的文件下载完成。</li>
+<li>当文件被下载完之后，结果会被赋值给另一个<code>files</code>字段。这个字段包含一个关于下载文件新的字典列表，比如下载路径，源地址，文件校验码。<code>files</code>里面的顺序和<code>file_url</code>顺序是一致的。要是某个写文件下载出错就不会出现在这个<code>files</code>中了。</li>
+</ol>
+<h2 id="使用Images-Pipeline"><a href="#使用Images-Pipeline" class="headerlink" title="使用Images Pipeline"></a>使用Images Pipeline</h2><p><code>ImagesPipeline</code>跟<code>FilesPipeline</code>的使用差不多，不过使用的字段名不一样，<code>image_urls</code>保存图片URL地址，<code>images</code>保存下载后的图片信息。</p>
+<p>使用<code>ImagesPipeline</code>的好处是你可以通过配置来提供额外的功能，比如生成文件缩略图，通过图片大小过滤需要下载的图片等。</p>
+<p><code>ImagesPipeline</code>使用<a href="https://github.com/python-pillow/Pillow" target="_blank" rel="noopener">Pillow</a>来生成缩略图以及转换成标准的JPEG/RGB格式。因此你需要安装这个包，我们建议你使用Pillow而不是PIL。</p>
+<h2 id="使用例子"><a href="#使用例子" class="headerlink" title="使用例子"></a>使用例子</h2><p>要使用媒体管道，请先在配置文件中打开它<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 同时使用图片和文件管道</span></span><br><span class="line">ITEM_PIPELINES = &#123;</span><br><span class="line">                  <span class="string">'scrapy.pipelines.images.ImagesPipeline'</span>: <span class="number">1</span>,</span><br><span class="line">                  <span class="string">'scrapy.pipelines.files.FilesPipeline'</span>: <span class="number">2</span>,</span><br><span class="line">                 &#125;</span><br><span class="line">FILES_STORE = <span class="string">'/path/to/valid/dir'</span>  <span class="comment"># 文件存储路径</span></span><br><span class="line">IMAGES_STORE = <span class="string">'/path/to/valid/dir'</span> <span class="comment"># 图片存储路径</span></span><br><span class="line"><span class="comment"># 90 days of delay for files expiration</span></span><br><span class="line">FILES_EXPIRES = <span class="number">90</span></span><br><span class="line"><span class="comment"># 30 days of delay for images expiration</span></span><br><span class="line">IMAGES_EXPIRES = <span class="number">30</span></span><br><span class="line"><span class="comment"># 图片缩略图</span></span><br><span class="line">IMAGES_THUMBS = &#123;</span><br><span class="line">    <span class="string">'small'</span>: (<span class="number">50</span>, <span class="number">50</span>),</span><br><span class="line">    <span class="string">'big'</span>: (<span class="number">270</span>, <span class="number">270</span>),</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment"># 图片过滤器，最小高度和宽度</span></span><br><span class="line">IMAGES_MIN_HEIGHT = <span class="number">110</span></span><br><span class="line">IMAGES_MIN_WIDTH = <span class="number">110</span></span><br></pre></td></tr></table></figure></p>
+<p>一个使用了缩略图的下载例子会生成如下图片：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;IMAGES_STORE&gt;/full/63bbfea82b8880ed33cdb762aa11fab722a90a24.jpg</span><br><span class="line">&lt;IMAGES_STORE&gt;/thumbs/small/63bbfea82b8880ed33cdb762aa11fab722a90a24.jpg</span><br><span class="line">&lt;IMAGES_STORE&gt;/thumbs/big/63bbfea82b8880ed33cdb762aa11fab722a90a24.jpg</span><br></pre></td></tr></table></figure></p>
+<p>然后，某个Item返回时，有<code>file_urls</code>或<code>image_urls</code>，并且存在相应的<code>files</code>或<code>images</code>字段</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> scrapy</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyItem</span><span class="params">(scrapy.Item)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># ... other item fields ...</span></span><br><span class="line">    image_urls = scrapy.Field()</span><br><span class="line">    images = scrapy.Field()</span><br></pre></td></tr></table></figure>
+<h2 id="自定义媒体管道"><a href="#自定义媒体管道" class="headerlink" title="自定义媒体管道"></a>自定义媒体管道</h2><p>如果你还需要更加复杂的功能，想自定义下载媒体逻辑，请参考<a href="http://doc.scrapy.org/en/1.0/topics/media-pipeline.html#topics-media-pipeline-override" target="_blank" rel="noopener">扩展媒体管道</a></p>
+<p>不管是扩展<code>FilesPipeline</code>还是<code>ImagesPipeline</code>,都只需重写下面两个方法</p>
+<ul>
+<li><code>get_media_requests(self, item, info)</code>,返回一个<code>Request</code>对象</li>
+<li><code>item_completed(self, results, item, info)</code>,当上门的Request下载完成后回调这个方法，然后填充<code>files</code>或<code>images</code>字段</li>
+</ul>
+<p>下面是一个扩展<code>ImagesPipeline</code>的例子，我只取path信息，并将它赋给<code>image_paths</code>字段，而不是默认的<code>images</code><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> scrapy</span><br><span class="line"><span class="keyword">from</span> scrapy.pipelines.images <span class="keyword">import</span> ImagesPipeline</span><br><span class="line"><span class="keyword">from</span> scrapy.exceptions <span class="keyword">import</span> DropItem</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyImagesPipeline</span><span class="params">(ImagesPipeline)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_media_requests</span><span class="params">(self, item, info)</span>:</span></span><br><span class="line">        <span class="keyword">for</span> image_url <span class="keyword">in</span> item[<span class="string">'image_urls'</span>]:</span><br><span class="line">            <span class="keyword">yield</span> scrapy.Request(image_url)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">item_completed</span><span class="params">(self, results, item, info)</span>:</span></span><br><span class="line">        image_paths = [x[<span class="string">'path'</span>] <span class="keyword">for</span> ok, x <span class="keyword">in</span> results <span class="keyword">if</span> ok]</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> image_paths:</span><br><span class="line">            <span class="keyword">raise</span> DropItem(<span class="string">"Item contains no images"</span>)</span><br><span class="line">        item[<span class="string">'image_paths'</span>] = image_paths</span><br><span class="line">        <span class="keyword">return</span> item</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Scrapy/" rel="tag"># Scrapy</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/03/19/python/scrapy-07/" rel="next" title="Scrapy笔记07- 内置服务">
+                <i class="fa fa-chevron-left"></i> Scrapy笔记07- 内置服务
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/03/21/python/scrapy-09/" rel="prev" title="Scrapy笔记09- 部署">
+                Scrapy笔记09- 部署 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://ooky9xe9n.bkt.clouddn.com/avatar.png"
+                alt="卡布奇诺" />
+            
+              <p class="site-author-name" itemprop="name">卡布奇诺</p>
+              <p class="site-description motion-element" itemprop="description">记录编程中遇到的坑</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">133</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/aopao1" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:admin@wujinyu.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Files-Pipeline"><span class="nav-number">1.</span> <span class="nav-text">使用Files Pipeline</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Images-Pipeline"><span class="nav-number">2.</span> <span class="nav-text">使用Images Pipeline</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用例子"><span class="nav-number">3.</span> <span class="nav-text">使用例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义媒体管道"><span class="nav-number">4.</span> <span class="nav-text">自定义媒体管道</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">卡布奇诺@心情</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

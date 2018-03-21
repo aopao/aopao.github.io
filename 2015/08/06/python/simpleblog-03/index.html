@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Django," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="到目前为止，你的网站只能在你自己的电脑上访问到。你需要将它发布到公网上去让地球上的人都能看到，那么要怎么做呢？ 在互联网上你可以找到很多的服务器供应商。我们将使用一个相对简单的托管平台PythonAnywhere。PythonAnywhere对于一些没有太多访问者的小应用是免费的，所以它对你来说绝对是足够使用的。 其它我们将使用到的外部服务是GitHub，它是一个代码托管服务。还有其它的一些服务，">
+<meta name="keywords" content="Django">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Django1.9开发博客03- 部署">
+<meta property="og:url" content="http://www.wujinyu.com/2015/08/06/python/simpleblog-03/index.html">
+<meta property="og:site_name" content="卡布奇诺">
+<meta property="og:description" content="到目前为止，你的网站只能在你自己的电脑上访问到。你需要将它发布到公网上去让地球上的人都能看到，那么要怎么做呢？ 在互联网上你可以找到很多的服务器供应商。我们将使用一个相对简单的托管平台PythonAnywhere。PythonAnywhere对于一些没有太多访问者的小应用是免费的，所以它对你来说绝对是足够使用的。 其它我们将使用到的外部服务是GitHub，它是一个代码托管服务。还有其它的一些服务，">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-09-10T13:57:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Django1.9开发博客03- 部署">
+<meta name="twitter:description" content="到目前为止，你的网站只能在你自己的电脑上访问到。你需要将它发布到公网上去让地球上的人都能看到，那么要怎么做呢？ 在互联网上你可以找到很多的服务器供应商。我们将使用一个相对简单的托管平台PythonAnywhere。PythonAnywhere对于一些没有太多访问者的小应用是免费的，所以它对你来说绝对是足够使用的。 其它我们将使用到的外部服务是GitHub，它是一个代码托管服务。还有其它的一些服务，">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.wujinyu.com/2015/08/06/python/simpleblog-03/"/>
+
+
+
+
+
+  <title>Django1.9开发博客03- 部署 | 卡布奇诺</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-21552344-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卡布奇诺</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生活心情</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-分类">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-归档">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-标签">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-公益">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-关于">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2015/08/06/python/simpleblog-03/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Django1.9开发博客03- 部署</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-08-06T19:03:57+08:00">
+                2015-08-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>到目前为止，你的网站只能在你自己的电脑上访问到。你需要将它发布到公网上去让地球上的人都能看到，那么要怎么做呢？</p>
+<p>在互联网上你可以找到很多的服务器供应商。我们将使用一个相对简单的托管平台<a href="http://pythonanywhere.com/" target="_blank" rel="noopener">PythonAnywhere</a>。<br>PythonAnywhere对于一些没有太多访问者的小应用是免费的，所以它对你来说绝对是足够使用的。</p>
+<p>其它我们将使用到的外部服务是GitHub，它是一个代码托管服务。还有其它的一些服务，但当今几乎所有的程序员都有 GitHub 帐户，相信你肯定有一个！<a id="more"></a></p>
+<h2 id="安装Git"><a href="#安装Git" class="headerlink" title="安装Git"></a>安装Git</h2><p>Git是一个被大量程序员使用的”版本控制系统”。此软件可以跟踪任何时间文件的改变，这样你以后可以随时召回某个特定版本。</p>
+<p>windows系统下面可以下载<a href="http://git-scm.com/" target="_blank" rel="noopener">git-scm</a>安装。除了第5步”Adjusting your PATH environment”，<br>需要选择”Run Git and associated Unix tools from the Windows command-line”(底部的选项)。除此之外，默认值都没有问题。</p>
+<p>Linux系统的安装使用包管理器安装<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install git</span><br><span class="line"><span class="comment"># or</span></span><br><span class="line">sudo yum install git</span><br></pre></td></tr></table></figure></p>
+<h2 id="Git版本库"><a href="#Git版本库" class="headerlink" title="Git版本库"></a>Git版本库</h2><p>首先初始化仓库<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ git init</span><br><span class="line">Initialized empty Git repository <span class="keyword">in</span> ~/simpleblog/.git/</span><br><span class="line">$ git config --global user.name <span class="string">"yidao620c"</span></span><br><span class="line">$ git config --global user.email yidao620@gmail.com</span><br></pre></td></tr></table></figure></p>
+<p>每个项目我们只需要初始化一次Git仓库（而且你从此不需要重新输入用户名和邮箱）</p>
+<p>Git会追踪这个目录下所有文件和文件夹的更改，但是有一些文件我们希望Git忽略它。<br>为此，我们可以在系统根目录下创建一个命名为<code>.gitignore</code>的文件。打开编辑器，创建新文件并写入以下内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">myvenv</span><br><span class="line">.idea/</span><br><span class="line">*.pyc</span><br><span class="line">__pycache__</span><br><span class="line">staticfiles</span><br><span class="line">local_settings.py</span><br><span class="line">db.sqlite3</span><br><span class="line">migrations</span><br><span class="line">whoosh_index/</span><br></pre></td></tr></table></figure></p>
+<p>最后保存我们的更改。转到你的控制台并运行这些命令：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git add --all .</span><br><span class="line">$ git commit -m <span class="string">"My simple blog first commit"</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="推送到Github上"><a href="#推送到Github上" class="headerlink" title="推送到Github上"></a>推送到Github上</h2><p>登录<a href="跳转到GitHub.com网站，注册一个新的免费账号">GitHub.com</a>网站，如果没有就先注册一个。<br>创建一个新的仓库名字为<code>simpleblog</code>，在下一屏中，你将看到你的仓库克隆 URL。选择“HTTPS”版本，拷贝地址，我们马上要把它粘贴到终端</p>
+<p>在控制台输入以下内容（替换<yidao620c>为你的github用户名，不包含尖括号）：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git remote add origin https://github.com/yidao620c/simpleblog.git</span><br><span class="line">$ git push -u origin master</span><br></pre></td></tr></table></figure></yidao620c></p>
+<p>输入你的Github账号名和密码，然后你会看到成功的消息说明没问题了。</p>
+<h2 id="在-PythonAnywhere设置我们的博客"><a href="#在-PythonAnywhere设置我们的博客" class="headerlink" title="在 PythonAnywhere设置我们的博客"></a>在 PythonAnywhere设置我们的博客</h2><p>先去&lt;<a href="http://www.pythonanywhere.com&gt;网站注册个用户名，免费的用户即可。" target="_blank" rel="noopener">www.pythonanywhere.com&gt;网站注册个用户名，免费的用户即可。</a></p>
+<h2 id="在-PythonAnywhere-上拉取我们的代码"><a href="#在-PythonAnywhere-上拉取我们的代码" class="headerlink" title="在 PythonAnywhere 上拉取我们的代码"></a>在 PythonAnywhere 上拉取我们的代码</h2><p>当然注册完 PythonAnywhere，你讲会转到仪表盘或“控制台”页面。<br>选择启动“Bash”控制台这一选项，这是 PythonAnywhere 版的控制台，就像你本地电脑上的一样。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> https://github.com/yidao620c/simpleblog.git</span><br></pre></td></tr></table></figure></p>
+<p>这将会拉取一份你的代码副本到 PythonAnywhere 上。通过键入<code>tree simpleblog</code>查阅</p>
+<p>今后每次需要更新的时候执行<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull</span><br></pre></td></tr></table></figure></p>
+<h2 id="在-PythonAnywhere-上创建-virtualenv"><a href="#在-PythonAnywhere-上创建-virtualenv" class="headerlink" title="在 PythonAnywhere 上创建 virtualenv"></a>在 PythonAnywhere 上创建 virtualenv</h2><p>如同你在自己电脑上做的，你可以在 PythonAnywhere 上创建 virtualenv 虚拟环境。在 Bash 控制台下，键入：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> simpleblog</span><br><span class="line">virtualenv --python=python3.4 myvenv</span><br><span class="line"><span class="built_in">source</span> myvenv/bin/activate</span><br><span class="line">pip install django</span><br></pre></td></tr></table></figure></p>
+<p>注意pip安装步骤可能需要几分钟。耐心等待即可！但是如果超过5分钟，就不对劲了，去查下网络原因。</p>
+<h2 id="在-PythonAnywhere-上创建数据库"><a href="#在-PythonAnywhere-上创建数据库" class="headerlink" title="在 PythonAnywhere 上创建数据库"></a>在 PythonAnywhere 上创建数据库</h2><p>服务器与你自己的计算机不同的另外一点是：它使用不同的数据库。因此用户账户以及文章和你电脑上的可能会有不同。</p>
+<p>我们可以像在自己的计算机上一样在服务器上初始化数据库，使用 migrate 以及 createsuperuser：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(mvenv) $ python manage.py migrate</span><br><span class="line">(mvenv) $ python manage.py createsuperuser</span><br></pre></td></tr></table></figure></p>
+<h2 id="发布博客"><a href="#发布博客" class="headerlink" title="发布博客"></a>发布博客</h2><p>现在我们的代码已在PythonAnywhere上，我们的 virtualenv 已经准备好，静态文件已收集，数据库已初始化。我们准备好发布网络应用程序！</p>
+<p>通过点击 logo 返回到 PythonAnywhere 仪表盘，然后点击 Web 选项卡。最终，点 Add a new web app</p>
+<p>在确认你的域名之后，选择对话框中 manual configuration (注 不是 “Django” 选项)，下一步选择 Python 3.4，然后点击 Next 以完成该向导。</p>
+<h3 id="设置-virtualenv"><a href="#设置-virtualenv" class="headerlink" title="设置 virtualenv"></a>设置 virtualenv</h3><p>你将会被带到 PythonAnywhere 上你的Web 应用程序的配置屏，那个页面是每次你想修改服务器上你的应用程序时候要去的页面。</p>
+<p>在“Virtualenv”一节，点击红色文字“Enter the path to a virtualenv”，<br>然后键入：<code>/home/&lt;your-username&gt;/simpleblog/myvenv/</code>。前进之前，先点击有复选框的蓝色框以保存路径。</p>
+<h3 id="配置-WSGI-文件"><a href="#配置-WSGI-文件" class="headerlink" title="配置 WSGI 文件"></a>配置 WSGI 文件</h3><p>Django使用“WSGI 协议”，它是用来服务Python网站的一个标准。PythonAnywhere支持这个标准。<br>PythonAnywhere识别我们Django博客的方式是通过配置WSGI配置文件。</p>
+<p>点击 “WSGI configuration file”链接<br>（在”Code”一节，它将被命名为如 /var/www/<your-username>_pythonanywhere_com_wsgi.py），然后跳转到一个编辑器。</your-username></p>
+<p>删除所有的内容并用以下内容替换：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line">path = <span class="string">'/home/&lt;your-username&gt;/my-first-blog'</span>  <span class="comment"># use your own username here</span></span><br><span class="line"><span class="keyword">if</span> path <span class="keyword">not</span> <span class="keyword">in</span> sys.path:</span><br><span class="line">    sys.path.append(path)</span><br><span class="line"></span><br><span class="line">os.environ[<span class="string">'DJANGO_SETTINGS_MODULE'</span>] = <span class="string">'mysite.settings'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> django.core.wsgi <span class="keyword">import</span> get_wsgi_application</span><br><span class="line"><span class="keyword">from</span> django.contrib.staticfiles.handlers <span class="keyword">import</span> StaticFilesHandler</span><br><span class="line">application = StaticFilesHandler(get_wsgi_application())</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>注意: 当看到<code>&lt;your-username&gt;</code>时，别忘了替换为你自己的用户名。</p>
+</blockquote>
+<p>这个文件的作用是告诉 PythonAnywhere 我们的Web应用程序在什么位置，Django设置文件的名字是什么。它也设置”whitenoise”静态文件工具。</p>
+<p>点击 Save 然后返回到 Web 选项卡。</p>
+<p>一切搞定！点击大大的绿色 Reload 按钮然后你将会看到你的应用程序。页面的顶部可以看到它的链接。</p>
+<h2 id="调试技巧"><a href="#调试技巧" class="headerlink" title="调试技巧"></a>调试技巧</h2><p>如果你在访问你的网站时候看到一个错误，首先要去error log中找一些调试信息。你可以在PythonAnywhere Web选项卡中发现它的链接。<br>检查那里是否有任何错误信息，底部是最新的信息。常见问题包括：</p>
+<ul>
+<li>忘记我们在控制台中的步骤：创建virtualenv，激活它，安装Django，运行collectstatic，迁移数据库。</li>
+<li>在Web选项卡中，virtualenv路径设置错误 — 如果真是这样，这通常会是一个红色错误消息。</li>
+<li>WSGI 文件设置错误 — 你的simpleblog目录地址设置是否正确？</li>
+<li>你是否为你的virtualenv选择了同样的Python版本，如同Web应用程序里的那样？两个应该都是3.4。</li>
+<li>有一些常见的调试小贴士在<a href="https://www.pythonanywhere.com/wiki/DebuggingImportError" target="_blank" rel="noopener">debugging tips on the PythonAnywhere</a>里.</li>
+</ul>
+<h2 id="你上线了！"><a href="#你上线了！" class="headerlink" title="你上线了！"></a>你上线了！</h2><p>你网站的默认页面说“Welcome to Django”，如同你本地计算机上的一样。试着添加/admin/到URL的末尾，然后你会到达管理者的页面。输入用户名和密码登录，然后你会看到服务器上的 add new Posts 。</p>
+<p>给你自己一个超大的鼓励！服务器部署是web开发中最棘手的部分之一，它通常要耗费人们几天时间才能搞定。但你的网站已经上线，运转在真正的互联网上，就是这样！</p>
+<p>先给自己个赞吧~</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Django/" rel="tag"># Django</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/08/03/python/simpleblog-02/" rel="next" title="Django1.9开发博客02- 模型">
+                <i class="fa fa-chevron-left"></i> Django1.9开发博客02- 模型
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/08/09/python/simpleblog-04/" rel="prev" title="Django1.9开发博客04- 三部曲">
+                Django1.9开发博客04- 三部曲 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://ooky9xe9n.bkt.clouddn.com/avatar.png"
+                alt="卡布奇诺" />
+            
+              <p class="site-author-name" itemprop="name">卡布奇诺</p>
+              <p class="site-description motion-element" itemprop="description">记录编程中遇到的坑</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">133</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/aopao1" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:admin@wujinyu.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装Git"><span class="nav-number">1.</span> <span class="nav-text">安装Git</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Git版本库"><span class="nav-number">2.</span> <span class="nav-text">Git版本库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#推送到Github上"><span class="nav-number">3.</span> <span class="nav-text">推送到Github上</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在-PythonAnywhere设置我们的博客"><span class="nav-number">4.</span> <span class="nav-text">在 PythonAnywhere设置我们的博客</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在-PythonAnywhere-上拉取我们的代码"><span class="nav-number">5.</span> <span class="nav-text">在 PythonAnywhere 上拉取我们的代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在-PythonAnywhere-上创建-virtualenv"><span class="nav-number">6.</span> <span class="nav-text">在 PythonAnywhere 上创建 virtualenv</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在-PythonAnywhere-上创建数据库"><span class="nav-number">7.</span> <span class="nav-text">在 PythonAnywhere 上创建数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发布博客"><span class="nav-number">8.</span> <span class="nav-text">发布博客</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#设置-virtualenv"><span class="nav-number">8.1.</span> <span class="nav-text">设置 virtualenv</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置-WSGI-文件"><span class="nav-number">8.2.</span> <span class="nav-text">配置 WSGI 文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调试技巧"><span class="nav-number">9.</span> <span class="nav-text">调试技巧</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#你上线了！"><span class="nav-number">10.</span> <span class="nav-text">你上线了！</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">卡布奇诺@心情</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

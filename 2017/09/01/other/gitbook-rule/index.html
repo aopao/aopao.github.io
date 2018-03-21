@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Gitbook," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="#概要 ##目的为了规范文档管理工作，提高团队协作效率，输出高质量的文档，特制定本规范。本规范文档一经确认, 所有开发人员必须按本文档规范进行执行. 本规范如有不对或者不合适的地方请及时提出, 经讨论决定后方可更改. 范围本规范适用于项目文档、API接口文档、使用说明文档、架构文档等 文档基本准则符合Markdown标准, 结构要有层次感，逻辑清晰简洁 文档管理使用git仓库对markdown文档">
+<meta name="keywords" content="Gitbook">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Gitbook文档规范">
+<meta property="og:url" content="http://www.wujinyu.com/2017/09/01/other/gitbook-rule/index.html">
+<meta property="og:site_name" content="卡布奇诺">
+<meta property="og:description" content="#概要 ##目的为了规范文档管理工作，提高团队协作效率，输出高质量的文档，特制定本规范。本规范文档一经确认, 所有开发人员必须按本文档规范进行执行. 本规范如有不对或者不合适的地方请及时提出, 经讨论决定后方可更改. 范围本规范适用于项目文档、API接口文档、使用说明文档、架构文档等 文档基本准则符合Markdown标准, 结构要有层次感，逻辑清晰简洁 文档管理使用git仓库对markdown文档">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-09-10T13:57:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Gitbook文档规范">
+<meta name="twitter:description" content="#概要 ##目的为了规范文档管理工作，提高团队协作效率，输出高质量的文档，特制定本规范。本规范文档一经确认, 所有开发人员必须按本文档规范进行执行. 本规范如有不对或者不合适的地方请及时提出, 经讨论决定后方可更改. 范围本规范适用于项目文档、API接口文档、使用说明文档、架构文档等 文档基本准则符合Markdown标准, 结构要有层次感，逻辑清晰简洁 文档管理使用git仓库对markdown文档">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.wujinyu.com/2017/09/01/other/gitbook-rule/"/>
+
+
+
+
+
+  <title>Gitbook文档规范 | 卡布奇诺</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-21552344-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卡布奇诺</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生活心情</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-分类">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-归档">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-标签">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-公益">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-关于">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2017/09/01/other/gitbook-rule/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Gitbook文档规范</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-01T08:41:34+08:00">
+                2017-09-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/教程笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">教程笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>#概要</p>
+<p>##目的<br>为了规范文档管理工作，提高团队协作效率，输出高质量的文档，特制定本规范。本规范文档一经确认, 所有开发人员必须按本文档规范进行执行. 本规范如有不对或者不合适的地方请及时提出, 经讨论决定后方可更改.</p>
+<h2 id="范围"><a href="#范围" class="headerlink" title="范围"></a>范围</h2><p>本规范适用于项目文档、API接口文档、使用说明文档、架构文档等</p>
+<h2 id="文档基本准则"><a href="#文档基本准则" class="headerlink" title="文档基本准则"></a>文档基本准则</h2><p>符合Markdown标准, 结构要有层次感，逻辑清晰简洁</p>
+<h2 id="文档管理"><a href="#文档管理" class="headerlink" title="文档管理"></a>文档管理</h2><p>使用git仓库对markdown文档进行管理<br>有两种方式：</p>
+<p>跟随代码仓库一起管理，例如在项目的根目录下有一个docs目录里面放文档<br>单独创建 XX_doc的仓库来管理<br>至于选择哪种方式，可以择优而定。若是多个项目团队共同协作文档，建议选择第二种方式。</p>
+<p>最终文档会使用gitbook在文档服务器进行展现，由文档最高管理员统一申请域名并部署<br><a id="more"></a></p>
+<h2 id="规范"><a href="#规范" class="headerlink" title="规范"></a>规范</h2><h3 id="项目文档"><a href="#项目文档" class="headerlink" title="项目文档"></a>项目文档</h3><p>在项目（代码仓库）的根目录下必须有一个”docs”目录，该目录下主要是用来存放相关文档</p>
+<h3 id="文档目录结构"><a href="#文档目录结构" class="headerlink" title="文档目录结构"></a>文档目录结构</h3><p>文档仓库根目录必须包含以下几个文件</p>
+<blockquote>
+<p>book.json 可选 gitbook的一些配置，比如可以指定展现的模版主题<br>README.md 必须 写一些相关介绍<br>usage.md 必须 写该项目或框架的使用说明<br>SUMMARY.md 必须 主要是book目录，每添加一个文档都需要在这个文件中添加目录</p>
+</blockquote>
+<p><code>book.json</code>的举例如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;title&quot; : &quot;斗米客户端研发部文档&quot;,</span><br><span class="line">	&quot;language&quot; : &quot;zh-hans&quot;,</span><br><span class="line">	&quot;plugins&quot;: [&quot;theme-comscore&quot;,</span><br><span class="line">                &quot;-sharing&quot;,</span><br><span class="line">	            &quot;-search&quot;,</span><br><span class="line">                &quot;-lunr&quot;,</span><br><span class="line">	            &quot;search-plus&quot;,</span><br><span class="line">	            &quot;splitter&quot;,</span><br><span class="line">                &quot;expandable-chapters-small&quot;,</span><br><span class="line">                &quot;-highlight&quot;,</span><br><span class="line">                &quot;prism&quot;,</span><br><span class="line">                &quot;prism-themes&quot;,</span><br><span class="line">                &quot;anchor-navigation-ex&quot;</span><br><span class="line">                </span><br><span class="line">	           ],</span><br><span class="line">    &quot;pluginsConfig&quot;: &#123;</span><br><span class="line">        &quot;prism&quot;: &#123;</span><br><span class="line">            &quot;css&quot;: [</span><br><span class="line">                &quot;prism-themes/themes/prism-base16-ateliersulphurpool.light.css&quot;</span><br><span class="line">            ]</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;anchor-navigation-ex&quot;: &#123;</span><br><span class="line">            &quot;showLevel&quot;: true,</span><br><span class="line">            &quot;associatedWithSummary&quot;: true,</span><br><span class="line">            &quot;mode&quot;: &quot;float&quot;, </span><br><span class="line">            &quot;float&quot;: &#123;</span><br><span class="line">                &quot;showLevelIcon&quot;: false,</span><br><span class="line">                &quot;level1Icon&quot;: &quot;fa fa-hand-o-right&quot;,</span><br><span class="line">                &quot;level2Icon&quot;: &quot;fa fa-hand-o-right&quot;,</span><br><span class="line">                &quot;level3Icon&quot;: &quot;fa fa-hand-o-right&quot;</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;pageTop&quot;: &#123;</span><br><span class="line">                &quot;showLevelIcon&quot;: false,</span><br><span class="line">                &quot;level1Icon&quot;: &quot;fa fa-hand-o-right&quot;,</span><br><span class="line">                &quot;level2Icon&quot;: &quot;fa fa-hand-o-right&quot;,</span><br><span class="line">                &quot;level3Icon&quot;: &quot;fa fa-hand-o-right&quot;</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;theme-default&quot;: &#123;</span><br><span class="line">            &quot;showLevel&quot;: false</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="针对SUMMARY-md举例如下"><a href="#针对SUMMARY-md举例如下" class="headerlink" title="针对SUMMARY.md举例如下"></a>针对<code>SUMMARY.md</code>举例如下</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># Summary</span><br><span class="line">* [介绍](README.md)</span><br><span class="line">* [使用说明](usage.md)</span><br><span class="line">* [组件拆分最佳实践](best.md)</span><br><span class="line">* [grain配置](config.md)</span><br><span class="line">* [javascript API](api.md)</span><br><span class="line">	* [缓存类API](api/cache.md)</span><br><span class="line">	* [位置类API](api/location.md)</span><br><span class="line">	* [信息类API](api/clientInfo.md)</span><br><span class="line">	* [安全类API](api/safety.md)</span><br><span class="line">	* [定制界面类API](api/clientUi.md)</span><br><span class="line">	* [原生功能类API](api/widget.md)</span><br><span class="line">	* [自定义API](api/customize.md)</span><br></pre></td></tr></table></figure>
+<h3 id="Markdown书写规范"><a href="#Markdown书写规范" class="headerlink" title="Markdown书写规范"></a>Markdown书写规范</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">1. 段落与段落之间空一行表示。</span><br><span class="line">   分节的时候可以多空一行。单个回车视为空格，连续回车才是换行。（行尾加两个空格，可以段内强制换行，一般用户可以忽略。）</span><br><span class="line">2. 其实在网络上你可以完全抛弃开头空两格的习惯，代之以段落之间空一行的习惯。如果只要要开头空两格，那么可以输入&amp;ensp;来表示一个空格，&amp;emsp;为两个。或者使用输入法切换到全角，双击空格键。</span><br><span class="line">3. 标题：# 一级标题</span><br><span class="line">        “#”之后最好加一个空格，这在md单向标记中都最好使用</span><br><span class="line">        也可以把”=“写在标题（H1）下面的一行，表示上面一行的文字为标题，”-“写在下面便是小标题或是节标题（H2）。</span><br><span class="line">4. 加粗，斜体：**加粗**，*斜体*，***粗斜体***</span><br><span class="line">5. 引用：&gt;</span><br><span class="line">6. 行内源代码：‘代码&apos;。行的开头空四个空格，缩进内容视为代码块。代码块也可以用’‘’代码‘’‘来完成。当然简单的用&apos;代码&apos;也可以显示。</span><br><span class="line">7. 删除线：~~删除~~</span><br><span class="line">8. 层次（也就是类似目录列表的东西）：“*” 后面要加空格，这是必须的，除了 *，还可以使用 + 或者 -。</span><br><span class="line">        1. 第一节</span><br><span class="line">        2. 第二节</span><br><span class="line">            * 第一小节（推荐每层次缩进四个空格）</span><br><span class="line">                * 小小节 1</span><br><span class="line">                * 小小节 2</span><br><span class="line">            * 第二小节</span><br><span class="line">9. 链接，图片：[想要显示的文字](链接,&quot;Title&quot;)，![（图片说明）](图片链接)。段落内使用的时候左右各空一格，除非是使用列表的时候。</span><br><span class="line">此外，还可以以索引方式把url都列在文章的最后，例如这样：</span><br><span class="line">[文字][1]</span><br><span class="line">[1]: 链接（不要忘记冒号后面的空格，title的写法与上类似）</span><br><span class="line">10. 分割线：---，上下各空一行,也可以用***，其实只要三个以上，随便你怎么写。</span><br><span class="line">11. 其他：</span><br><span class="line">        [链接标题][null-link]，可以生成一个伪链接样式，也就是存在链接的样式，但没有实质的链接。更高级的链接写法：[文字][hover]</span><br><span class="line">                           [hover]:链接&quot;悬停文字&quot;</span><br><span class="line">        图片链接：</span><br><span class="line">        [![][jane-eyre-pic］[jane-eyre-douban]</span><br><span class="line">        [jane-eyre-pic]: http://img3.douban.com/mpic/s1108264.jpg</span><br><span class="line">        [jane-eyre-douban]: http://book.douban.com/subject/1141406/</span><br><span class="line">        若要在图片下线是说明：&#123;ImagCap&#125;说明&#123;/ImgCap&#125;</span><br><span class="line">12. 跟其他的编程语言一样，利用转意字符”/“就可以输出”[“这类符号</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Gitbook/" rel="tag"># Gitbook</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/01/other/gitbook-install/" rel="next" title="Mac环境安装Gitbook，并导出PDF教程">
+                <i class="fa fa-chevron-left"></i> Mac环境安装Gitbook，并导出PDF教程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/01/other/hexo-qa/" rel="prev" title="Hexo 错误解决方案">
+                Hexo 错误解决方案 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://ooky9xe9n.bkt.clouddn.com/avatar.png"
+                alt="卡布奇诺" />
+            
+              <p class="site-author-name" itemprop="name">卡布奇诺</p>
+              <p class="site-description motion-element" itemprop="description">记录编程中遇到的坑</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">133</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/aopao1" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:admin@wujinyu.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#范围"><span class="nav-number">1.</span> <span class="nav-text">范围</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文档基本准则"><span class="nav-number">2.</span> <span class="nav-text">文档基本准则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文档管理"><span class="nav-number">3.</span> <span class="nav-text">文档管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#规范"><span class="nav-number">4.</span> <span class="nav-text">规范</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#项目文档"><span class="nav-number">4.1.</span> <span class="nav-text">项目文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文档目录结构"><span class="nav-number">4.2.</span> <span class="nav-text">文档目录结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#针对SUMMARY-md举例如下"><span class="nav-number">4.3.</span> <span class="nav-text">针对SUMMARY.md举例如下</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Markdown书写规范"><span class="nav-number">4.4.</span> <span class="nav-text">Markdown书写规范</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">卡布奇诺@心情</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

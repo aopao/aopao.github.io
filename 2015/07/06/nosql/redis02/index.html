@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="redis," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1）strings类型及操作 string是最简单的类型，你可以理解成与Memcached是一模一样的类型，一个key对应一个value，其上支持的操作与Memcached的操作类似。但它的功能更丰富。 string类型是二进制安全的。意思是redis的string可以包含任何数据，比如jpg图片或者序列化的对象。从内部实现来看其实string可以看作byte数组，最大上限是1G字节，下面是str">
+<meta name="keywords" content="redis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redis笔记02 - 基本操作">
+<meta property="og:url" content="http://www.wujinyu.com/2015/07/06/nosql/redis02/index.html">
+<meta property="og:site_name" content="卡布奇诺">
+<meta property="og:description" content="1）strings类型及操作 string是最简单的类型，你可以理解成与Memcached是一模一样的类型，一个key对应一个value，其上支持的操作与Memcached的操作类似。但它的功能更丰富。 string类型是二进制安全的。意思是redis的string可以包含任何数据，比如jpg图片或者序列化的对象。从内部实现来看其实string可以看作byte数组，最大上限是1G字节，下面是str">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-09-10T13:57:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="redis笔记02 - 基本操作">
+<meta name="twitter:description" content="1）strings类型及操作 string是最简单的类型，你可以理解成与Memcached是一模一样的类型，一个key对应一个value，其上支持的操作与Memcached的操作类似。但它的功能更丰富。 string类型是二进制安全的。意思是redis的string可以包含任何数据，比如jpg图片或者序列化的对象。从内部实现来看其实string可以看作byte数组，最大上限是1G字节，下面是str">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.wujinyu.com/2015/07/06/nosql/redis02/"/>
+
+
+
+
+
+  <title>redis笔记02 - 基本操作 | 卡布奇诺</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-21552344-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卡布奇诺</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生活心情</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-分类">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-归档">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-标签">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-公益">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-关于">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2015/07/06/nosql/redis02/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">redis笔记02 - 基本操作</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-07-06T16:15:42+08:00">
+                2015-07-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Nosql/" itemprop="url" rel="index">
+                    <span itemprop="name">Nosql</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>1）strings类型及操作</p>
+<p>string是最简单的类型，你可以理解成与Memcached是一模一样的类型，一个key对应一个value，其上支持的操作与Memcached的操作类似。但它的功能更丰富。</p>
+<p>string类型是二进制安全的。意思是redis的string可以包含任何数据，比如jpg图片或者序列化的对象。从内部实现来看其实string可以看作byte数组，最大上限是1G字节，下面是string类型的定义:<a id="more"></a><br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sdshdr</span> &#123;</span></span><br><span class="line">　　<span class="keyword">long</span> len;</span><br><span class="line">　　<span class="keyword">long</span> <span class="built_in">free</span>;</span><br><span class="line">　　<span class="keyword">char</span> buf[];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>len是buf数组的长度。</p>
+<p>free是数组中剩余可用字节数，由此可以理解为什么string类型是二进制安全的了，因为它本质上就是个byte数组，当然可以包含任何数据了</p>
+<p>buf是个char数组用于存贮实际的字符串内容，其实char和c#中的byte是等价的，都是一个字节。</p>
+<p>另外string类型可以被部分命令按int处理.比如incr等命令，如果只用string类型，redis就可以被看作加上持久化特性的memcached。当然redis对string类型的操作比memcached还是多很多的，具体操作方法如下：</p>
+<p>1、set</p>
+<p>设置key对应的值为string类型的value。<br>例如我们添加一个name= HongWan的键值对，可以这样做:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; set name HongWan</span><br><span class="line">OK</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>2、setnx</p>
+<p>设置key对应的值为string类型的value。如果key已经存在，返回0，nx是not exist的意思。<br>例如我们添加一个name= HongWan_new的键值对，可以这样做:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; get name</span><br><span class="line">&quot;HongWan&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt; setnx name HongWan_new</span><br><span class="line">(integer) 0</span><br><span class="line">redis 127.0.0.1:6379&gt; get name</span><br><span class="line">&quot;HongWan&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>由于原来name有一个对应的值，所以本次的修改不生效，且返回码是0。</p>
+<p>3、setex</p>
+<p>设置key对应的值为string类型的value，并指定此键值对应的有效期。<br>例如我们添加一个haircolor= red的键值对，并指定它的有效期是10秒，可以这样做:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; setex haircolor 10 red</span><br><span class="line">OK</span><br><span class="line">redis 127.0.0.1:6379&gt; get haircolor</span><br><span class="line">&quot;red&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt; get haircolor</span><br><span class="line">(nil)</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>可见由于最后一次的调用是10秒以后了，所以取不到haicolor这个键对应的值。</p>
+<p>4、setrange</p>
+<p>设置指定key的value值的子字符串。<br>例如我们希望将HongWan的126邮箱替换为gmail邮箱，那么我们可以这样做:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; get name</span><br><span class="line">&quot;HongWan@126.com&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt; setrange name 8 gmail.com</span><br><span class="line">(integer) 17</span><br><span class="line">redis 127.0.0.1:6379&gt; get name</span><br><span class="line">&quot;HongWan@gmail.com&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>其中的8是指从下标为8(包含8)的字符开始替换</p>
+<p>5、mset</p>
+<p>一次设置多个key的值，成功返回ok表示所有的值都设置了，失败返回0表示没有任何值被设置。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; mset key1 HongWan1 key2 HongWan2</span><br><span class="line">OK</span><br><span class="line">redis 127.0.0.1:6379&gt; get key1</span><br><span class="line">&quot;HongWan1&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt; get key2</span><br><span class="line">&quot;HongWan2&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>6、msetnx</p>
+<p>一次设置多个key的值，成功返回ok表示所有的值都设置了，失败返回0表示没有任何值被设置，但是不会覆盖已经存在的key。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; get key1</span><br><span class="line">&quot;HongWan1&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt; get key2</span><br><span class="line">&quot;HongWan2&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt; msetnx key2 HongWan2_new key3 HongWan3</span><br><span class="line">(integer) 0</span><br><span class="line">redis 127.0.0.1:6379&gt; get key2</span><br><span class="line">&quot;HongWan2&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt; get key3</span><br><span class="line">(nil)</span><br></pre></td></tr></table></figure></p>
+<p>可以看出如果这条命令返回0，那么里面操作都会回滚，都不会被执行。</p>
+<p>7、get</p>
+<p>获取key对应的string值,如果key不存在返回nil。<br>例如我们获取一个库中存在的键name，可以很快得到它对应的value<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; get name</span><br><span class="line">&quot;HongWan&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br><span class="line">我们获取一个库中不存在的键name1，那么它会返回一个nil以表时无此键值对</span><br><span class="line">redis 127.0.0.1:6379&gt; get name1</span><br><span class="line">(nil)</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>8、getset</p>
+<p>设置key的值，并返回key的旧值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; get name</span><br><span class="line">&quot;HongWan&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt; getset name HongWan_new</span><br><span class="line">&quot;HongWan&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt; get name</span><br><span class="line">&quot;HongWan_new&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>接下来我们看一下如果key不存的时候会什么样儿?<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; getset name1 aaa</span><br><span class="line">(nil)</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>可见，如果key不存在，那么将返回nil</p>
+<p>9、getrange</p>
+<p>获取指定key的value值的子字符串。<br>具体样例如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; get name</span><br><span class="line">&quot;HongWan@126.com&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt; getrange name 0 6</span><br><span class="line">&quot;HongWan&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>字符串左面下标是从0开始的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; getrange name -7 -1</span><br><span class="line">&quot;126.com&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>字符串右面下标是从-1开始的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; getrange name 7 100</span><br><span class="line">&quot;@126.com&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>当下标超出字符串长度时，将默认为是同方向的最大下标</p>
+<p>10、mget</p>
+<p>一次获取多个key的值，如果对应key不存在，则对应返回nil。<br>具体样例如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; mget key1 key2 key3</span><br><span class="line">1) &quot;HongWan1&quot;</span><br><span class="line">2) &quot;HongWan2&quot;</span><br><span class="line">3) (nil)</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>key3由于没有这个键定义，所以返回nil。</p>
+<p>11、incr</p>
+<p>对key的值做加加操作,并返回新的值。注意incr一个不是int的value会返回错误，incr一个不存在的key，则设置key为1<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; set age 20</span><br><span class="line">OK</span><br><span class="line">redis 127.0.0.1:6379&gt; incr age</span><br><span class="line">(integer) 21</span><br><span class="line">redis 127.0.0.1:6379&gt; get age</span><br><span class="line">&quot;21&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>12、incrby</p>
+<p>同incr类似，加指定值 ，key不存在时候会设置key，并认为原来的value是 0<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; get age</span><br><span class="line">&quot;21&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt; incrby age 5</span><br><span class="line">(integer) 26</span><br><span class="line">redis 127.0.0.1:6379&gt; get name</span><br><span class="line">&quot;HongWan@gmail.com&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt; get age</span><br><span class="line">&quot;26&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>13、decr</p>
+<p>对key的值做的是减减操作，decr一个不存在key，则设置key为-1<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; get age</span><br><span class="line">&quot;26&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt; decr age</span><br><span class="line">(integer) 25</span><br><span class="line">redis 127.0.0.1:6379&gt; get age</span><br><span class="line">&quot;25&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>14、decrby</p>
+<p>同decr，减指定值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; get age</span><br><span class="line">&quot;25&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt; decrby age 5</span><br><span class="line">(integer) 20</span><br><span class="line">redis 127.0.0.1:6379&gt; get age</span><br><span class="line">&quot;20&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>decrby完全是为了可读性，我们完全可以通过incrby一个负值来实现同样效果，反之一样。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; get age</span><br><span class="line">&quot;20&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt; incrby age -5</span><br><span class="line">(integer) 15</span><br><span class="line">redis 127.0.0.1:6379&gt; get age</span><br><span class="line">&quot;15&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>15、append</p>
+<p>给指定key的字符串值追加value,返回新字符串值的长度。例如我们向name的值追加一个@126.com字符串，那么可以这样做:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; append name @126.com</span><br><span class="line">(integer) 15</span><br><span class="line">redis 127.0.0.1:6379&gt; get name</span><br><span class="line">&quot;HongWan@126.com&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>16、strlen</p>
+<p>取指定key的value值的长度。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; get name</span><br><span class="line">&quot;HongWan_new&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt; strlen name</span><br><span class="line">(integer) 11</span><br><span class="line">redis 127.0.0.1:6379&gt; get age</span><br><span class="line">&quot;15&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt; strlen age</span><br><span class="line">(integer) 2</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>2）hash</p>
+<p>Redis hash是一个string类型的field和value的映射表.它的添加、删除操作都是O(1)(平均)。hash特别适合用于存储对象。相较于将对象的每个字段存成单个string类型。将一个对象存储在hash类型中会占用更少的内存，并且可以更方便的存取整个对象。省内存的原因是新建一个hash对象时开始是用zipmap(又称为small hash)来存储的。这个zipmap其实并不是hash table，但是zipmap相比正常的hash实现可以节省不少hash本身需要的一些元数据存储开销。尽管zipmap的添加，删除，查找都是O(n)，但是由于一般对象的field数量都不太多。所以使用zipmap也是很快的,也就是说添加删除平均还是O(1)。如果field或者value的大小超出一定限制后，Redis会在内部自动将zipmap替换成正常的hash实现. 这个限制可以在配置文件中指定<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hash-max-zipmap-entries 64 #配置字段最多64个。</span><br><span class="line">hash-max-zipmap-value 512 #配置value最大为512字节。</span><br></pre></td></tr></table></figure></p>
+<p>1、hset</p>
+<p>设置hash field为指定值，如果key不存在，则先创建。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; hset myhash field1 Hello</span><br><span class="line">(integer) 1</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>2、hsetnx</p>
+<p>设置hash field为指定值，如果key不存在，则先创建。如果field已经存在，返回0，nx是not exist的意思。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; hsetnx myhash field &quot;Hello&quot;</span><br><span class="line">(integer) 1</span><br><span class="line">redis 127.0.0.1:6379&gt; hsetnx myhash field &quot;Hello&quot;</span><br><span class="line">(integer) 0</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>第一次执行是成功的，但第二次执行相同的命令失败，原因是field已经存在了。</p>
+<p>3、hmset</p>
+<p>同时设置hash的多个field。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; hmset myhash field1 Hello field2 World</span><br><span class="line">OK</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>4、hget</p>
+<p>获取指定的hash field。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; hget myhash field1</span><br><span class="line">&quot;Hello&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt; hget myhash field2</span><br><span class="line">&quot;World&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt; hget myhash field3</span><br><span class="line">(nil)</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>由于数据库没有field3，所以取到的是一个空值nil。</p>
+<p>5、hmget</p>
+<p>获取全部指定的hash filed。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; hmget myhash field1 field2 field3</span><br><span class="line">1) &quot;Hello&quot;</span><br><span class="line">2) &quot;World&quot;</span><br><span class="line">3) (nil)</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>由于数据库没有field3，所以取到的是一个空值nil。</p>
+<p>6、hincrby</p>
+<p>指定的hash filed 加上给定值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; hset myhash field3 20</span><br><span class="line">(integer) 1</span><br><span class="line">redis 127.0.0.1:6379&gt; hget myhash field3</span><br><span class="line">&quot;20&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt; hincrby myhash field3 -8</span><br><span class="line">(integer) 12</span><br><span class="line">redis 127.0.0.1:6379&gt; hget myhash field3</span><br><span class="line">&quot;12&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>在本例中我们将field3的值从20降到了12，即做了一个减8的操作。</p>
+<p>7、hexists</p>
+<p>测试指定field是否存在。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; hexists myhash field1</span><br><span class="line">(integer) 1</span><br><span class="line">redis 127.0.0.1:6379&gt; hexists myhash field9</span><br><span class="line">(integer) 0</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>通过上例可以说明field1存在，但field9是不存在的。</p>
+<p>8、hlen</p>
+<p>返回指定hash的field数量。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; hlen myhash</span><br><span class="line">(integer) 4</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>通过上例可以看到myhash中有4个field。</p>
+<p>9、hdel</p>
+<p>返回指定hash的field数量。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; hlen myhash</span><br><span class="line">(integer) 4</span><br><span class="line">redis 127.0.0.1:6379&gt; hdel myhash field1</span><br><span class="line">(integer) 1</span><br><span class="line">redis 127.0.0.1:6379&gt; hlen myhash</span><br><span class="line">(integer) 3</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>10、hkeys</p>
+<p>返回hash的所有field。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; hkeys myhash</span><br><span class="line">1) &quot;field2&quot;</span><br><span class="line">2) &quot;field&quot;</span><br><span class="line">3) &quot;field3&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>说明这个hash中有3个field。</p>
+<p>11、hvals</p>
+<p>返回hash的所有value。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; hvals myhash</span><br><span class="line">1) &quot;World&quot;</span><br><span class="line">2) &quot;Hello&quot;</span><br><span class="line">3) &quot;12&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>说明这个hash中有3个field。</p>
+<p>12、hgetall</p>
+<p>获取某个hash中全部的filed及value。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; hgetall myhash</span><br><span class="line">1) &quot;field2&quot;</span><br><span class="line">2) &quot;World&quot;</span><br><span class="line">3) &quot;field&quot;</span><br><span class="line">4) &quot;Hello&quot;</span><br><span class="line">5) &quot;field3&quot;</span><br><span class="line">6) &quot;12&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>可见，一下子将myhash中所有的field及对应的value都取出来了。</p>
+<p>3）list</p>
+<p>Redis的list类型其实就是一个每个子元素都是string类型的双向链表。链表的最大长度是(2的32次方)。我们可以通过push,pop操作从链表的头部或者尾部添加删除元素。这使得list既可以用作栈，也可以用作队列。</p>
+<p>有意思的是list的pop操作还有阻塞版本的，当我们[lr]pop一个list对象时，如果list是空，或者不存在，会立即返回nil。但是阻塞版本的b[lr]pop可以则可以阻塞，当然可以加超时时间，超时后也会返回nil。为什么要阻塞版本的pop呢，主要是为了避免轮询。举个简单的例子如果我们用list来实现一个工作队列。执行任务的thread可以调用阻塞版本的pop去获取任务这样就可以避免轮询去检查是否有任务存在。当任务来时候工作线程可以立即返回，也可以避免轮询带来的延迟。说了这么多，接下来看一下实际操作的方法吧：</p>
+<p>1、lpush</p>
+<p>在key对应list的头部添加字符串元素：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; lpush mylist &quot;world&quot;</span><br><span class="line">(integer) 1</span><br><span class="line">redis 127.0.0.1:6379&gt; lpush mylist &quot;hello&quot;</span><br><span class="line">(integer) 2</span><br><span class="line">redis 127.0.0.1:6379&gt; lrange mylist 0 -1</span><br><span class="line">1) &quot;hello&quot;</span><br><span class="line">2) &quot;world&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>在此处我们先插入了一个world，然后在world的头部插入了一个hello。其中lrange是用于取mylist的内容。</p>
+<p>2、rpush</p>
+<p>在key对应list的尾部添加字符串元素：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; rpush mylist2 &quot;hello&quot;</span><br><span class="line">(integer) 1</span><br><span class="line">redis 127.0.0.1:6379&gt; rpush mylist2 &quot;world&quot;</span><br><span class="line">(integer) 2</span><br><span class="line">redis 127.0.0.1:6379&gt; lrange mylist2 0 -1</span><br><span class="line">1) &quot;hello&quot;</span><br><span class="line">2) &quot;world&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>在此处我们先插入了一个hello，然后在hello的尾部插入了一个world。</p>
+<p>3、linsert</p>
+<p>在key对应list的特定位置之前或之后添加字符串元素：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; rpush mylist3 &quot;hello&quot;</span><br><span class="line">(integer) 1</span><br><span class="line">redis 127.0.0.1:6379&gt; rpush mylist3 &quot;world&quot;</span><br><span class="line">(integer) 2</span><br><span class="line">redis 127.0.0.1:6379&gt; linsert mylist3 before &quot;world&quot; &quot;there&quot;</span><br><span class="line">(integer) 3</span><br><span class="line">redis 127.0.0.1:6379&gt; lrange mylist3 0 -1</span><br><span class="line">1) &quot;hello&quot;</span><br><span class="line">2) &quot;there&quot;</span><br><span class="line">3) &quot;world&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>在此处我们先插入了一个hello，然后在hello的尾部插入了一个world，然后又在world的前面插入了there。</p>
+<p>4、lset</p>
+<p>设置list中指定下标的元素值(下标从0开始)：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; rpush mylist4 &quot;one&quot;</span><br><span class="line">(integer) 1</span><br><span class="line">redis 127.0.0.1:6379&gt; rpush mylist4 &quot;two&quot;</span><br><span class="line">(integer) 2</span><br><span class="line">redis 127.0.0.1:6379&gt; rpush mylist4 &quot;three&quot;</span><br><span class="line">(integer) 3</span><br><span class="line">redis 127.0.0.1:6379&gt; lset mylist4 0 &quot;four&quot;</span><br><span class="line">OK</span><br><span class="line">redis 127.0.0.1:6379&gt; lset mylist4 -2 &quot;five&quot;</span><br><span class="line">OK</span><br><span class="line">redis 127.0.0.1:6379&gt; lrange mylist4 0 -1</span><br><span class="line">1) &quot;four&quot;</span><br><span class="line">2) &quot;five&quot;</span><br><span class="line">3) &quot;three&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>在此处我们依次插入了one,two,three，然后将标是0的值设置为four，再将下标是-2的值设置为five。</p>
+<p>5、lrem</p>
+<p>从key对应list中删除count个和value相同的元素。<br>count&gt;0时，按从头到尾的顺序删除，具体如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; rpush mylist5 &quot;hello&quot;</span><br><span class="line">(integer) 1</span><br><span class="line">redis 127.0.0.1:6379&gt; rpush mylist5 &quot;hello&quot;</span><br><span class="line">(integer) 2</span><br><span class="line">redis 127.0.0.1:6379&gt; rpush mylist5 &quot;foo&quot;</span><br><span class="line">(integer) 3</span><br><span class="line">redis 127.0.0.1:6379&gt; rpush mylist5 &quot;hello&quot;</span><br><span class="line">(integer) 4</span><br><span class="line">redis 127.0.0.1:6379&gt; lrem mylist5 2 &quot;hello&quot;</span><br><span class="line">(integer) 2</span><br><span class="line">redis 127.0.0.1:6379&gt; lrange mylist5 0 -1</span><br><span class="line">1) &quot;foo&quot;</span><br><span class="line">2) &quot;hello&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>count&lt;0时，按从尾到头的顺序删除，具体如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; rpush mylist6 &quot;hello&quot;</span><br><span class="line">(integer) 1</span><br><span class="line">redis 127.0.0.1:6379&gt; rpush mylist6 &quot;hello&quot;</span><br><span class="line">(integer) 2</span><br><span class="line">redis 127.0.0.1:6379&gt; rpush mylist6 &quot;foo&quot;</span><br><span class="line">(integer) 3</span><br><span class="line">redis 127.0.0.1:6379&gt; rpush mylist6 &quot;hello&quot;</span><br><span class="line">(integer) 4</span><br><span class="line">redis 127.0.0.1:6379&gt; lrem mylist6 -2 &quot;hello&quot;</span><br><span class="line">(integer) 2</span><br><span class="line">redis 127.0.0.1:6379&gt; lrange mylist6 0 -1</span><br><span class="line">1) &quot;hello&quot;</span><br><span class="line">2) &quot;foo&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>count=0时，删除全部，具体如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; rpush mylist7 &quot;hello&quot;</span><br><span class="line">(integer) 1</span><br><span class="line">redis 127.0.0.1:6379&gt; rpush mylist7 &quot;hello&quot;</span><br><span class="line">(integer) 2</span><br><span class="line">redis 127.0.0.1:6379&gt; rpush mylist7 &quot;foo&quot;</span><br><span class="line">(integer) 3</span><br><span class="line">redis 127.0.0.1:6379&gt; rpush mylist7 &quot;hello&quot;</span><br><span class="line">(integer) 4</span><br><span class="line">redis 127.0.0.1:6379&gt; lrem mylist7 0 &quot;hello&quot;</span><br><span class="line">(integer) 3</span><br><span class="line">redis 127.0.0.1:6379&gt; lrange mylist7 0 -1</span><br><span class="line">1) &quot;foo&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>6、ltrim</p>
+<p>保留指定key 的值范围内的数据：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; rpush mylist8 &quot;one&quot;</span><br><span class="line">(integer) 1</span><br><span class="line">redis 127.0.0.1:6379&gt; rpush mylist8 &quot;two&quot;</span><br><span class="line">(integer) 2</span><br><span class="line">redis 127.0.0.1:6379&gt; rpush mylist8 &quot;three&quot;</span><br><span class="line">(integer) 3</span><br><span class="line">redis 127.0.0.1:6379&gt; rpush mylist8 &quot;four&quot;</span><br><span class="line">(integer) 4</span><br><span class="line">redis 127.0.0.1:6379&gt; ltrim mylist8 1 -1</span><br><span class="line">OK</span><br><span class="line">redis 127.0.0.1:6379&gt; lrange mylist8 0 -1</span><br><span class="line">1) &quot;two&quot;</span><br><span class="line">2) &quot;three&quot;</span><br><span class="line">3) &quot;four&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>7、lpop</p>
+<p>从list的头部删除元素，并返回删除元素：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; lrange mylist 0 -1</span><br><span class="line">1) &quot;hello&quot;</span><br><span class="line">2) &quot;world&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt; lpop mylist</span><br><span class="line">&quot;hello&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt; lrange mylist 0 -1</span><br><span class="line">1) &quot;world&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>8、rpop</p>
+<p>从list的尾部删除元素，并返回删除元素：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; lrange mylist2 0 -1</span><br><span class="line">1) &quot;hello&quot;</span><br><span class="line">2) &quot;world&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt; rpop mylist2</span><br><span class="line">&quot;world&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt; lrange mylist2 0 -1</span><br><span class="line">1) &quot;hello&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>9、rpoplpush</p>
+<p>从第一个list的尾部移除元素并添加到第二个list的头部,最后返回被移除的元素值，整个操作是原子的.如果第一个list是空或者不存在返回nil：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; lrange mylist5 0 -1</span><br><span class="line">1) &quot;three&quot;</span><br><span class="line">2) &quot;foo&quot;</span><br><span class="line">3) &quot;hello&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt; lrange mylist6 0 -1</span><br><span class="line">1) &quot;hello&quot;</span><br><span class="line">2) &quot;foo&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt; rpoplpush mylist5 mylist6</span><br><span class="line">&quot;hello&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt; lrange mylist5 0 -1</span><br><span class="line">1) &quot;three&quot;</span><br><span class="line">2) &quot;foo&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt; lrange mylist6 0 -1</span><br><span class="line">1) &quot;hello&quot;</span><br><span class="line">2) &quot;hello&quot;</span><br><span class="line">3) &quot;foo&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>10、lindex</p>
+<p>返回名称为key的list中index位置的元素：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; lrange mylist5 0 -1</span><br><span class="line">1) &quot;three&quot;</span><br><span class="line">2) &quot;foo&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt; lindex mylist5 0</span><br><span class="line">&quot;three&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt; lindex mylist5 1</span><br><span class="line">&quot;foo&quot;</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+<p>11、llen</p>
+<p>返回key对应list的长度：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">redis 127.0.0.1:6379&gt; llen mylist5</span><br><span class="line">(integer) 2</span><br><span class="line">redis 127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/redis/" rel="tag"># redis</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/07/01/nosql/redis01/" rel="next" title="redis笔记01 - 入门与安装">
+                <i class="fa fa-chevron-left"></i> redis笔记01 - 入门与安装
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/07/12/nosql/redis03/" rel="prev" title="redis笔记03 - 进阶篇">
+                redis笔记03 - 进阶篇 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://ooky9xe9n.bkt.clouddn.com/avatar.png"
+                alt="卡布奇诺" />
+            
+              <p class="site-author-name" itemprop="name">卡布奇诺</p>
+              <p class="site-description motion-element" itemprop="description">记录编程中遇到的坑</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">133</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/aopao1" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:admin@wujinyu.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">卡布奇诺@心情</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
