@@ -79,16 +79,17 @@
 
 
 
-<meta name="description" content="记录编程中遇到的坑">
-<meta property="og:type" content="website">
-<meta property="og:title" content="卡布奇诺">
-<meta property="og:url" content="http://www.wujinyu.com/tags/license/index.html">
+<meta name="description" content="创建监听器1php artisan make:listener QueryListener --event=Illuminate\Database\\Events\\QueryExecuted 打开 app/ProvidersEventServiceProvider.php ，在$listen中添加 1234567protected $listen = [    &amp;apos;Illuminate\">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Laravel 实时监听打印 SQL">
+<meta property="og:url" content="http://www.wujinyu.com/2018/04/03/laravel-print-sql/index.html">
 <meta property="og:site_name" content="卡布奇诺">
-<meta property="og:description" content="记录编程中遇到的坑">
+<meta property="og:description" content="创建监听器1php artisan make:listener QueryListener --event=Illuminate\Database\\Events\\QueryExecuted 打开 app/ProvidersEventServiceProvider.php ，在$listen中添加 1234567protected $listen = [    &amp;apos;Illuminate\">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-04-03T08:07:54.008Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="卡布奇诺">
-<meta name="twitter:description" content="记录编程中遇到的坑">
+<meta name="twitter:title" content="Laravel 实时监听打印 SQL">
+<meta name="twitter:description" content="创建监听器1php artisan make:listener QueryListener --event=Illuminate\Database\\Events\\QueryExecuted 打开 app/ProvidersEventServiceProvider.php ，在$listen中添加 1234567protected $listen = [    &amp;apos;Illuminate\">
 
 
 
@@ -118,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://www.wujinyu.com/tags/license/"/>
+  <link rel="canonical" href="http://www.wujinyu.com/2018/04/03/laravel-print-sql/"/>
 
 
 
 
 
-  <title>标签: license | 卡布奇诺</title>
+  <title>Laravel 实时监听打印 SQL | 卡布奇诺</title>
   
 
 
@@ -152,7 +153,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -256,54 +257,151 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>license<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/04/03/laravel-print-sql/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2016/10/16/linux/active-server/" itemprop="url">
-              
-                <span itemprop="name">5分钟搭建一个license服务器</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">Laravel 实时监听打印 SQL</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-10-16T20:22:22+08:00"
-              content="2016-10-16" >
-          10-16
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-03T16:06:28+08:00">
+                2018-04-03
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="创建监听器"><a href="#创建监听器" class="headerlink" title="创建监听器"></a>创建监听器</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php artisan make:listener QueryListener --event=Illuminate\Database\\Events\\QueryExecuted</span><br></pre></td></tr></table></figure>
+<p>打开 <code>app/ProvidersEventServiceProvider.php</code> ，在<code>$listen</code>中添加</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">protected $listen = [</span><br><span class="line">    &apos;Illuminate\Database\Events\QueryExecuted&apos; =&gt; [</span><br><span class="line">        &apos;App\Listeners\QueryListener,</span><br><span class="line">    ]</span><br><span class="line">];</span><br><span class="line">#头部添加</span><br><span class="line">use App\Listeners\QueryListener;</span><br></pre></td></tr></table></figure>
+<p>打开<code>QueryListener</code>文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public function handle (QueryExecuted $event)</span><br><span class="line">&#123;</span><br><span class="line">    if (env(&apos;APP_ENV&apos;, &apos;production&apos;) == &apos;local&apos;) &#123;</span><br><span class="line">        $sql = str_replace(&quot;?&quot;, &quot;&apos;%s&apos;&quot;, $event-&gt;sql);</span><br><span class="line">        $log = vsprintf($sql, $event-&gt;bindings);</span><br><span class="line">        Log::info($log);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/03/mac-item/" rel="next" title="Mac文件夹多语言显示设置">
+                <i class="fa fa-chevron-left"></i> Mac文件夹多语言显示设置
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
 
 
           </div>
@@ -311,6 +409,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -331,8 +433,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -412,6 +523,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建监听器"><span class="nav-number">1.</span> <span class="nav-text">创建监听器</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -552,6 +679,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
