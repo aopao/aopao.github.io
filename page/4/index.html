@@ -271,6 +271,455 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2017/04/23/python/requests速查手册/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/04/23/python/requests速查手册/" itemprop="url">requests速查手册</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-23T22:07:42+08:00">
+                2017-04-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="get"><a href="#get" class="headerlink" title="get"></a>get</h2><p><strong>请求网址与传递参数</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">payload = &#123;<span class="string">'key1'</span>: <span class="string">'value1'</span>, <span class="string">'key2'</span>: <span class="string">'value2'</span>&#125;</span><br><span class="line">r = requests.get(url, params=payload)</span><br></pre></td></tr></table></figure>
+<p><strong>定制请求头</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">headers = &#123;<span class="string">'user-agent'</span>: <span class="string">'my-app/0.0.1'</span>&#125;</span><br><span class="line">r = requests.get(url, headers=headers)</span><br></pre></td></tr></table></figure>
+<p><strong>超时</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">r = requests.get(url, timeout=<span class="number">0.001</span>)</span><br></pre></td></tr></table></figure>
+<p><strong>短链接</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">r = requests.get(url,headers=&#123;<span class="string">'Connection'</span>:<span class="string">'close'</span>&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="post"><a href="#post" class="headerlink" title="post"></a>post</h2><p><strong>发送表单数据</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">data = &#123;<span class="string">'key'</span>:<span class="string">'value'</span>&#125;</span><br><span class="line">r = requests.post(url, data=data)</span><br></pre></td></tr></table></figure>
+<p><strong>发送json数据</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># requests会自动序列化data</span></span><br><span class="line">data = &#123;<span class="string">'key'</span>:<span class="string">'value'</span>&#125;</span><br><span class="line">r = requests.post(url, json=data)</span><br></pre></td></tr></table></figure>
+<h2 id="处理返回结果"><a href="#处理返回结果" class="headerlink" title="处理返回结果"></a>处理返回结果</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 得到json</span></span><br><span class="line">r.json()</span><br></pre></td></tr></table></figure>
+<h2 id="代理ip"><a href="#代理ip" class="headerlink" title="代理ip"></a>代理ip</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">proxies = &#123;</span><br><span class="line">  <span class="string">'http'</span>: <span class="string">'http://10.10.1.10:3128'</span>,</span><br><span class="line">  <span class="string">'https'</span>: <span class="string">'http://10.10.1.10:1080'</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">requests.get(<span class="string">'http://example.org'</span>, proxies=proxies)</span><br></pre></td></tr></table></figure>
+<h2 id="编码与解码问题"><a href="#编码与解码问题" class="headerlink" title="编码与解码问题"></a>编码与解码问题</h2><p>我们可以通过 <code>r.encoding</code> 查看requests抓取文件的编码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">r = requests.get(url)</span><br><span class="line"><span class="keyword">print</span> (r.encoding)</span><br></pre></td></tr></table></figure>
+<p>如果 Requests 检测不到正确的编码，那么你告诉它正确的是什么：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">response.encoding = <span class="string">'gbk'</span></span><br><span class="line"><span class="keyword">print</span> (response.text)</span><br></pre></td></tr></table></figure>
+<p>字符串在Python内部的表示是 <code>unicode</code> 编码，因此，在做编码转换时，通常需要以 <code>unicode</code> 作为中间编码，即先将其他编码的字符串解码 <code>decode</code> 成 <code>unicode</code> ，再从 <code>unicode</code> 编码 <code>encode</code> 成另一种编码。</p>
+<p><code>decode</code> 的作用是将其他编码的字符串转换成unicode编码，如 <code>str1.decode(&#39;gb2312&#39;)</code>，表示将 <code>gb2312</code> 编码的字符串 <code>str1</code> 转换成 <code>unicode</code> 编码。</p>
+<p><code>encode</code> 的作用是将 <code>unicode</code> 编码转换成其他编码的字符串，如 <code>str2.encode(&#39;gb2312&#39;)</code>，表示将 <code>unicode</code> 编码的字符串 <code>str2</code> 转换成 <code>gb2312</code>编码。</p>
+<p>如果一个字符串已经是 <code>unicode</code> 了，再进行解码则将出错，因此通常要对其编码方式是否为 <code>unicode</code> 进行判断，用非 <code>unicode</code> 编码形式的str来 <code>encode</code> 会报错</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2017/04/23/python/python规范目录结构/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/04/23/python/python规范目录结构/" itemprop="url">python规范目录结构</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-23T22:07:42+08:00">
+                2017-04-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>假设项目名称为Foo</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Foo/</span><br><span class="line">|-- bin/ #存放项目的一些可执行文件</span><br><span class="line">|   |-- foo</span><br><span class="line">|-- foo/ # 所有模块、包都应该放在此目录，程序的入口最好命名为main.py</span><br><span class="line">|   |-- tests/ # 存放单元测试代码；</span><br><span class="line">|   |   |-- __init__.py</span><br><span class="line">|   |   |-- test_main.py</span><br><span class="line">|   |-- __init__.py</span><br><span class="line">|   |-- main.py</span><br><span class="line">|-- docs/ # 用于存放文档</span><br><span class="line">|   |-- conf.py</span><br><span class="line">|   |-- abc.rst</span><br><span class="line">|-- setup.py # 来管理代码的打包、安装、部署问题</span><br><span class="line">|-- requirements.txt # 存放软件依赖的外部Python包列表</span><br><span class="line">|-- README # 项目说明文件</span><br></pre></td></tr></table></figure>
+<p><a href="http://www.cnblogs.com/bigberg/p/6423164.html" target="_blank" rel="noopener">python基础6–目录结构</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2017/04/23/python/python实现windows系统下自动拨号/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/04/23/python/python实现windows系统下自动拨号/" itemprop="url">python实现windows系统下自动拨号</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-23T22:07:42+08:00">
+                2017-04-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Adsl</span><span class="params">(object)</span>:</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">    <span class="comment"># 分别填写adsl名称，用户名与密码，dsl名称一般为宽带连接</span></span><br><span class="line">    self.name = <span class="string">"宽带连接"</span></span><br><span class="line">    self.username = <span class="string">'adsl_uname'</span></span><br><span class="line">    self.password = <span class="string">'adsl_upwd'</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">connect</span><span class="params">(self)</span>:</span></span><br><span class="line">    cmd_str = <span class="string">"rasdial %s %s %s"</span> % (self.name, self.username, self.password)</span><br><span class="line">    os.system(cmd_str)</span><br><span class="line">    time.sleep(<span class="number">5</span>)</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">disconnect</span><span class="params">(self)</span>:</span></span><br><span class="line">    cmd_str = <span class="string">"rasdial %s /disconnect"</span> % self.name</span><br><span class="line">    os.system(cmd_str)</span><br><span class="line">    time.sleep(<span class="number">5</span>)</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">reconnect</span><span class="params">(self)</span>:</span></span><br><span class="line">    self.disconnect()</span><br><span class="line">    self.connect()</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2017/04/23/python/将Python代码打包放到PyPI上/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -555,148 +1004,6 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install aiohttp</span><br></pre></td></tr></table></figure>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">from</span> aiohttp <span class="keyword">import</span> web</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">index</span><span class="params">(request)</span>:</span></span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">0.5</span>) <span class="comment"># 模拟io阻塞</span></span><br><span class="line">    <span class="keyword">return</span> web.Response(body=<span class="string">b'&lt;h1&gt;Index&lt;/h1&gt;'</span>,content_type=<span class="string">'text/html'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">hello</span><span class="params">(request)</span>:</span></span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">0.5</span>)</span><br><span class="line">    text = <span class="string">'&lt;h1&gt;hello, %s!&lt;/h1&gt;'</span> % request.match_info[<span class="string">'name'</span>]</span><br><span class="line">    <span class="keyword">return</span> web.Response(body=text.encode(<span class="string">'utf-8'</span>),content_type=<span class="string">'text/html'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">init</span><span class="params">(loop)</span>:</span></span><br><span class="line">    app = web.Application(loop=loop)</span><br><span class="line">    app.router.add_route(<span class="string">'GET'</span>, <span class="string">'/'</span>, index)</span><br><span class="line">    app.router.add_route(<span class="string">'GET'</span>, <span class="string">'/hello/&#123;name&#125;'</span>, hello)</span><br><span class="line">    srv = <span class="keyword">await</span> loop.create_server(app.make_handler(), <span class="string">'127.0.0.1'</span>, <span class="number">8000</span>)</span><br><span class="line">    print(<span class="string">'Server started at http://127.0.0.1:8000...'</span>)</span><br><span class="line">    <span class="keyword">return</span> srv</span><br><span class="line"></span><br><span class="line">loop = asyncio.get_event_loop()</span><br><span class="line">loop.run_until_complete(init(loop))</span><br><span class="line">loop.run_forever()</span><br></pre></td></tr></table></figure>
 <p><a href="http://blog.csdn.net/dutsoft/article/details/54729480" target="_blank" rel="noopener">python并发之协程</a><br><a href="http://developer.51cto.com/art/201403/434352_all.htm" target="_blank" rel="noopener">python:利用asyncio进行快速抓取</a><br><a href="https://www.oschina.net/translate/playing-around-with-await-async-in-python-3-5" target="_blank" rel="noopener">玩转 Python 3.5 的 await/async</a><br><a href="http://www.tuicool.com/articles/V7jQbmU" target="_blank" rel="noopener">Python 3.5 协程究竟是个啥</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2017/04/23/python/python实现windows系统下自动拨号/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="卡布奇诺">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="卡布奇诺">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/04/23/python/python实现windows系统下自动拨号/" itemprop="url">python实现windows系统下自动拨号</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-23T22:07:42+08:00">
-                2017-04-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Adsl</span><span class="params">(object)</span>:</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">    <span class="comment"># 分别填写adsl名称，用户名与密码，dsl名称一般为宽带连接</span></span><br><span class="line">    self.name = <span class="string">"宽带连接"</span></span><br><span class="line">    self.username = <span class="string">'adsl_uname'</span></span><br><span class="line">    self.password = <span class="string">'adsl_upwd'</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">connect</span><span class="params">(self)</span>:</span></span><br><span class="line">    cmd_str = <span class="string">"rasdial %s %s %s"</span> % (self.name, self.username, self.password)</span><br><span class="line">    os.system(cmd_str)</span><br><span class="line">    time.sleep(<span class="number">5</span>)</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">disconnect</span><span class="params">(self)</span>:</span></span><br><span class="line">    cmd_str = <span class="string">"rasdial %s /disconnect"</span> % self.name</span><br><span class="line">    os.system(cmd_str)</span><br><span class="line">    time.sleep(<span class="number">5</span>)</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">reconnect</span><span class="params">(self)</span>:</span></span><br><span class="line">    self.disconnect()</span><br><span class="line">    self.connect()</span><br></pre></td></tr></table></figure>
 
           
         
@@ -1477,401 +1784,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2016/11/07/database/MySQL 主从环境配置/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="卡布奇诺">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="卡布奇诺">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/11/07/database/MySQL 主从环境配置/" itemprop="url">MySQL 主从环境配置</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-11-07T20:46:25+08:00">
-                2016-11-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Database/" itemprop="url" rel="index">
-                    <span itemprop="name">Database</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="1-前言"><a href="#1-前言" class="headerlink" title="1.前言"></a>1.前言</h1><p>　　</p>
-<h1 id="2-环境"><a href="#2-环境" class="headerlink" title="2.环境"></a>2.环境</h1><blockquote>
-<p>操作系统： CentOS6.5<br>MySQL：mysql-5.6.34</p>
-</blockquote>
-<h1 id="3-二进制包方式安装-MySQL"><a href="#3-二进制包方式安装-MySQL" class="headerlink" title="3.二进制包方式安装 MySQL"></a>3.二进制包方式安装 MySQL</h1><h2 id="3-1-卸载-Linux-自带的-MySQL"><a href="#3-1-卸载-Linux-自带的-MySQL" class="headerlink" title="3.1 卸载 Linux 自带的 MySQL"></a>3.1 卸载 Linux 自带的 MySQL</h2><p>Linux 系统自带了 MySQL 数据库，但是对于我们来说版本低了点，所以我们还是自己重新安装一遍 MySQL，为防止冲突，我们需要将原先版本的 MySQL 卸载。</p>
-<ol>
-<li>查看 MySQL 及相关的 RPM 包</li>
-</ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpm -qa | grep -i mysql</span><br></pre></td></tr></table></figure>
-<p><img src="http://oc4wmeyj8.bkt.clouddn.com/%E6%9F%A5%E8%AF%A2%E8%87%AA%E5%B8%A6mysql.PNG" alt=""></p>
-<ol>
-<li>卸载 MySQL</li>
-</ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y remove mysql<span class="number">-5.1</span><span class="number">.71</span><span class="number">-1.</span>el6</span><br></pre></td></tr></table></figure>
-<ol>
-<li>查看是否卸载</li>
-</ol>
-<p><img src="http://oc4wmeyj8.bkt.clouddn.com/%E5%8D%B8%E8%BD%BDmysql%E5%90%8E.PNG" alt=""></p>
-<h2 id="3-2-安装-MySQL"><a href="#3-2-安装-MySQL" class="headerlink" title="3.2 安装 MySQL"></a>3.2 安装 MySQL</h2><ol>
-<li>下载 MySQL</li>
-</ol>
-<p>通过 <code>wget</code> 命令下载 MySQL 的 tar.gz 文件</p>
-<ol>
-<li>解压 tar.gz 文件</li>
-</ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local</span><br><span class="line">tar zxvf &#123;下载文件所在路径&#125;.tar.gz</span><br></pre></td></tr></table></figure>
-<ol>
-<li>重名文件夹</li>
-</ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv mysql<span class="number">-5.6</span><span class="number">.34</span>-linux-glibc2<span class="number">.5</span>-i686/ mysql</span><br></pre></td></tr></table></figure>
-<ol>
-<li>更改 mysql 文件夹属性</li>
-</ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">cd mysql/</span><br><span class="line">groupadd mysql</span><br><span class="line">useradd -g mysql mysql</span><br><span class="line">chown -R mysql .</span><br><span class="line">chgrp -R mysql .</span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line"><span class="number">5.</span> 编译安装 MySQL</span><br><span class="line"></span><br><span class="line">```c</span><br><span class="line">scripts/mysql_install_db --user=mysql --basedir=/usr/local/mysql/ --datadir=/usr/local/mysql/data/</span><br></pre></td></tr></table></figure>
-<ol>
-<li>配置 my.cnf 文件</li>
-</ol>
-<p>从 mysql 安装目录下拷贝一份 my.cnf 文件到 /etc/ 目录下，如果原先 /etc/ 存在 my.cnf 文件，则覆盖。</p>
-<p>在 <code>[mysqld]</code>中添加：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">basedir = /usr/local/mysql</span><br><span class="line">datadir = /usr/local/mysql/data</span><br><span class="line">port = <span class="number">3306</span></span><br><span class="line">server_id = <span class="number">1</span></span><br></pre></td></tr></table></figure>
-<ol>
-<li>启动 MySQL 服务</li>
-</ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cp support-files/mysql.server /etc/init.d/mysqld</span><br><span class="line">ln -s /usr/local/mysql/bin/mysql /usr/bin</span><br><span class="line">service mysqld start</span><br></pre></td></tr></table></figure>
-<ol>
-<li>验证 MySQL 服务是否开启</li>
-</ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps -ef | grep mysqld</span><br></pre></td></tr></table></figure>
-<h1 id="4-配置主从环境"><a href="#4-配置主从环境" class="headerlink" title="4.配置主从环境"></a>4.配置主从环境</h1><h2 id="4-1-准备两台-Linux-环境服务器"><a href="#4-1-准备两台-Linux-环境服务器" class="headerlink" title="4.1 准备两台 Linux 环境服务器"></a>4.1 准备两台 Linux 环境服务器</h2><p>分别在两台服务器上按上述步骤安装 MySQL。</p>
-<h2 id="4-2-配置主库"><a href="#4-2-配置主库" class="headerlink" title="4.2 配置主库"></a>4.2 配置主库</h2><ol>
-<li>修改主库所在服务器上的 my.cnf 文件</li>
-</ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/my.cnf</span><br></pre></td></tr></table></figure>
-<p>在 my.cnf 文件中添加</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">log_bin = master_mysql_bin</span><br></pre></td></tr></table></figure>
-<p>该参数配置表示开启 MySQL 的二进制日志。</p>
-<ol>
-<li>重启 MySQL 服务</li>
-</ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service mysqld restart</span><br></pre></td></tr></table></figure>
-<ol>
-<li>查看 master 节点状态</li>
-</ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show master status;</span><br></pre></td></tr></table></figure>
-<p><img src="http://oc4wmeyj8.bkt.clouddn.com/master_status.PNG" alt=""></p>
-<p>记录下红色标记处的信息，配置 slave 节点时需要。</p>
-<ol>
-<li>主库中增加复制账号</li>
-</ol>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; grant replication slave on *.* to 'repl'@'192.168.222.%' identified by 'replsafe';</span><br></pre></td></tr></table></figure>
-<h2 id="4-3-配置从库"><a href="#4-3-配置从库" class="headerlink" title="4.3 配置从库"></a>4.3 配置从库</h2><ol>
-<li>修改从库所在服务器上的 my.cnf 文件</li>
-</ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/my.cnf</span><br></pre></td></tr></table></figure>
-<p>在 my.cnf 文件中添加</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">log_bin = slave_mysql_bin</span><br><span class="line">relay_log = mysql_relay_bin</span><br></pre></td></tr></table></figure>
-<p>修改从库上的二进制日志和中继日志的命名规则</p>
-<ol>
-<li>重启 MySQL 服务</li>
-</ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service mysqld restart</span><br></pre></td></tr></table></figure>
-<ol>
-<li>连接到主库</li>
-</ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; change master to</span><br><span class="line">    -&gt; master_host='192.168.222.131',</span><br><span class="line">    -&gt; master_port=<span class="number">3306</span>,</span><br><span class="line">    -&gt; master_user='repl',</span><br><span class="line">    -&gt; master_password='replsafe',</span><br><span class="line">    -&gt; master_log_file='master_mysql_bin.000001',</span><br><span class="line">    -&gt; master_log_pos=<span class="number">120</span>;</span><br><span class="line">Query OK, <span class="number">0</span> rows affected, <span class="number">2</span> warnings (<span class="number">0.11</span> sec)</span><br></pre></td></tr></table></figure>
-<ol>
-<li>开启复制</li>
-</ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">start slave;</span><br></pre></td></tr></table></figure>
-<ol>
-<li>查看从库复制状态</li>
-</ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show slave status\G</span><br><span class="line">*************************** <span class="number">1.</span> row ***************************</span><br><span class="line">               Slave_IO_State: Waiting <span class="keyword">for</span> master to send event</span><br><span class="line">                  Master_Host: <span class="number">192.168</span><span class="number">.222</span><span class="number">.131</span></span><br><span class="line">                  Master_User: repl</span><br><span class="line">                  Master_Port: <span class="number">3306</span></span><br><span class="line">                Connect_Retry: <span class="number">60</span></span><br><span class="line">              Master_Log_File: master_mysql_bin<span class="number">.000001</span></span><br><span class="line">          Read_Master_Log_Pos: <span class="number">330</span></span><br><span class="line">               Relay_Log_File: mysql_relay_bin<span class="number">.000002</span></span><br><span class="line">                Relay_Log_Pos: <span class="number">500</span></span><br><span class="line">        Relay_Master_Log_File: master_mysql_bin<span class="number">.000001</span></span><br><span class="line">             Slave_IO_Running: Yes</span><br><span class="line">            Slave_SQL_Running: Yes</span><br><span class="line">              Replicate_Do_DB: </span><br><span class="line">          Replicate_Ignore_DB: </span><br><span class="line">           Replicate_Do_Table: </span><br><span class="line">       Replicate_Ignore_Table: </span><br><span class="line">      Replicate_Wild_Do_Table: </span><br><span class="line">  Replicate_Wild_Ignore_Table: </span><br><span class="line">                   Last_Errno: <span class="number">0</span></span><br><span class="line">                   Last_Error: </span><br><span class="line">                 Skip_Counter: <span class="number">0</span></span><br><span class="line">          Exec_Master_Log_Pos: <span class="number">330</span></span><br><span class="line">              Relay_Log_Space: <span class="number">673</span></span><br><span class="line">              Until_Condition: None</span><br><span class="line">               Until_Log_File: </span><br><span class="line">                Until_Log_Pos: <span class="number">0</span></span><br><span class="line">           Master_SSL_Allowed: No</span><br><span class="line">           Master_SSL_CA_File: </span><br><span class="line">           Master_SSL_CA_Path: </span><br><span class="line">              Master_SSL_Cert: </span><br><span class="line">            Master_SSL_Cipher: </span><br><span class="line">               Master_SSL_Key: </span><br><span class="line">        Seconds_Behind_Master: <span class="number">0</span></span><br><span class="line">Master_SSL_Verify_Server_Cert: No</span><br><span class="line">                Last_IO_Errno: <span class="number">0</span></span><br><span class="line">                Last_IO_Error: </span><br><span class="line">               Last_SQL_Errno: <span class="number">0</span></span><br><span class="line">               Last_SQL_Error: </span><br><span class="line">  Replicate_Ignore_Server_Ids: </span><br><span class="line">             Master_Server_Id: <span class="number">131</span></span><br><span class="line">                  Master_UUID: <span class="number">249f</span>7c7a<span class="number">-9b</span>c8<span class="number">-11e6</span><span class="number">-8</span>aaf<span class="number">-000</span>c29b971bb</span><br><span class="line">             Master_Info_File: /usr/local/mysql/data/master.info</span><br><span class="line">                    SQL_Delay: <span class="number">0</span></span><br><span class="line">          SQL_Remaining_Delay: <span class="literal">NULL</span></span><br><span class="line">      Slave_SQL_Running_State: Slave has read all relay <span class="built_in">log</span>; waiting <span class="keyword">for</span> the slave I/O thread to update it</span><br><span class="line">           Master_Retry_Count: <span class="number">86400</span></span><br><span class="line">                  Master_Bind: </span><br><span class="line">      Last_IO_Error_Timestamp: </span><br><span class="line">     Last_SQL_Error_Timestamp: </span><br><span class="line">               Master_SSL_Crl: </span><br><span class="line">           Master_SSL_Crlpath: </span><br><span class="line">           Retrieved_Gtid_Set: </span><br><span class="line">            Executed_Gtid_Set: </span><br><span class="line">                Auto_Position: <span class="number">0</span></span><br><span class="line"><span class="number">1</span> <span class="function">row in <span class="title">set</span> <span class="params">(<span class="number">0.00</span> sec)</span></span></span><br></pre></td></tr></table></figure>
-<p>通过 <code>show slave status\G</code> 显示出来的内容如上，则表示主备环境搭建成功。</p>
-<ol>
-<li>验证复制功能</li>
-</ol>
-<p>在主库上创建一个数据库，创建一张表，并想表中插入数据，查看从库能否有相同数据。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create database master_slave;</span><br><span class="line">Query OK, <span class="number">1</span> <span class="function">row <span class="title">affected</span> <span class="params">(<span class="number">0.00</span> sec)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line">mysql&gt; use master_slave;</span><br><span class="line">Database changed</span><br><span class="line">mysql&gt; <span class="function">create table <span class="title">tb1</span><span class="params">(id <span class="keyword">int</span>)</span></span>;</span><br><span class="line">Query OK, <span class="number">0</span> <span class="function">rows <span class="title">affected</span> <span class="params">(<span class="number">0.14</span> sec)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line">mysql&gt; insert into tb1 values(1);</span><br><span class="line">Query OK, <span class="number">1</span> <span class="function">row <span class="title">affected</span> <span class="params">(<span class="number">0.03</span> sec)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line">mysql&gt; select * from tb1;</span><br><span class="line">+------+</span><br><span class="line">| id   |</span><br><span class="line">+------+</span><br><span class="line">|    <span class="number">1</span> |</span><br><span class="line">+------+</span><br><span class="line"><span class="number">1</span> <span class="function">row in <span class="title">set</span> <span class="params">(<span class="number">0.00</span> sec)</span></span></span><br></pre></td></tr></table></figure>
-<p>查看从库上是否有相同数据</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show databases;</span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema |</span><br><span class="line">| master_slave       |</span><br><span class="line">| mysql              |</span><br><span class="line">| performance_schema |</span><br><span class="line">| test               |</span><br><span class="line">+--------------------+</span><br><span class="line"><span class="number">5</span> <span class="function">rows in <span class="title">set</span> <span class="params">(<span class="number">0.00</span> sec)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line">mysql&gt; use master_slave;</span><br><span class="line">Reading table information <span class="keyword">for</span> completion of table <span class="keyword">and</span> column names</span><br><span class="line">You can turn off <span class="keyword">this</span> feature to get a quicker startup with -A</span><br><span class="line"></span><br><span class="line">Database changed</span><br><span class="line">mysql&gt; show tables;</span><br><span class="line">+------------------------+</span><br><span class="line">| Tables_in_master_slave |</span><br><span class="line">+------------------------+</span><br><span class="line">| tb1                    |</span><br><span class="line">+------------------------+</span><br><span class="line"><span class="number">1</span> <span class="function">row in <span class="title">set</span> <span class="params">(<span class="number">0.00</span> sec)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line">mysql&gt; select * from tb1;</span><br><span class="line">+------+</span><br><span class="line">| id   |</span><br><span class="line">+------+</span><br><span class="line">|    <span class="number">1</span> |</span><br><span class="line">+------+</span><br><span class="line"><span class="number">1</span> <span class="function">row in <span class="title">set</span> <span class="params">(<span class="number">0.00</span> sec)</span></span></span><br></pre></td></tr></table></figure>
-<p>验证复制功能成功。</p>
-<h1 id="5-可能遇到的问题"><a href="#5-可能遇到的问题" class="headerlink" title="5.可能遇到的问题"></a>5.可能遇到的问题</h1><p><strong>问题一：</strong><br>在启动复制功能时，查看 slave 节点状态发现：</p>
-<p><img src="http://oc4wmeyj8.bkt.clouddn.com/2003%E9%94%99%E8%AF%AF.PNG" alt=""></p>
-<p><strong>原因：</strong>主库服务器上防火墙开启导致，从库连接不上主库</p>
-<p><strong>解决方案：</strong>在主库服务器上关闭防火墙 <code>service iptables stop</code></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2016/10/16/linux/active-server/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="卡布奇诺">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="卡布奇诺">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/10/16/linux/active-server/" itemprop="url">5分钟搭建一个license服务器</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-16T20:22:22+08:00">
-                2016-10-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>作为一个码农对于那些NO.1的开发工具爱不释手，它们对框架的支持、界面、插件都是那么的优秀，<br>大大加快了开发的速度以及开发的乐趣，酷炫的界面也能大大的装一个逼。</p>
-<p>对于暂时经济不宽裕的同学，比较明智的选择是Google一台active服务器即可，<br>有能力的同学不妨尝试自行架设，这也就是本文的目的啦。</p>
-<p>喝水不忘挖井人，在此向服务器软件的作者Lanyu表示衷心的感谢。
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2016/10/16/linux/active-server/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1926,7 +1838,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">133</span>
+                  <span class="site-state-item-count">135</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
