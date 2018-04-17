@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="卡布奇诺">
 <meta property="og:description" content="当我们使用Mac中文语言的时候，使用终端Terminal看到的文件夹列表和直接在Finder里面看到的不一样。经常我们使用一个中文的文件夹在终端cd选择的时候切换输入法会感觉比较恶心。 但是系统默认的几个文件夹 桌面，下载… 在终端看到的会是英文的 Desktop, Dowload…等，这里就来说明怎么实现这种多语言的文件夹命名。 123cd /System/Library/CoreService">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-04-03T03:19:19.563Z">
+<meta property="og:updated_time" content="2018-04-17T01:43:27.813Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mac文件夹多语言显示设置">
 <meta name="twitter:description" content="当我们使用Mac中文语言的时候，使用终端Terminal看到的文件夹列表和直接在Finder里面看到的不一样。经常我们使用一个中文的文件夹在终端cd选择的时候切换输入法会感觉比较恶心。 但是系统默认的几个文件夹 桌面，下载… 在终端看到的会是英文的 Desktop, Dowload…等，这里就来说明怎么实现这种多语言的文件夹命名。 123cd /System/Library/CoreService">
@@ -342,8 +342,7 @@
 <p>但是系统默认的几个文件夹 桌面，下载… 在终端看到的会是英文的 Desktop, Dowload…等，这里就来说明怎么实现这种多语言的文件夹命名。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /System/Library/CoreServices/SystemFolderLocalizations/zh_CN.lproj </span><br><span class="line">sudo chmod -R 777 *</span><br><span class="line">open . # 在文件夹中打开，以便之后操作</span><br></pre></td></tr></table></figure>
 <p>如果加了<code>sudo</code>命令还是无法给权限请开启Rootless功能，开启方法：</p>
-<p>重启电脑并按住 <code>cmd + R</code> 键。进入恢复模式。<br>顶部的菜单 栏<code>Utilities &gt; Terminal</code>打开终端。<br>键入命令 <code>csrutil disable</code> 重启即可。<br>开启之后再做之前操作。</p>
-<p>打开 <code>SystemFolderLocalizations.strings</code> 文件。看内容是否乱码，如果是乱码则为二进制文件，需要下面2步转换，如果不是乱码可以跳过下面两步。</p>
+<p>重启电脑并按住 <code>cmd + R</code> 键。进入恢复模式。<br>顶部的菜单 栏<code>Utilities &gt; Terminal</code>打开终端。<br>键入命令 <code>csrutil disable</code> 重启即可。<br>开启之后再做之前操作。<br><a id="more"></a><br>打开 <code>SystemFolderLocalizations.strings</code> 文件。看内容是否乱码，如果是乱码则为二进制文件，需要下面2步转换，如果不是乱码可以跳过下面两步。</p>
 <p>转化二进制文件为JSON或者XML文件(<strong>二选一</strong>)。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">plutil -convert json SystemFolderLocalizations.strings # 转化为JSON文件</span><br><span class="line">plutil -convert xml1 SystemFolderLocalizations.strings # 转化为XML文件</span><br></pre></td></tr></table></figure>
 <p>然后修改添加自己的英/中文(key-value)。例如我们新建一个Projects但是要显示中文的“项目”。</p>
@@ -467,7 +466,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">135</span>
+                  <span class="site-state-item-count">134</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -489,7 +488,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-count">74</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
