@@ -271,6 +271,136 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/04/19/laravel-construct-get-auth-user/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/19/laravel-construct-get-auth-user/" itemprop="url">laravel_construct_get_auth_user</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-19T14:47:26+08:00">
+                2018-04-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>应该不少同学都遇到这个问题了：5.3 起，由于框架运行流程的修改，你无法在控制器的构造函数里获取登录用户，那么我们怎么办呢？以下是几个方法：</p>
+<ol>
+<li>不再从构造函数取用户</li>
+</ol>
+<p>我们可以从 request 中获取登录用户：<code>request()-&gt;user()</code>。</p>
+<ol>
+<li>或者在控制器方法里我们使用  <code>Auth::user()</code></li>
+</ol>
+<p>除了上面的折中的办法，我们一定要在构造函数搞定的话那么请看这里：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">protected $user;</span><br><span class="line"></span><br><span class="line">public function __construct()</span><br><span class="line">&#123;</span><br><span class="line">    $this-&gt;middleware(function ($request, $next) &#123;</span><br><span class="line">        $this-&gt;user = $request-&gt;user();</span><br><span class="line"></span><br><span class="line">        return $next($request);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样你就可以在其它方法里使用 <code>$this-&gt;user</code> 来访问当前登录用户了。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/04/03/laravel-print-sql/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1124,7 +1254,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2017/09/01/other/hexo-qa/">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2017/09/01/other/gitbook-install/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="卡布奇诺">
@@ -1143,7 +1273,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/01/other/hexo-qa/" itemprop="url">Hexo 错误解决方案</a></h1>
+                <a class="post-title-link" href="/2017/09/01/other/gitbook-install/" itemprop="url">Mac环境安装Gitbook，并导出PDF教程</a></h1>
         
 
         <div class="post-meta">
@@ -1216,12 +1346,16 @@
 
       
         
-          
-            <h2 id="错误-FATAL-Cannot-set-property-‘lastIndex’-of-undefined"><a href="#错误-FATAL-Cannot-set-property-‘lastIndex’-of-undefined" class="headerlink" title="错误:FATAL Cannot set property ‘lastIndex’ of undefined"></a>错误:FATAL Cannot set property ‘lastIndex’ of undefined</h2><p> <code>Hexo</code> 的 <code>_config.yml</code> 文件中的高亮功能</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">highlight:</span><br><span class="line">  enable: true</span><br><span class="line">  line_number: true</span><br><span class="line">  auto_detect: false</span><br><span class="line">  tab_replace:</span><br></pre></td></tr></table></figure>
-<p>其中的 <code>auto_detect</code> 应该设置为 <code>false</code>。</p>
-
-          
+          <p>在经过了长时间的折腾之后，终于在Mac环境成功的安装了Gitbook。</p>
+<p>安装Gitbook的主要流程如下：</p>
+<p>安装node.js&gt;安装Gitbook&gt;安装Gitbook编辑器&gt;安装calibre&gt;导出PDF。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/09/01/other/gitbook-install/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1554,154 +1688,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2017/09/01/other/gitbook-install/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="卡布奇诺">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="卡布奇诺">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/01/other/gitbook-install/" itemprop="url">Mac环境安装Gitbook，并导出PDF教程</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-01T08:41:34+08:00">
-                2017-09-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/教程笔记/" itemprop="url" rel="index">
-                    <span itemprop="name">教程笔记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>在经过了长时间的折腾之后，终于在Mac环境成功的安装了Gitbook。</p>
-<p>安装Gitbook的主要流程如下：</p>
-<p>安装node.js&gt;安装Gitbook&gt;安装Gitbook编辑器&gt;安装calibre&gt;导出PDF。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/09/01/other/gitbook-install/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1756,7 +1742,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">134</span>
+                  <span class="site-state-item-count">135</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
