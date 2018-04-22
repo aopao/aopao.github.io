@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Linux,SELinux," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -79,18 +79,17 @@
 
 
 
-<meta name="description" content="SELinux 模式 SELinux 拥有三个基本的操作模式，当中 Enforcing 是缺省的模式。此外，它还有一个 targeted 或 mls 的修饰语。这管制 SELinux 规则的应用有多广泛，当中 targeted是较宽松的级别。  Enforcing： 这个缺省模式会在系统上启用并实施 SELinux 的安全性政策，拒绝访问及记录行动 Permissive： 在 Permissive">
-<meta name="keywords" content="Linux,SELinux">
+<meta name="description" content="安装1). 使用 Composer 安装该扩展包： 1composer require barryvdh/laravel-ide-helper 2). 安装完成后，在 config/app.php 添加以下内容到 providers 数组。 1Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class, 3). 接下来运行以下命令生成代码对应">
 <meta property="og:type" content="article">
-<meta property="og:title" content="SELinux">
-<meta property="og:url" content="http://www.wujinyu.com/2016/01/25/linux/selinux/index.html">
+<meta property="og:title" content="Laravel-ide-helper">
+<meta property="og:url" content="http://www.wujinyu.com/2018/04/22/Laravel-ide-helper/index.html">
 <meta property="og:site_name" content="卡布奇诺">
-<meta property="og:description" content="SELinux 模式 SELinux 拥有三个基本的操作模式，当中 Enforcing 是缺省的模式。此外，它还有一个 targeted 或 mls 的修饰语。这管制 SELinux 规则的应用有多广泛，当中 targeted是较宽松的级别。  Enforcing： 这个缺省模式会在系统上启用并实施 SELinux 的安全性政策，拒绝访问及记录行动 Permissive： 在 Permissive">
+<meta property="og:description" content="安装1). 使用 Composer 安装该扩展包： 1composer require barryvdh/laravel-ide-helper 2). 安装完成后，在 config/app.php 添加以下内容到 providers 数组。 1Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class, 3). 接下来运行以下命令生成代码对应">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-10T13:57:09.000Z">
+<meta property="og:updated_time" content="2018-04-22T01:06:02.950Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SELinux">
-<meta name="twitter:description" content="SELinux 模式 SELinux 拥有三个基本的操作模式，当中 Enforcing 是缺省的模式。此外，它还有一个 targeted 或 mls 的修饰语。这管制 SELinux 规则的应用有多广泛，当中 targeted是较宽松的级别。  Enforcing： 这个缺省模式会在系统上启用并实施 SELinux 的安全性政策，拒绝访问及记录行动 Permissive： 在 Permissive">
+<meta name="twitter:title" content="Laravel-ide-helper">
+<meta name="twitter:description" content="安装1). 使用 Composer 安装该扩展包： 1composer require barryvdh/laravel-ide-helper 2). 安装完成后，在 config/app.php 添加以下内容到 providers 数组。 1Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class, 3). 接下来运行以下命令生成代码对应">
 
 
 
@@ -120,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://www.wujinyu.com/2016/01/25/linux/selinux/"/>
+  <link rel="canonical" href="http://www.wujinyu.com/2018/04/22/Laravel-ide-helper/"/>
 
 
 
 
 
-  <title>SELinux | 卡布奇诺</title>
+  <title>Laravel-ide-helper | 卡布奇诺</title>
   
 
 
@@ -272,7 +271,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2016/01/25/linux/selinux/">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/04/22/Laravel-ide-helper/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="卡布奇诺">
@@ -289,7 +288,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">SELinux</h1>
+          <h1 class="post-title" itemprop="name headline">Laravel-ide-helper</h1>
         
 
         <div class="post-meta">
@@ -301,8 +300,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-01-25T16:29:29+08:00">
-                2016-01-25
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-22T09:04:02+08:00">
+                2018-04-22
               </time>
             
 
@@ -311,28 +310,6 @@
             
           </span>
 
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -361,27 +338,16 @@
       
 
       
-        <p>SELinux 模式</p>
-<p>SELinux 拥有三个基本的操作模式，当中 Enforcing 是缺省的模式。此外，它还有一个 targeted 或 mls 的修饰语。这管制 SELinux 规则的应用有多广泛，当中 targeted<br>是较宽松的级别。</p>
-<ul>
-<li>Enforcing： 这个缺省模式会在系统上启用并实施 SELinux 的安全性政策，拒绝访问及记录行动</li>
-<li>Permissive： 在 Permissive 模式下，SELinux 会被启用但不会实施安全性政策，而只会发出警告及记录行动。Permissive 模式在排除 SELinux 的问题时很有用</li>
-<li>Disabled： SELinux 已被停用</li>
-</ul>
-<a id="more"></a>
-<h3 id="1-sestatus-v"><a href="#1-sestatus-v" class="headerlink" title="1.sestatus -v"></a>1.sestatus -v</h3><pre><code># sestatus
-SELinux status:                 enabled
-SELinuxfs mount:                /selinux
-Current mode:                   enforcing
-Mode from config file:          enforcing
-Policy version:                 21
-Policy from config file:        targeted
-</code></pre><p>如果SELinux status参数为enabled即为开启状态<br>临时关闭（不用重启机器）：<br>setenforce 0  #设置SELinux 成为permissive模式， setenforce 1 设置SELinux 成为enforcing模式</p>
-<h3 id="2-修改配置文件需要重启机器"><a href="#2-修改配置文件需要重启机器" class="headerlink" title="2.修改配置文件需要重启机器"></a>2.修改配置文件需要重启机器</h3><p>修改/etc/selinux/config 文件<br>将SELINUX=enforcing改为SELINUX=disabled<br>重启机器即可</p>
-<h3 id="3-日志文件"><a href="#3-日志文件" class="headerlink" title="3.日志文件"></a>3.日志文件</h3><p>默认情况下，SELinux的日志信息是由Linux审计系统auditd写在 /var/log/audit/audit.log里<br>autitd守护进程未启动，则写在/var/log/messages里</p>
-<h3 id="4-利用-audit2allow-创建自定-SELinux-政策模块"><a href="#4-利用-audit2allow-创建自定-SELinux-政策模块" class="headerlink" title="4.利用 audit2allow 创建自定 SELinux 政策模块"></a>4.利用 audit2allow 创建自定 SELinux 政策模块</h3><pre><code>grep httpd /var/log/audit/audit.log | audit2allow -M httpd
-</code></pre><h3 id="5-利用-semodule-这个指令将httpd政策模块装入现有的-SELinux-政策内"><a href="#5-利用-semodule-这个指令将httpd政策模块装入现有的-SELinux-政策内" class="headerlink" title="5.利用 semodule 这个指令将httpd政策模块装入现有的 SELinux 政策内"></a>5.利用 semodule 这个指令将httpd政策模块装入现有的 SELinux 政策内</h3><pre><code>semodule -i httpd.pp
-</code></pre>
+        <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>1). 使用 Composer 安装该扩展包：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer require barryvdh/laravel-ide-helper</span><br></pre></td></tr></table></figure>
+<p>2). 安装完成后，在 <code>config/app.php</code> 添加以下内容到 <code>providers</code> 数组。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,</span><br></pre></td></tr></table></figure>
+<p>3). 接下来运行以下命令生成代码对应文档：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php artisan ide-helper:generate</span><br></pre></td></tr></table></figure>
+<p>由于使用此扩展包会生成相应的代码结构文件, 这些文件可能只有当前的开发者的 IDE 需要, 因此需要添加对应配置到 <code>.gitignore</code> 文件中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.idea</span><br><span class="line">_ide_helper.php</span><br><span class="line">_ide_helper_models.php</span><br><span class="line">.phpstorm.meta.php</span><br></pre></td></tr></table></figure>
+<p>到此，此拓展包即安装成功!</p>
+
       
     </div>
     
@@ -396,14 +362,6 @@ Policy from config file:        targeted
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/Linux/" rel="tag"># Linux</a>
-          
-            <a href="/tags/SELinux/" rel="tag"># SELinux</a>
-          
-        </div>
-      
 
       
       
@@ -413,8 +371,8 @@ Policy from config file:        targeted
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/01/02/python/gevent/" rel="next" title="浅谈coroutine和gevent">
-                <i class="fa fa-chevron-left"></i> 浅谈coroutine和gevent
+              <a href="/2018/04/19/laravel-construct-get-auth-user/" rel="next" title="laravel_construct_get_auth_user">
+                <i class="fa fa-chevron-left"></i> laravel_construct_get_auth_user
               </a>
             
           </div>
@@ -422,10 +380,6 @@ Policy from config file:        targeted
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/01/25/linux/centos-install/" rel="prev" title="CentOS7.x 配置LAMP环境">
-                CentOS7.x 配置LAMP环境 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -583,7 +537,7 @@ Policy from config file:        targeted
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-sestatus-v"><span class="nav-number">1.</span> <span class="nav-text">1.sestatus -v</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-修改配置文件需要重启机器"><span class="nav-number">2.</span> <span class="nav-text">2.修改配置文件需要重启机器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-日志文件"><span class="nav-number">3.</span> <span class="nav-text">3.日志文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-利用-audit2allow-创建自定-SELinux-政策模块"><span class="nav-number">4.</span> <span class="nav-text">4.利用 audit2allow 创建自定 SELinux 政策模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-利用-semodule-这个指令将httpd政策模块装入现有的-SELinux-政策内"><span class="nav-number">5.</span> <span class="nav-text">5.利用 semodule 这个指令将httpd政策模块装入现有的 SELinux 政策内</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装"><span class="nav-number">1.</span> <span class="nav-text">安装</span></a></li></ol></div>
             
 
           </div>
