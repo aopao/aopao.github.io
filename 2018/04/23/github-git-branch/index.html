@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Python," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -79,18 +79,17 @@
 
 
 
-<meta name="description" content="基本使用在 multiprocessing 中，每一个进程都用一个 Process 类来表示。首先看下它的API 1Process([group [, target [, name [, args [, kwargs]]]]])  target 表示调用对象，你可以传入方法的名字 args 表示被调用对象的位置参数元组，比如target是函数a，他有两个参数m，n，那么args就传入(m, n)即">
-<meta name="keywords" content="Python">
+<meta name="description" content="一、clone Repository克隆Github 上的 Repository，如下： 1git clone git@github.com:FBing/design-patterns.git 二、管理分支1、查看分支1、查看本地分支使用git branch命令，如下： 12$ git branch* master *标识的是你当前所在的分支。 2、查看远程分支命令如下： 1git branch">
 <meta property="og:type" content="article">
-<meta property="og:title" content="python多进程">
-<meta property="og:url" content="http://www.wujinyu.com/2017/05/21/python/python多进程/index.html">
+<meta property="og:title" content="github-git-branch">
+<meta property="og:url" content="http://www.wujinyu.com/2018/04/23/github-git-branch/index.html">
 <meta property="og:site_name" content="卡布奇诺">
-<meta property="og:description" content="基本使用在 multiprocessing 中，每一个进程都用一个 Process 类来表示。首先看下它的API 1Process([group [, target [, name [, args [, kwargs]]]]])  target 表示调用对象，你可以传入方法的名字 args 表示被调用对象的位置参数元组，比如target是函数a，他有两个参数m，n，那么args就传入(m, n)即">
+<meta property="og:description" content="一、clone Repository克隆Github 上的 Repository，如下： 1git clone git@github.com:FBing/design-patterns.git 二、管理分支1、查看分支1、查看本地分支使用git branch命令，如下： 12$ git branch* master *标识的是你当前所在的分支。 2、查看远程分支命令如下： 1git branch">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-10T13:57:09.000Z">
+<meta property="og:updated_time" content="2018-04-23T04:49:46.680Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="python多进程">
-<meta name="twitter:description" content="基本使用在 multiprocessing 中，每一个进程都用一个 Process 类来表示。首先看下它的API 1Process([group [, target [, name [, args [, kwargs]]]]])  target 表示调用对象，你可以传入方法的名字 args 表示被调用对象的位置参数元组，比如target是函数a，他有两个参数m，n，那么args就传入(m, n)即">
+<meta name="twitter:title" content="github-git-branch">
+<meta name="twitter:description" content="一、clone Repository克隆Github 上的 Repository，如下： 1git clone git@github.com:FBing/design-patterns.git 二、管理分支1、查看分支1、查看本地分支使用git branch命令，如下： 12$ git branch* master *标识的是你当前所在的分支。 2、查看远程分支命令如下： 1git branch">
 
 
 
@@ -120,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://www.wujinyu.com/2017/05/21/python/python多进程/"/>
+  <link rel="canonical" href="http://www.wujinyu.com/2018/04/23/github-git-branch/"/>
 
 
 
 
 
-  <title>python多进程 | 卡布奇诺</title>
+  <title>github-git-branch | 卡布奇诺</title>
   
 
 
@@ -272,7 +271,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2017/05/21/python/python多进程/">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/04/23/github-git-branch/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="卡布奇诺">
@@ -289,7 +288,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">python多进程</h1>
+          <h1 class="post-title" itemprop="name headline">github-git-branch</h1>
         
 
         <div class="post-meta">
@@ -301,8 +300,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-21T00:03:44+08:00">
-                2017-05-21
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-23T12:44:44+08:00">
+                2018-04-23
               </time>
             
 
@@ -311,28 +310,6 @@
             
           </span>
 
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -361,25 +338,29 @@
       
 
       
-        <h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><p>在 <code>multiprocessing</code> 中，每一个进程都用一个 <code>Process</code> 类来表示。首先看下它的API</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Process([group [, target [, name [, args [, kwargs]]]]])</span><br></pre></td></tr></table></figure>
-<ul>
-<li><code>target</code> 表示调用对象，你可以传入方法的名字</li>
-<li><code>args</code> 表示被调用对象的位置参数元组，比如target是函数a，他有两个参数m，n，那么args就传入(m, n)即可</li>
-<li><code>kwargs</code> 表示调用对象的字典</li>
-<li><code>name</code> 是别名，相当于给这个进程取一个名字</li>
-<li><code>group</code> 分组，实际上不使用</li>
-</ul>
-<p>我们先用一个实例来感受一下：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> multiprocessing</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">process</span><span class="params">(num)</span>:</span></span><br><span class="line">    <span class="keyword">print</span> (<span class="string">'Process:'</span>, num)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">5</span>):</span><br><span class="line">        p = multiprocessing.Process(target=process, args=(i,))</span><br><span class="line">        p.start()</span><br></pre></td></tr></table></figure>
-<p>最简单的创建Process的过程如上所示，target传入函数名，args是函数的参数，是元组的形式，如果只有一个参数，那就是长度为1的元组。</p>
-<p>然后调用<code>start()</code>方法即可启动多个进程了。</p>
-<p>另外你还可以通过 <code>cpu_count()</code> 方法还有 <code>active_children()</code> 方法获取当前机器的 CPU 核心数量以及得到目前所有的运行的进程。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> multiprocessing</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">process</span><span class="params">(num)</span>:</span></span><br><span class="line">    time.sleep(num)</span><br><span class="line">    <span class="keyword">print</span> (<span class="string">'Process:'</span>, num)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">5</span>):</span><br><span class="line">        p = multiprocessing.Process(target=process, args=(i,))</span><br><span class="line">        p.start()</span><br><span class="line"></span><br><span class="line">    print(<span class="string">'CPU number:'</span> + str(multiprocessing.cpu_count()))</span><br><span class="line">    <span class="keyword">for</span> p <span class="keyword">in</span> multiprocessing.active_children():</span><br><span class="line">        print(<span class="string">'Child process name: '</span> + p.name + <span class="string">' id: '</span> + str(p.pid))</span><br><span class="line"></span><br><span class="line">    print(<span class="string">'Process Ended'</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="Lock"><a href="#Lock" class="headerlink" title="Lock"></a>Lock</h2><p>并行输出结果会导致错位，我们可以通过Lock进行加锁</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Process, Lock</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyProcess</span><span class="params">(Process)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, loop, lock)</span>:</span></span><br><span class="line">        Process.__init__(self)</span><br><span class="line">        self.loop = loop</span><br><span class="line">        self.lock = lock</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">for</span> count <span class="keyword">in</span> range(self.loop):</span><br><span class="line">            time.sleep(<span class="number">0.1</span>)</span><br><span class="line">            self.lock.acquire()</span><br><span class="line">            print(<span class="string">'Pid: '</span> + str(self.pid) + <span class="string">' LoopCount: '</span> + str(count))</span><br><span class="line">            self.lock.release()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    lock = Lock()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>, <span class="number">15</span>):</span><br><span class="line">        p = MyProcess(i, lock)</span><br><span class="line">        p.start()</span><br></pre></td></tr></table></figure>
-<h2 id="Python-Queue模块详解"><a href="#Python-Queue模块详解" class="headerlink" title="Python Queue模块详解"></a>Python Queue模块详解</h2><p><a href="http://www.jb51.net/article/58004.htm" target="_blank" rel="noopener">Python Queue模块详解</a></p>
-
+        <h2 id="一、clone-Repository"><a href="#一、clone-Repository" class="headerlink" title="一、clone Repository"></a>一、clone Repository</h2><p>克隆<code>Github</code> 上的 <code>Repository</code>，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone git@github.com:FBing/design-patterns.git</span><br></pre></td></tr></table></figure>
+<h2 id="二、管理分支"><a href="#二、管理分支" class="headerlink" title="二、管理分支"></a>二、管理分支</h2><h3 id="1、查看分支"><a href="#1、查看分支" class="headerlink" title="1、查看分支"></a>1、查看分支</h3><h4 id="1、查看本地分支"><a href="#1、查看本地分支" class="headerlink" title="1、查看本地分支"></a>1、查看本地分支</h4><p>使用<code>git branch</code>命令，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git branch</span><br><span class="line">* master</span><br></pre></td></tr></table></figure>
+<p>*标识的是你当前所在的分支。</p>
+<h4 id="2、查看远程分支"><a href="#2、查看远程分支" class="headerlink" title="2、查看远程分支"></a>2、查看远程分支</h4><p>命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -r</span><br></pre></td></tr></table></figure>
+<h4 id="3、查看所有分支"><a href="#3、查看所有分支" class="headerlink" title="3、查看所有分支"></a>3、查看所有分支</h4><p>命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -a</span><br></pre></td></tr></table></figure>
+<h3 id="2、本地创建新的分支"><a href="#2、本地创建新的分支" class="headerlink" title="2、本地创建新的分支"></a>2、本地创建新的分支</h3><p>命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch [branch name]</span><br></pre></td></tr></table></figure>
+<h3 id="3、切换到新的分支"><a href="#3、切换到新的分支" class="headerlink" title="3、切换到新的分支"></a>3、切换到新的分支</h3><p>命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout [branch name]</span><br></pre></td></tr></table></figure>
+<h3 id="4、创建-切换分支"><a href="#4、创建-切换分支" class="headerlink" title="4、创建+切换分支"></a>4、创建+切换分支</h3><p>创建分支的同时切换到该分支上，命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout -b [branch name]</span><br></pre></td></tr></table></figure>
+<p><code>git checkout -b [branch name]</code> 的效果相当于以下两步操作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git branch [branch name]</span><br><span class="line">git checkout [branch name]</span><br></pre></td></tr></table></figure>
+<h3 id="5、将新分支推送到github"><a href="#5、将新分支推送到github" class="headerlink" title="5、将新分支推送到github"></a>5、将新分支推送到github</h3><p>命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin [branch name]</span><br></pre></td></tr></table></figure>
+<h3 id="6、删除本地分支"><a href="#6、删除本地分支" class="headerlink" title="6、删除本地分支"></a>6、删除本地分支</h3><p>命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -d [branch name]</span><br></pre></td></tr></table></figure>
+<h3 id="7、删除github远程分支"><a href="#7、删除github远程分支" class="headerlink" title="7、删除github远程分支"></a>7、删除github远程分支</h3><p>命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin :[branch name]</span><br></pre></td></tr></table></figure>
       
     </div>
     
@@ -394,12 +375,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/Python/" rel="tag"># Python</a>
-          
-        </div>
-      
 
       
       
@@ -409,8 +384,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/05/11/python/python获取本机IP、mac地址、计算机名/" rel="next" title="python获取本机IP、mac地址、计算机名">
-                <i class="fa fa-chevron-left"></i> python获取本机IP、mac地址、计算机名
+              <a href="/2018/04/23/git-laravel-github/" rel="next" title="执行 git 把 laravel 上传到 GIthub 出现的错误以及解决方案">
+                <i class="fa fa-chevron-left"></i> 执行 git 把 laravel 上传到 GIthub 出现的错误以及解决方案
               </a>
             
           </div>
@@ -418,10 +393,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/05/22/other/github博客绑定个性域名/" rel="prev" title="github博客绑定个性域名">
-                github博客绑定个性域名 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -579,7 +550,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本使用"><span class="nav-number">1.</span> <span class="nav-text">基本使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lock"><span class="nav-number">2.</span> <span class="nav-text">Lock</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python-Queue模块详解"><span class="nav-number">3.</span> <span class="nav-text">Python Queue模块详解</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、clone-Repository"><span class="nav-number">1.</span> <span class="nav-text">一、clone Repository</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、管理分支"><span class="nav-number">2.</span> <span class="nav-text">二、管理分支</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、查看分支"><span class="nav-number">2.1.</span> <span class="nav-text">1、查看分支</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、查看本地分支"><span class="nav-number">2.1.1.</span> <span class="nav-text">1、查看本地分支</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、查看远程分支"><span class="nav-number">2.1.2.</span> <span class="nav-text">2、查看远程分支</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3、查看所有分支"><span class="nav-number">2.1.3.</span> <span class="nav-text">3、查看所有分支</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、本地创建新的分支"><span class="nav-number">2.2.</span> <span class="nav-text">2、本地创建新的分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、切换到新的分支"><span class="nav-number">2.3.</span> <span class="nav-text">3、切换到新的分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4、创建-切换分支"><span class="nav-number">2.4.</span> <span class="nav-text">4、创建+切换分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5、将新分支推送到github"><span class="nav-number">2.5.</span> <span class="nav-text">5、将新分支推送到github</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6、删除本地分支"><span class="nav-number">2.6.</span> <span class="nav-text">6、删除本地分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7、删除github远程分支"><span class="nav-number">2.7.</span> <span class="nav-text">7、删除github远程分支</span></a></li></ol></li></ol></div>
             
 
           </div>
