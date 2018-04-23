@@ -271,6 +271,127 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/04/23/git-laravel-github/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/23/git-laravel-github/" itemprop="url">执行 git 把 laravel 上传到 GIthub 出现的错误以及解决方案</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-23T11:14:31+08:00">
+                2018-04-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="执行-git-把-laravel-上传到-GIthub-出现的错误以及解决方案"><a href="#执行-git-把-laravel-上传到-GIthub-出现的错误以及解决方案" class="headerlink" title="执行 git 把 laravel 上传到 GIthub 出现的错误以及解决方案"></a>执行 git 把 laravel 上传到 GIthub 出现的错误以及解决方案</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">zhihu [master] git pull origin master</span><br><span class="line">warning: no common commits</span><br><span class="line">remote: Counting objects: 9, done.</span><br><span class="line">remote: Compressing objects: 100% (5/5), done.</span><br><span class="line">  1 Merge branch 'master' of github.com:aopao/Dahan</span><br><span class="line">remote: Total 9 (delta 0), reused 5 (delta 0), pack-reused 0</span><br><span class="line">Unpacking objects: 100% (9/9), done.</span><br><span class="line">From github.com:aopao/Dahan</span><br><span class="line"> * branch            master     -&gt; FETCH_HEAD</span><br><span class="line"> * [new branch]      master     -&gt; origin/master</span><br><span class="line">fatal: refusing to merge unrelated histories</span><br></pre></td></tr></table></figure>
+<h3 id="解决方案："><a href="#解决方案：" class="headerlink" title="解决方案："></a>解决方案：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull origin branchname --allow-unrelated-histories</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git pull origin master --allow-unrelated-histories</span><br><span class="line">git merge origin origin/master</span><br><span class="line">... add and commit here...</span><br><span class="line">git push origin master</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/04/22/Laravel-ide-helper/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1382,7 +1503,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2017/09/01/other/gitbook-install/">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2017/09/01/other/gitbook-rule/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="卡布奇诺">
@@ -1401,7 +1522,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/01/other/gitbook-install/" itemprop="url">Mac环境安装Gitbook，并导出PDF教程</a></h1>
+                <a class="post-title-link" href="/2017/09/01/other/gitbook-rule/" itemprop="url">Gitbook文档规范</a></h1>
         
 
         <div class="post-meta">
@@ -1474,160 +1595,20 @@
 
       
         
-          <p>在经过了长时间的折腾之后，终于在Mac环境成功的安装了Gitbook。</p>
-<p>安装Gitbook的主要流程如下：</p>
-<p>安装node.js&gt;安装Gitbook&gt;安装Gitbook编辑器&gt;安装calibre&gt;导出PDF。</p>
+          <p>#概要</p>
+<p>##目的<br>为了规范文档管理工作，提高团队协作效率，输出高质量的文档，特制定本规范。本规范文档一经确认, 所有开发人员必须按本文档规范进行执行. 本规范如有不对或者不合适的地方请及时提出, 经讨论决定后方可更改.</p>
+<h2 id="范围"><a href="#范围" class="headerlink" title="范围"></a>范围</h2><p>本规范适用于项目文档、API接口文档、使用说明文档、架构文档等</p>
+<h2 id="文档基本准则"><a href="#文档基本准则" class="headerlink" title="文档基本准则"></a>文档基本准则</h2><p>符合Markdown标准, 结构要有层次感，逻辑清晰简洁</p>
+<h2 id="文档管理"><a href="#文档管理" class="headerlink" title="文档管理"></a>文档管理</h2><p>使用git仓库对markdown文档进行管理<br>有两种方式：</p>
+<p>跟随代码仓库一起管理，例如在项目的根目录下有一个docs目录里面放文档<br>单独创建 XX_doc的仓库来管理<br>至于选择哪种方式，可以择优而定。若是多个项目团队共同协作文档，建议选择第二种方式。</p>
+<p>最终文档会使用gitbook在文档服务器进行展现，由文档最高管理员统一申请域名并部署<br>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/09/01/other/gitbook-install/#more" rel="contents">
+            <a class="btn" href="/2017/09/01/other/gitbook-rule/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
           <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2017/09/01/other/hexo-qa/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="卡布奇诺">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="卡布奇诺">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/01/other/hexo-qa/" itemprop="url">Hexo 错误解决方案</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-01T08:41:34+08:00">
-                2017-09-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/教程笔记/" itemprop="url" rel="index">
-                    <span itemprop="name">教程笔记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="错误-FATAL-Cannot-set-property-‘lastIndex’-of-undefined"><a href="#错误-FATAL-Cannot-set-property-‘lastIndex’-of-undefined" class="headerlink" title="错误:FATAL Cannot set property ‘lastIndex’ of undefined"></a>错误:FATAL Cannot set property ‘lastIndex’ of undefined</h2><p> <code>Hexo</code> 的 <code>_config.yml</code> 文件中的高亮功能</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">highlight:</span><br><span class="line">  enable: true</span><br><span class="line">  line_number: true</span><br><span class="line">  auto_detect: false</span><br><span class="line">  tab_replace:</span><br></pre></td></tr></table></figure>
-<p>其中的 <code>auto_detect</code> 应该设置为 <code>false</code>。</p>
-
-          
         
       
     </div>
@@ -1715,7 +1696,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">136</span>
+                  <span class="site-state-item-count">137</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
