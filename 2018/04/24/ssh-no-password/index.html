@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="license," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -79,18 +79,17 @@
 
 
 
-<meta name="description" content="作为一个码农对于那些NO.1的开发工具爱不释手，它们对框架的支持、界面、插件都是那么的优秀，大大加快了开发的速度以及开发的乐趣，酷炫的界面也能大大的装一个逼。 对于暂时经济不宽裕的同学，比较明智的选择是Google一台active服务器即可，有能力的同学不妨尝试自行架设，这也就是本文的目的啦。 喝水不忘挖井人，在此向服务器软件的作者Lanyu表示衷心的感谢。">
-<meta name="keywords" content="license">
+<meta name="description" content="先生成公钥和私钥，在 Mac OSX 终端（或 iTerm 2 等）中进入 ~/.ssh 目录，输入： 1$ ssh-keygen -t rsa 会询问一些问题，直接全部回车，即可在 ~/.ssh 目录中生成 id_rsa（私钥） 和 id_rsa.pub（公钥）文件。我们需要将公钥上传到 testhost 服务器的 ~/.ssh 目录下面，因为第二种方式中我们已经配置了 testhost 服务器">
 <meta property="og:type" content="article">
-<meta property="og:title" content="5分钟搭建一个license服务器">
-<meta property="og:url" content="http://www.wujinyu.com/2016/10/16/linux/active-server/index.html">
+<meta property="og:title" content="Mac 上免登陆 SSH 服务器">
+<meta property="og:url" content="http://www.wujinyu.com/2018/04/24/ssh-no-password/index.html">
 <meta property="og:site_name" content="卡布奇诺">
-<meta property="og:description" content="作为一个码农对于那些NO.1的开发工具爱不释手，它们对框架的支持、界面、插件都是那么的优秀，大大加快了开发的速度以及开发的乐趣，酷炫的界面也能大大的装一个逼。 对于暂时经济不宽裕的同学，比较明智的选择是Google一台active服务器即可，有能力的同学不妨尝试自行架设，这也就是本文的目的啦。 喝水不忘挖井人，在此向服务器软件的作者Lanyu表示衷心的感谢。">
+<meta property="og:description" content="先生成公钥和私钥，在 Mac OSX 终端（或 iTerm 2 等）中进入 ~/.ssh 目录，输入： 1$ ssh-keygen -t rsa 会询问一些问题，直接全部回车，即可在 ~/.ssh 目录中生成 id_rsa（私钥） 和 id_rsa.pub（公钥）文件。我们需要将公钥上传到 testhost 服务器的 ~/.ssh 目录下面，因为第二种方式中我们已经配置了 testhost 服务器">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-10T13:57:09.000Z">
+<meta property="og:updated_time" content="2018-04-24T02:29:29.193Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="5分钟搭建一个license服务器">
-<meta name="twitter:description" content="作为一个码农对于那些NO.1的开发工具爱不释手，它们对框架的支持、界面、插件都是那么的优秀，大大加快了开发的速度以及开发的乐趣，酷炫的界面也能大大的装一个逼。 对于暂时经济不宽裕的同学，比较明智的选择是Google一台active服务器即可，有能力的同学不妨尝试自行架设，这也就是本文的目的啦。 喝水不忘挖井人，在此向服务器软件的作者Lanyu表示衷心的感谢。">
+<meta name="twitter:title" content="Mac 上免登陆 SSH 服务器">
+<meta name="twitter:description" content="先生成公钥和私钥，在 Mac OSX 终端（或 iTerm 2 等）中进入 ~/.ssh 目录，输入： 1$ ssh-keygen -t rsa 会询问一些问题，直接全部回车，即可在 ~/.ssh 目录中生成 id_rsa（私钥） 和 id_rsa.pub（公钥）文件。我们需要将公钥上传到 testhost 服务器的 ~/.ssh 目录下面，因为第二种方式中我们已经配置了 testhost 服务器">
 
 
 
@@ -120,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://www.wujinyu.com/2016/10/16/linux/active-server/"/>
+  <link rel="canonical" href="http://www.wujinyu.com/2018/04/24/ssh-no-password/"/>
 
 
 
 
 
-  <title>5分钟搭建一个license服务器 | 卡布奇诺</title>
+  <title>Mac 上免登陆 SSH 服务器 | 卡布奇诺</title>
   
 
 
@@ -272,7 +271,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2016/10/16/linux/active-server/">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/04/24/ssh-no-password/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="卡布奇诺">
@@ -289,7 +288,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">5分钟搭建一个license服务器</h1>
+          <h1 class="post-title" itemprop="name headline">Mac 上免登陆 SSH 服务器</h1>
         
 
         <div class="post-meta">
@@ -301,8 +300,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-16T20:22:22+08:00">
-                2016-10-16
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-24T10:25:25+08:00">
+                2018-04-24
               </time>
             
 
@@ -311,28 +310,6 @@
             
           </span>
 
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -361,28 +338,18 @@
       
 
       
-        <p>作为一个码农对于那些NO.1的开发工具爱不释手，它们对框架的支持、界面、插件都是那么的优秀，<br>大大加快了开发的速度以及开发的乐趣，酷炫的界面也能大大的装一个逼。</p>
-<p>对于暂时经济不宽裕的同学，比较明智的选择是Google一台active服务器即可，<br>有能力的同学不妨尝试自行架设，这也就是本文的目的啦。</p>
-<p>喝水不忘挖井人，在此向服务器软件的作者Lanyu表示衷心的感谢。<a id="more"></a></p>
-<h2 id="服务器"><a href="#服务器" class="headerlink" title="服务器"></a>服务器</h2><p>这个网上都有我就不列地址了，支持很多的操作系统平台，这里我选的是linux64位的。</p>
-<p>接下来，介绍如何部署到Linux服务器上，首先将xxxxxxxxxServer_linux_amd64上传到任意目录，<br>我这里是 /root/work/ 目录，先将名字改了，太长了<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv xxxxxxxxxServer_linux_amd64 xnServer</span><br></pre></td></tr></table></figure></p>
-<p>接下来 需要把它运行起来，先加一个可执行权限<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x xnServer</span><br></pre></td></tr></table></figure></p>
-<p>运行<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/root/work/xnServer -p 1008 -u love122 -prolongationPeriod 999999999 -l 127.0.0.1</span><br></pre></td></tr></table></figure></p>
-<p>默认运行会出现以下信息，则为成功(省略)。如果要后台运行，请使用nohup命令。</p>
-<p>启动参数说明：</p>
-<ol>
-<li>-l 指定绑定监听到哪个IP(私人用)</li>
-<li>-u 用户名参数，当未设置-u参数，且计算机用户名为^[a-zA-Z0-9]+$时，使用计算机用户名作为idea用户名</li>
-<li>-p 参数，用于指定监听的端口</li>
-<li>-prolongationPeriod 指定过期时间参数</li>
-</ol>
-<h2 id="守护进程"><a href="#守护进程" class="headerlink" title="守护进程"></a>守护进程</h2><p>也可以通过supervisor实现守护进程自启动。关于supervisor前面有专门的一篇讲解，有兴趣可以去看看。</p>
-<p>编辑<code>/etc/supervisord.conf</code>，添加一个应用程序：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[program:xn-server]</span><br><span class="line">user=root</span><br><span class="line">command=/root/work/xnServer -p 1008 -u love122 -prolongationPeriod 999999999 -l 127.0.0.1</span><br><span class="line">stdout_logfile=/var/log/supervisor/xnserver_out.log</span><br><span class="line">stderr_logfile=/var/log/supervisor/xnserver_err.log</span><br><span class="line">autostart=true</span><br><span class="line">autorestart=true</span><br><span class="line">startsecs=6</span><br></pre></td></tr></table></figure></p>
-<p>注：测试发现这个<code>-p 1008</code>不起作用，最后总是1017端口。</p>
-<h2 id="nginx配置"><a href="#nginx配置" class="headerlink" title="nginx配置"></a>nginx配置</h2><p>接下来，将自己的域名采用nginx反向代理过来, 修改<code>/etc/nginx/nginx.conf</code>配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name _;</span><br><span class="line">    root /var/www/html/;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_pass http://127.0.0.1:1017;</span><br><span class="line">        proxy_redirect off;</span><br><span class="line">        proxy_set_header Host $host;</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">    &#125;</span><br><span class="line">    access_log off; #access_log end</span><br><span class="line">    error_log /dev/null; #error_log end</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>重启nginx <code>service nginx restart</code></p>
-<p>如果嫌nginx麻烦，也不需要配置，直接用ip地址加端口号也是一样：<a href="http://127.0.0.1:1017/" target="_blank" rel="noopener">http://127.0.0.1:1017/</a></p>
-<p>这样就大功告成了！</p>
+        <p>先生成公钥和私钥，在 <code>Mac OSX</code> 终端（或 <code>iTerm 2</code> 等）中进入 <code>~/.ssh</code> 目录，输入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-keygen -t rsa</span><br></pre></td></tr></table></figure>
+<p>会询问一些问题，直接全部回车，即可在 <code>~/.ssh</code> 目录中生成 <code>id_rsa</code>（私钥） 和 <code>id_rsa.pub</code>（公钥）文件。我们需要将公钥上传到 <code>testhost</code> 服务器的 <code>~/.ssh</code> 目录下面，因为第二种方式中我们已经配置了 <code>testhost</code> 服务器，<code>scp</code> 也能识别这个服务器，所以，可以使用如下命令将文件传输到 <code>testhost</code> 服务器中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ scp ~/.ssh/id_rsa.pub testhost:~/.ssh/</span><br></pre></td></tr></table></figure>
+<p>接下来，用第二种方式登录到 <code>testhost</code> 服务器中，在 <code>~/.ssh</code> 目录中使用以下命令将 <code>id_rsa.pub</code> 更名为 <code>authorized_keys</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">foo@testhost: $ mv id_rsa.pub authorized_keys</span><br></pre></td></tr></table></figure>
+<p>最后确保下文件权限正常：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">foo@testhost: $ chmod 700 ~/.ssh/</span><br><span class="line">foo@testhost: $ chmod 600 ~/.ssh/authorized_keys</span><br></pre></td></tr></table></figure>
+<p>现在，我们可以在 <code>Mac OSX</code> 的终端中使用 <code>ssh testhost</code> 登录到 <code>testhost</code> 服务器了，无需输入密码，更无需记忆服务器参数。</p>
+<p>如果无法连接，请在服务器的 <code>/etc/ssh/sshd_config</code> 文件中查看 <code>PubkeyAuthentication</code> 的值是否为 <code>yes</code>，如果不是，请修改为 <code>yes</code> ，并使用以下命令重启 ssh 服务：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">foo@testhost: $ /etc/init.d/ssh restart  #6.0</span><br><span class="line"></span><br><span class="line">systemctl restart  sshd.service    #7.0</span><br></pre></td></tr></table></figure>
+<p>如果需要禁止密码登录，同样可以编辑 <code>/etc/ssh/sshd_config</code> 文件中 <code>PasswordAuthentication</code> 的值为 <code>no</code> 并重启 ssh 服务。</p>
 
       
     </div>
@@ -398,12 +365,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/license/" rel="tag"># license</a>
-          
-        </div>
-      
 
       
       
@@ -413,8 +374,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/10/16/linux/linux-mount-disk/" rel="next" title="在Linux下磁盘分区、创建文件系统、挂载">
-                <i class="fa fa-chevron-left"></i> 在Linux下磁盘分区、创建文件系统、挂载
+              <a href="/2018/04/23/docker-install-oh-my-zsh/" rel="next" title="docker安装 Oh-my-zsh">
+                <i class="fa fa-chevron-left"></i> docker安装 Oh-my-zsh
               </a>
             
           </div>
@@ -422,10 +383,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/11/07/database/MySQL 主从环境配置/" rel="prev" title="MySQL 主从环境配置">
-                MySQL 主从环境配置 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -483,17 +440,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -573,22 +521,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#服务器"><span class="nav-number">1.</span> <span class="nav-text">服务器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#守护进程"><span class="nav-number">2.</span> <span class="nav-text">守护进程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nginx配置"><span class="nav-number">3.</span> <span class="nav-text">nginx配置</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
