@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="源代码包放在 /usr/local/src 目录下，安装路径在 /usr/local下  编译 Nginx 下载 Nginx 源码包，我选择的是 1.10.3 稳定版   12# cd /usr/local/src$ wget http://nginx.org/download/nginx-1.10.3.tar.gz    解压源码包   12$ cd /usr/local/src$ tar v">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ubuntu 16.04 编译安装 LNMP 环境">
+<meta property="og:url" content="http://www.wujinyu.com/2018/04/28/Ubuntu16-04-install-lnmp/index.html">
+<meta property="og:site_name" content="卡布奇诺">
+<meta property="og:description" content="源代码包放在 /usr/local/src 目录下，安装路径在 /usr/local下  编译 Nginx 下载 Nginx 源码包，我选择的是 1.10.3 稳定版   12# cd /usr/local/src$ wget http://nginx.org/download/nginx-1.10.3.tar.gz    解压源码包   12$ cd /usr/local/src$ tar v">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p5x7w1vrd.bkt.clouddn.com/ae1e13a91055019a0649d572917d7166.jpg">
+<meta property="og:image" content="http://p5x7w1vrd.bkt.clouddn.com/13fe2074a8c91c34a29bbfe7f2974ffd.jpg">
+<meta property="og:image" content="http://p5x7w1vrd.bkt.clouddn.com/ff3f0366b94548a473c74f8030cfdad9.jpg">
+<meta property="og:updated_time" content="2018-04-28T12:05:40.708Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ubuntu 16.04 编译安装 LNMP 环境">
+<meta name="twitter:description" content="源代码包放在 /usr/local/src 目录下，安装路径在 /usr/local下  编译 Nginx 下载 Nginx 源码包，我选择的是 1.10.3 稳定版   12# cd /usr/local/src$ wget http://nginx.org/download/nginx-1.10.3.tar.gz    解压源码包   12$ cd /usr/local/src$ tar v">
+<meta name="twitter:image" content="http://p5x7w1vrd.bkt.clouddn.com/ae1e13a91055019a0649d572917d7166.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.wujinyu.com/2018/04/28/Ubuntu16-04-install-lnmp/"/>
+
+
+
+
+
+  <title>Ubuntu 16.04 编译安装 LNMP 环境 | 卡布奇诺</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-21552344-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卡布奇诺</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生活心情</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-分类">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-归档">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-标签">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-关于">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/04/28/Ubuntu16-04-install-lnmp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Ubuntu 16.04 编译安装 LNMP 环境</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-28T13:02:32+08:00">
+                2018-04-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>源代码包放在 /usr/local/src 目录下，安装路径在 /usr/local下</p>
+</blockquote>
+<h2 id="编译-Nginx"><a href="#编译-Nginx" class="headerlink" title="编译 Nginx"></a>编译 Nginx</h2><ul>
+<li><p>下载 Nginx 源码包，我选择的是 1.10.3 稳定版</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># cd /usr/local/src</span><br><span class="line">$ wget http://nginx.org/download/nginx-1.10.3.tar.gz</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>解压源码包</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd /usr/local/src</span><br><span class="line">$ tar vfzx nginx-1.10.3.tar.gz</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>配置安装路径</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd /usr/local/src/nginx-1.10.3/</span><br><span class="line">$ ./configure --prefix=usr/local/nginx</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>此时编译报错：没有 C 编译器 <code>./configure: error: C compiler cc is not found</code></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install build-essential</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>再次配置安装路径，报错：缺少 PCRE 库 <code>./configure: error: the HTTP rewrite module requires the PCRE library.</code></p>
+<ul>
+<li><p>下载 pcre 库源码并解压</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ cd /usr/local/src/</span><br><span class="line">$ wget https://ftp.pcre.org/pub/pcre/pcre-8.40.tar.gz</span><br><span class="line">$ tar vfxz pcre-8.40.tar.gz</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>再次配置安装路径</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd /usr/local/src/nginx-1.10.3/</span><br><span class="line">$ ./configure --prefix=/usr/local/nginx --with-pcre=/usr/local/src/pcre-8.40</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>报错：缺少 zlib 库  <code>./configure: error: the HTTP gzip module requires the zlib library.</code></p>
+<ul>
+<li><p>如上方法，下载 zlib 源码并解压</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ cd /usr/local/src/</span><br><span class="line">$ wget http://www.zlib.net/zlib-1.2.11.tar.gz</span><br><span class="line">$ tar vfzx zlib-1.2.11.tar.gz</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>再次配置安装路径</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd /usr/local/src/nginx-1.10.3/</span><br><span class="line">$ ./configure --prefix=/usr/local/nginx --with-pcre=/usr/local/src/pcre-8.40 --with-zlib=/usr/local/src/zlib-1.2.11</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>此时成功了 o(￣▽￣)<br>  <img src="http://p5x7w1vrd.bkt.clouddn.com/ae1e13a91055019a0649d572917d7166.jpg" alt=""></p>
+</li>
+<li><p>别忘了最后一步</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>启动 nginx</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ /user/local/nginx/sbin/nginx</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>可能会出现的问题</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">The program &apos;nginx&apos; can be found in the following packages:</span><br><span class="line"> * nginx-core</span><br><span class="line"> * nginx-extras</span><br><span class="line"> * nginx-full</span><br><span class="line"> * nginx-light</span><br><span class="line">Try: apt install &lt;selected package&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code>* 解决方案：
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">apt-get install nginx-core</span><br><span class="line">apt-get install nginx-extras</span><br><span class="line">apt-get install nginx-full</span><br><span class="line">apt-get install nginx-light</span><br></pre></td></tr></table></figure>
+</code></pre><ul>
+<li><p>查看网页</p>
+<ul>
+<li><p>在chrome查看80端口，出现该页面，说明我已经成功安装nginx了o(￣▽￣)</p>
+<p><img src="http://p5x7w1vrd.bkt.clouddn.com/13fe2074a8c91c34a29bbfe7f2974ffd.jpg" alt=""></p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="编译-PHP"><a href="#编译-PHP" class="headerlink" title="编译 PHP"></a>编译 PHP</h3><ul>
+<li>下载源码包，我选择的是最新稳定版 7.1.4</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ cd /usr/local/src/</span><br><span class="line">$ wget http://cn2.php.net/get/php-7.1.4.tar.gz/from/this/mirror</span><br><span class="line">$ mv mirror php-7.1.4.tar.gz</span><br></pre></td></tr></table></figure>
+<ul>
+<li>解压源码包</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd /usr/local/src/</span><br><span class="line">$ tar vfxz php-7.1.4.tar.gz</span><br></pre></td></tr></table></figure>
+<ul>
+<li>配置安装路径</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd /usr/local/src/php-7.1.4</span><br><span class="line">$ ./configure --prefix=/usr/local/php --with-gd --enable-gd-native-ttf --enable-gd-jis-conv --enable-mysqlnd --with-pdo-mysql=mysqlnd --with-openssl --enable-mbstring --enable-fpm</span><br></pre></td></tr></table></figure>
+<ul>
+<li>报错：缺少xml2-config，需要安装libxml2 <code>configure: error: xml2-config not found. Please check your libxml2 installation.</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 安装libxml2和libxml2-dev</span><br><span class="line">$ apt-get install libxml2 libxml2-dev</span><br></pre></td></tr></table></figure>
+<ul>
+<li>继续配置安装路径，报错：缺少openssl <code>configure: error: Cannot find OpenSSL’s</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 安装openssl和libssl-dev Ubuntu上没有openssl-develb包</span><br><span class="line">$ apt-get install openssl libssl-dev</span><br></pre></td></tr></table></figure>
+<ul>
+<li>继续配置安装路径，报错：<code>configure: error: Cannot find OpenSSL’s libraries</code></li>
+</ul>
+<blockquote>
+<p>解决方案：<a href="http://stackoverflow.com/questions/39919283/configure-error-cannot-find-openssls-libraries-ubuntu-16-04" target="_blank" rel="noopener">http://stackoverflow.com/questions/39919283/configure-error-cannot-find-openssls-libraries-ubuntu-16-04</a></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ apt-get install pkg-config libssl-dev openssl</span><br></pre></td></tr></table></figure>
+<ul>
+<li>继续配置安装路径，缺少gd库，但是我找了下，并没有php7.1-gd这个库，退而且其次，安装了jpeg和png的库 <code>configure: error: png.h not found.</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ apt-get install libjpeg-dev libpng-dev</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>继续配置安装路径，这一次终于成功了😄<br><img src="http://p5x7w1vrd.bkt.clouddn.com/ff3f0366b94548a473c74f8030cfdad9.jpg" alt=""></p>
+</li>
+<li><p>编译PHP</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd /usr/local/src/php-7.1.4</span><br><span class="line">$ make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+<ul>
+<li>几个PHP相关的配置文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ cd /usr/local/php</span><br><span class="line">$ cp etc/php-fpm.conf.default etc/php-fpm.conf</span><br><span class="line">$ cd /usr/local/src/php-7.1.4</span><br><span class="line">$ cp php.ini-development /usr/local/php/etc/php.ini</span><br></pre></td></tr></table></figure>
+<h3 id="Nginx和PHP整合"><a href="#Nginx和PHP整合" class="headerlink" title="Nginx和PHP整合"></a>Nginx和PHP整合</h3><ul>
+<li>修改 Nginx 配置文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 位置 /etc/nginx/nginx.conf</span><br><span class="line">location ~ \.php$ &#123;</span><br><span class="line">	root           /var/wwwroot/test.com/;</span><br><span class="line">	fastcgi_pass   127.0.0.1:9000;</span><br><span class="line">	fastcgi_index  index.php;</span><br><span class="line">	fastcgi_param  SCRIPT_FILENAME $DOCUMENT_ROOT$fastcgi_script_name;</span><br><span class="line">	include        fastcgi_params;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>配置文件里这些都给你写了，其实只要把注释去掉即可。</p>
+<p>然后优雅的重启下 <code>Nginx</code> 和 <code>php-fpm</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 目录 /usr/local/nginx</span><br><span class="line">$ ./sbin/nginx -s reload</span><br><span class="line"># 目录 /usr/local/php</span><br><span class="line">$ ./sbin/php-fpm</span><br><span class="line">```	</span><br><span class="line"></span><br><span class="line">报错：`WARNING: Nothing matches the include pattern ‘/usr/local/php/etc/php-fpm.d/*.conf’ from /usr/local/php/etc/php-fpm.conf at line 125.`</span><br><span class="line"></span><br><span class="line">很简单，在`/usr/local/php/etc/php-fpm.d/` 目录下，把 `www.conf.default` 重命名或复制份，以 `conf` 为后缀即可</span><br><span class="line"></span><br><span class="line">出现报错：</span><br></pre></td></tr></table></figure>
+<p>ERROR: [pool www] cannot get gid for group ‘nobody’<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">解决：</span><br></pre></td></tr></table></figure></p>
+<p>$ cd /usr/local/php/etc/php-fpm.d/<br>$ vim <a href="http://www.conf" target="_blank" rel="noopener">www.conf</a></p>
+<h1 id="把group-后边的-nobody-改为-www-data"><a href="#把group-后边的-nobody-改为-www-data" class="headerlink" title="把group 后边的 nobody  改为 www-data"></a>把<code>group</code> 后边的 <code>nobody</code>  改为 <code>www-data</code></h1><p>group=www-data<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">然后再启动`php-fpm`。</span><br><span class="line"></span><br><span class="line">ok~</span><br><span class="line">![](http://p5x7w1vrd.bkt.clouddn.com/cca4245fe2abe651899ca691fcdcee56.jpg)</span><br><span class="line"></span><br><span class="line">### 编译MySQL</span><br><span class="line"></span><br><span class="line">* 新增mysql 用户组和用户</span><br></pre></td></tr></table></figure></p>
+<p>groupadd mysql<br>useradd -g mysql mysql<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">* 下载源码</span><br></pre></td></tr></table></figure></p>
+<h1 id="目录-usr-local-src"><a href="#目录-usr-local-src" class="headerlink" title="目录 /usr/local/src/"></a>目录 /usr/local/src/</h1><p>$ wget <a href="http://dev.mysql.com/get/Downloads/MySQL-5.7/mysql-5.7.10.tar.gz" target="_blank" rel="noopener">http://dev.mysql.com/get/Downloads/MySQL-5.7/mysql-5.7.10.tar.gz</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">* 安装说明文档</span><br></pre></td></tr></table></figure></p>
+<h1 id="Preconfiguration-setup"><a href="#Preconfiguration-setup" class="headerlink" title="Preconfiguration setup"></a>Preconfiguration setup</h1><p>shell&gt; groupadd mysql<br>shell&gt; useradd -r -g mysql -s /bin/false mysql</p>
+<h1 id="Beginning-of-source-build-specific-instructions"><a href="#Beginning-of-source-build-specific-instructions" class="headerlink" title="Beginning of source-build specific instructions"></a>Beginning of source-build specific instructions</h1><p>shell&gt; tar zxvf mysql-VERSION.tar.gz<br>shell&gt; cd mysql-VERSION<br>shell&gt; mkdir bld<br>shell&gt; cd bld<br>shell&gt; cmake ..<br>shell&gt; make<br>shell&gt; make install</p>
+<h1 id="End-of-source-build-specific-instructions"><a href="#End-of-source-build-specific-instructions" class="headerlink" title="End of source-build specific instructions"></a>End of source-build specific instructions</h1><h1 id="Postinstallation-setup"><a href="#Postinstallation-setup" class="headerlink" title="Postinstallation setup"></a>Postinstallation setup</h1><p>shell&gt; cd /usr/local/mysql<br>shell&gt; chown -R mysql .<br>shell&gt; chgrp -R mysql .<br>shell&gt; bin/mysql_install_db –user=mysql    # Before MySQL 5.7.6<br>shell&gt; bin/mysqld –initialize –user=mysql # MySQL 5.7.6 and up<br>shell&gt; bin/mysql_ssl_rsa_setup              # MySQL 5.7.6 and up<br>shell&gt; chown -R root .<br>shell&gt; chown -R mysql data<br>shell&gt; bin/mysqld_safe –user=mysql &amp;</p>
+<h1 id="Next-command-is-optional"><a href="#Next-command-is-optional" class="headerlink" title="Next command is optional"></a>Next command is optional</h1><p>shell&gt; cp support-files/mysql.server /etc/init.d/mysql.server<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">* 报错`The program &apos;cmake&apos; is currently not installed. `</span><br></pre></td></tr></table></figure></p>
+<p>$ apt install cmake<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+<p>cmake -DCMAKE_INSTALL_PREFIX=/usr/local/mysql -DMYSQL_DATADIR=/usr/local/mysql/data -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLLATION=utf8_general_ci -DMYSQL_TCP_PORT=3306 -DMYSQL_USER=mysql -DWITH_MYISAM_STORAGE_ENGINE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_ARCHIVE_STORAGE_ENGINE=1 -DWITH_BLACKHOLE_STORAGE_ENGINE=1 -DWITH_MEMORY_STORAGE_ENGINE=1 -DDOWNLOAD_BOOST=1 -DWITH_BOOST=/usr/local/boost<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">### 安装 nginx-rtmp-module</span><br><span class="line"></span><br><span class="line">* 下载 nginx-rtmp-module</span><br></pre></td></tr></table></figure></p>
+<p>git clone <a href="https://github.com/sergey-dryabzhinsky/nginx-rtmp-module.git" target="_blank" rel="noopener">https://github.com/sergey-dryabzhinsky/nginx-rtmp-module.git</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">* 安装 Nginx 依赖关系</span><br></pre></td></tr></table></figure></p>
+<p>sudo apt-get install build-essential libpcre3 libpcre3-dev libssl-dev<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">* 安装</span><br></pre></td></tr></table></figure></p>
+<p>./configure –prefix=/usr/local/nginx –with-pcre=/usr/local/src/pcre-8.40 –with-zlib=/usr/local/src/zlib-1.2.11 –with-http_ssl_module –add-module=/usr/local/src/nginx-rtmp-module<br>make -j 1<br>sudo make install<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&gt; `--add-module=/usr/local/src/nginx-rtmp-module` 写成你 Git 下来的那个路径</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">* 配置 `Nginx` 文件</span><br><span class="line"> </span><br><span class="line">`nginx`中的应用程序意味着`rtmp`端点。</span><br><span class="line">基本`uri`语法:`rtmp://nginx_host[:nginx_port]/app_name/stream_name`</span><br><span class="line">我们将使用流作为流名称，因此我们的端点将是:`rtmp://localhost/show/stream`，以后可以作为`http://localhost:8080/hls/stream.m3u8`。</span><br><span class="line"></span><br><span class="line">* `rtmp module config`</span><br></pre></td></tr></table></figure></p>
+<p>rtmp {<br>    server {<br>        listen 1935; # Listen on standard RTMP port<br>        chunk_size 4000;</p>
+<pre><code>    application show {
+        live on;
+        # Turn on HLS
+        hls on;
+        hls_path /mnt/hls/; #是播放的流文件以及视频分段文件的地址，你可以更改任意位置
+        hls_fragment 3; #3秒片段
+        hls_playlist_length 60; #60秒播放列表。
+        # disable consuming the stream from nginx as rtmp
+        deny play all;
+    }
+}
+</code></pre><p>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">* `http server config`</span><br></pre></td></tr></table></figure></p>
+<p>server {<br>    listen 8080;</p>
+<pre><code>location /hls {
+    # Disable cache
+    add_header Cache-Control no-cache;
+
+    # CORS setup
+    add_header &apos;Access-Control-Allow-Origin&apos; &apos;*&apos; always;
+    add_header &apos;Access-Control-Expose-Headers&apos; &apos;Content-Length&apos;;
+
+    # allow CORS preflight requests
+    if ($request_method = &apos;OPTIONS&apos;) {
+        add_header &apos;Access-Control-Allow-Origin&apos; &apos;*&apos;;
+        add_header &apos;Access-Control-Max-Age&apos; 1728000;
+        add_header &apos;Content-Type&apos; &apos;text/plain charset=UTF-8&apos;;
+        add_header &apos;Content-Length&apos; 0;
+        return 204;
+    }
+
+    types {
+        application/vnd.apple.mpegurl m3u8;
+        video/mp2t ts;
+    }
+
+    root /mnt/;
+}
+</code></pre><p>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">* `nginx.conf` 配置文件模板</span><br></pre></td></tr></table></figure></p>
+<p>worker_processes  auto;<br>events {<br>    worker_connections  1024;<br>}</p>
+<h1 id="RTMP-configuration"><a href="#RTMP-configuration" class="headerlink" title="RTMP configuration"></a>RTMP configuration</h1><p>rtmp {<br>    server {<br>        listen 1935; # Listen on standard RTMP port<br>        chunk_size 4000;</p>
+<pre><code>    application show {
+        live on;
+        # Turn on HLS
+        hls on;
+        hls_path /mnt/hls/;
+        hls_fragment 3;
+        hls_playlist_length 60;
+        # disable consuming the stream from nginx as rtmp
+        deny play all;
+    }
+}
+</code></pre><p>}</p>
+<p>http {<br>    sendfile off;<br>    tcp_nopush on;<br>    aio on;<br>    directio 512;<br>    default_type application/octet-stream;</p>
+<pre><code>server {
+    listen 8080;
+
+    location / {
+        # Disable cache
+        add_header &apos;Cache-Control&apos; &apos;no-cache&apos;;
+
+        # CORS setup
+        add_header &apos;Access-Control-Allow-Origin&apos; &apos;*&apos; always;
+        add_header &apos;Access-Control-Expose-Headers&apos; &apos;Content-Length&apos;;
+
+        # allow CORS preflight requests
+        if ($request_method = &apos;OPTIONS&apos;) {
+            add_header &apos;Access-Control-Allow-Origin&apos; &apos;*&apos;;
+            add_header &apos;Access-Control-Max-Age&apos; 1728000;
+            add_header &apos;Content-Type&apos; &apos;text/plain charset=UTF-8&apos;;
+            add_header &apos;Content-Length&apos; 0;
+            return 204;
+        }
+
+        types {
+            application/dash+xml mpd;
+            application/vnd.apple.mpegurl m3u8;
+            video/mp2t ts;
+        }
+
+        root /mnt/;
+    }
+}
+</code></pre><p>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">* 重启 `Nginx`</span><br></pre></td></tr></table></figure></p>
+<p>$ /usr/local/nginx/sbin/nginx -t #测试配置文件是否成功<br>$ /usr/local/nginx/sbin/nginx -t &amp;&amp; nginx -s reload #启动并重新加载配置文件<br><code>`</code></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/26/Centos-install-Docker/" rel="next" title="CentOS7安装Docker">
+                <i class="fa fa-chevron-left"></i> CentOS7安装Docker
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/30/python-scrapy-setting/" rel="prev" title="scrapy提升篇之配置">
+                scrapy提升篇之配置 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://ooky9xe9n.bkt.clouddn.com/avatar.png"
+                alt="卡布奇诺" />
+            
+              <p class="site-author-name" itemprop="name">卡布奇诺</p>
+              <p class="site-description motion-element" itemprop="description">记录编程中遇到的坑</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">145</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">74</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/aopao1" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:admin@wujinyu.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#编译-Nginx"><span class="nav-number">1.</span> <span class="nav-text">编译 Nginx</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#编译-PHP"><span class="nav-number">1.1.</span> <span class="nav-text">编译 PHP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Nginx和PHP整合"><span class="nav-number">1.2.</span> <span class="nav-text">Nginx和PHP整合</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#把group-后边的-nobody-改为-www-data"><span class="nav-number"></span> <span class="nav-text">把group 后边的 nobody  改为 www-data</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#目录-usr-local-src"><span class="nav-number"></span> <span class="nav-text">目录 /usr/local/src/</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Preconfiguration-setup"><span class="nav-number"></span> <span class="nav-text">Preconfiguration setup</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Beginning-of-source-build-specific-instructions"><span class="nav-number"></span> <span class="nav-text">Beginning of source-build specific instructions</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#End-of-source-build-specific-instructions"><span class="nav-number"></span> <span class="nav-text">End of source-build specific instructions</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Postinstallation-setup"><span class="nav-number"></span> <span class="nav-text">Postinstallation setup</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Next-command-is-optional"><span class="nav-number"></span> <span class="nav-text">Next command is optional</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RTMP-configuration"><span class="nav-number"></span> <span class="nav-text">RTMP configuration</span></a></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">卡布奇诺@心情</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
