@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="卡布奇诺">
 <meta property="og:description" content="我们在使用的时候会遇到很多的恶意IP攻击，这个时候就要用到Nginx 禁止IP访问了。下面我们就先看看Nginx的默认虚拟主机在用户通过IP访问，或者通过未设置的域名访问（比如有人把他自己的域名指向了你的ip）的时 候生效最关键的一点是，在server的设置里面添加这一行： 1listen 80 default; 后面的default参数表示这个是默认虚拟主机。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-10T13:57:09.000Z">
+<meta property="og:updated_time" content="2018-05-08T13:47:04.221Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Nginx 禁止IP访问 ">
 <meta name="twitter:description" content="我们在使用的时候会遇到很多的恶意IP攻击，这个时候就要用到Nginx 禁止IP访问了。下面我们就先看看Nginx的默认虚拟主机在用户通过IP访问，或者通过未设置的域名访问（比如有人把他自己的域名指向了你的ip）的时 候生效最关键的一点是，在server的设置里面添加这一行： 1listen 80 default; 后面的default参数表示这个是默认虚拟主机。">
@@ -377,6 +377,7 @@
 <p>最后通过在<code>listen 80 default;</code>后再加<code>server_name _;</code>解决，形式如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#禁止IP访问  </span><br><span class="line">server  &#123;  </span><br><span class="line">    listen 80 default;  </span><br><span class="line">    server_name _;  </span><br><span class="line">    server_name www.example.com example.com </span><br><span class="line">    return 500;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>这样，通过<code>example.com</code>就能访问服务器了。</p>
+<p>## </p>
 
       
     </div>
@@ -499,7 +500,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">148</span>
+                  <span class="site-state-item-count">150</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
