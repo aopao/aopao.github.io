@@ -271,7 +271,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2017/04/23/python/python实现windows系统下自动拨号/">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2017/04/23/python/Python使用requirement.txt实现自动打包部署/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="卡布奇诺">
@@ -290,7 +290,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/04/23/python/python实现windows系统下自动拨号/" itemprop="url">python实现windows系统下自动拨号</a></h1>
+                <a class="post-title-link" href="/2017/04/23/python/Python使用requirement.txt实现自动打包部署/" itemprop="url">Python使用requirement.txt实现自动打包部署</a></h1>
         
 
         <div class="post-meta">
@@ -364,7 +364,165 @@
       
         
           
-            <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Adsl</span><span class="params">(object)</span>:</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">    <span class="comment"># 分别填写adsl名称，用户名与密码，dsl名称一般为宽带连接</span></span><br><span class="line">    self.name = <span class="string">"宽带连接"</span></span><br><span class="line">    self.username = <span class="string">'adsl_uname'</span></span><br><span class="line">    self.password = <span class="string">'adsl_upwd'</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">connect</span><span class="params">(self)</span>:</span></span><br><span class="line">    cmd_str = <span class="string">"rasdial %s %s %s"</span> % (self.name, self.username, self.password)</span><br><span class="line">    os.system(cmd_str)</span><br><span class="line">    time.sleep(<span class="number">5</span>)</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">disconnect</span><span class="params">(self)</span>:</span></span><br><span class="line">    cmd_str = <span class="string">"rasdial %s /disconnect"</span> % self.name</span><br><span class="line">    os.system(cmd_str)</span><br><span class="line">    time.sleep(<span class="number">5</span>)</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">reconnect</span><span class="params">(self)</span>:</span></span><br><span class="line">    self.disconnect()</span><br><span class="line">    self.connect()</span><br></pre></td></tr></table></figure>
+            <h2 id="不要在本地打包依赖"><a href="#不要在本地打包依赖" class="headerlink" title="不要在本地打包依赖"></a>不要在本地打包依赖</h2><p>python一些模块是下载源码然后本机编译的。如果本机打包模块发布在别的机器上可能会出现兼容性问题。所以，统一使用pip进行模块安装打包。</p>
+<h2 id="使用pip进行依赖部署"><a href="#使用pip进行依赖部署" class="headerlink" title="使用pip进行依赖部署"></a>使用pip进行依赖部署</h2><p>在开发环境中，统一运行以下命令安装依赖</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pip install xx</span><br></pre></td></tr></table></figure>
+<p>在开发环境中，运行以下命令导出依赖</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip freeze &gt; requirement.txt</span><br></pre></td></tr></table></figure>
+<p>在生产环境中，执行以下命令安装依赖</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -r requirement.txt</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2017/04/23/python/将Python代码打包放到PyPI上/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/04/23/python/将Python代码打包放到PyPI上/" itemprop="url">将Python代码打包放到PyPI上</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-23T22:07:42+08:00">
+                2017-04-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="什么是PyPI"><a href="#什么是PyPI" class="headerlink" title="什么是PyPI"></a>什么是PyPI</h2><p>PyPI(Python Package Index)是python官方的第三方库的仓库。<br>所有人都可以下载第三方库或上传自己开发的库到PyPI。<br>PyPI推荐使用pip包管理器来下载第三方库</p>
+<h2 id="包的文件结构"><a href="#包的文件结构" class="headerlink" title="包的文件结构"></a>包的文件结构</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">foo</span><br><span class="line">|-- bin/ #存放项目的一些可执行文件</span><br><span class="line">|   |-- foo</span><br><span class="line">|-- foo/ # 所有模块、包都应该放在此目录，程序的入口最好命名为main.py</span><br><span class="line">|   |-- tests/ # 存放单元测试代码；</span><br><span class="line">|   |   |-- __init__.py</span><br><span class="line">|   |   |-- test_main.py</span><br><span class="line">|   |-- __init__.py</span><br><span class="line">|   |-- main.py</span><br><span class="line">|-- docs/ # 用于存放文档</span><br><span class="line">|   |-- conf.py</span><br><span class="line">|   |-- abc.rst</span><br><span class="line">|-- setup.py # 来管理代码的打包、安装、部署问题</span><br><span class="line">|-- requirements.txt # 存放软件依赖的外部Python包列表</span><br><span class="line">|-- README.rst # 项目说明文件</span><br></pre></td></tr></table></figure>
+<h2 id="setup文件"><a href="#setup文件" class="headerlink" title="setup文件"></a>setup文件</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> codecs</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">  <span class="keyword">from</span> setuptools <span class="keyword">import</span> setup</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">  <span class="keyword">from</span> distutils.core <span class="keyword">import</span> setup</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">read</span><span class="params">(fname)</span>:</span></span><br><span class="line">  <span class="keyword">return</span> codecs.open(os.path.join(os.path.dirname(__file__), fname)).read()</span><br><span class="line"></span><br><span class="line">NAME = <span class="string">"project_name"</span></span><br><span class="line">PACKAGES = [<span class="string">"somefunctions"</span>,]</span><br><span class="line">DESCRIPTION = <span class="string">"package description."</span></span><br><span class="line">LONG_DESCRIPTION = read(<span class="string">"README.rst"</span>)</span><br><span class="line">KEYWORDS = <span class="string">"test python package"</span></span><br><span class="line">AUTHOR = <span class="string">"your_name"</span></span><br><span class="line">AUTHOR_EMAIL = <span class="string">"youremail@email.com"</span></span><br><span class="line">URL = <span class="string">"http://your_blog/"</span></span><br><span class="line">VERSION = <span class="string">"1.0.1"</span></span><br><span class="line">LICENSE = <span class="string">"MIT"</span></span><br><span class="line">CLASSFIERS = [<span class="string">'License :: OSI Approved :: MIT License'</span>,<span class="string">'Programming Language :: Python'</span>,<span class="string">'Intended Audience :: Developers'</span>,<span class="string">'Operating System :: OS Independent'</span>]</span><br><span class="line"></span><br><span class="line">setup(</span><br><span class="line">  name = NAME,</span><br><span class="line">  version = VERSION,</span><br><span class="line">  description = DESCRIPTION,</span><br><span class="line">  long_description =LONG_DESCRIPTION,</span><br><span class="line">  classifiers =  CLASSFIERS,</span><br><span class="line">  keywords = KEYWORDS,</span><br><span class="line">  author = AUTHOR,</span><br><span class="line">  author_email = AUTHOR_EMAIL,</span><br><span class="line">  url = URL,</span><br><span class="line">  license = LICENSE,</span><br><span class="line">  packages = PACKAGES,</span><br><span class="line">  include_package_data=<span class="keyword">True</span>,</span><br><span class="line">  zip_safe=<span class="keyword">True</span>,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h2 id="打包上传"><a href="#打包上传" class="headerlink" title="打包上传"></a>打包上传</h2><p>使用check命令查看是否存在语法问题，使用sdist进行打包。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python setup.py check</span><br><span class="line">python setup.py sdist</span><br></pre></td></tr></table></figure>
+<p>发布前，需要到<a href="https://pypi.python.org/pypi" target="_blank" rel="noopener">pypi官网</a>注册一个账号，并在用户目录新建文件 ~/.pypirc ，并键入以下内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[distutils]</span><br><span class="line">index-servers = pypi</span><br><span class="line">[pypi]</span><br><span class="line">repository: https://pypi.python.org/pypi</span><br><span class="line">username: yourname</span><br><span class="line">password: yourpwd</span><br></pre></td></tr></table></figure>
+<p>执行以下内容进行打包上传，服务器返回Server response (200): OK表示上传成功</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python setup.py sdist upload</span><br></pre></td></tr></table></figure>
+<p>发布成功后就可以使用<code>pip install</code>安装你自己的python包了！</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://github.com/pypa/setuptools/issues/941" target="_blank" rel="noopener">Invalid or non-existent authentication information</a></p>
 
           
         
@@ -1405,6 +1563,154 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2016/10/16/linux/active-server/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/10/16/linux/active-server/" itemprop="url">5分钟搭建一个license服务器</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-16T20:22:22+08:00">
+                2016-10-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>作为一个码农对于那些NO.1的开发工具爱不释手，它们对框架的支持、界面、插件都是那么的优秀，<br>大大加快了开发的速度以及开发的乐趣，酷炫的界面也能大大的装一个逼。</p>
+<p>对于暂时经济不宽裕的同学，比较明智的选择是Google一台active服务器即可，<br>有能力的同学不妨尝试自行架设，这也就是本文的目的啦。</p>
+<p>喝水不忘挖井人，在此向服务器软件的作者Lanyu表示衷心的感谢。
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2016/10/16/linux/active-server/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2016/10/16/linux/linux-mount-disk/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1594,300 +1900,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2016/10/16/linux/active-server/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="卡布奇诺">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="卡布奇诺">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/10/16/linux/active-server/" itemprop="url">5分钟搭建一个license服务器</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-16T20:22:22+08:00">
-                2016-10-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>作为一个码农对于那些NO.1的开发工具爱不释手，它们对框架的支持、界面、插件都是那么的优秀，<br>大大加快了开发的速度以及开发的乐趣，酷炫的界面也能大大的装一个逼。</p>
-<p>对于暂时经济不宽裕的同学，比较明智的选择是Google一台active服务器即可，<br>有能力的同学不妨尝试自行架设，这也就是本文的目的啦。</p>
-<p>喝水不忘挖井人，在此向服务器软件的作者Lanyu表示衷心的感谢。
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2016/10/16/linux/active-server/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2016/10/12/linux/supervisor/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="卡布奇诺">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="卡布奇诺">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/10/12/linux/supervisor/" itemprop="url">使用supervisor管理进程</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-12T08:22:22+08:00">
-                2016-10-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>Supervisor (<a href="http://supervisord.org" target="_blank" rel="noopener">http://supervisord.org</a>) 是一个用 Python 写的进程管理工具，<br>可以很方便的用来启动、重启、关闭进程（不仅仅是Python进程）。除了对单个进程的控制，还可以同时启动、关闭多个进程，<br>有时候服务器出问题导致所有应用程序都被杀死，此时可以用supervisor同时启动所有应用程序。
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2016/10/12/linux/supervisor/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1942,7 +1954,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">151</span>
+                  <span class="site-state-item-count">152</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1964,7 +1976,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">93</span>
+                  <span class="site-state-item-count">94</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

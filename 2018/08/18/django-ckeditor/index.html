@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Python,django," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="安装 django-ckeditor1 使用 pip 安装1pip install django-ckeditor 2 注册到 django 项目中的 setting.py 在 INSTALLED_APPS 中加入 ‘ckeditor’1234INSTALLED_APPS = [    # ...    &amp;apos;ckeditor&amp;apos;,] 3 打开对应需要修改为富文本编辑的模型文件 mo">
+<meta name="keywords" content="Python,django">
+<meta property="og:type" content="article">
+<meta property="og:title" content="django-ckeditor后台富文本编辑器">
+<meta property="og:url" content="http://www.wujinyu.com/2018/08/18/django-ckeditor/index.html">
+<meta property="og:site_name" content="卡布奇诺">
+<meta property="og:description" content="安装 django-ckeditor1 使用 pip 安装1pip install django-ckeditor 2 注册到 django 项目中的 setting.py 在 INSTALLED_APPS 中加入 ‘ckeditor’1234INSTALLED_APPS = [    # ...    &amp;apos;ckeditor&amp;apos;,] 3 打开对应需要修改为富文本编辑的模型文件 mo">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-08-18T00:11:51.282Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="django-ckeditor后台富文本编辑器">
+<meta name="twitter:description" content="安装 django-ckeditor1 使用 pip 安装1pip install django-ckeditor 2 注册到 django 项目中的 setting.py 在 INSTALLED_APPS 中加入 ‘ckeditor’1234INSTALLED_APPS = [    # ...    &amp;apos;ckeditor&amp;apos;,] 3 打开对应需要修改为富文本编辑的模型文件 mo">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.wujinyu.com/2018/08/18/django-ckeditor/"/>
+
+
+
+
+
+  <title>django-ckeditor后台富文本编辑器 | 卡布奇诺</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-21552344-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卡布奇诺</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生活心情</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-分类">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-归档">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-标签">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-关于">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/08/18/django-ckeditor/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">django-ckeditor后台富文本编辑器</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-18T08:04:10+08:00">
+                2018-08-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="安装-django-ckeditor"><a href="#安装-django-ckeditor" class="headerlink" title="安装 django-ckeditor"></a>安装 django-ckeditor</h2><h3 id="1-使用-pip-安装"><a href="#1-使用-pip-安装" class="headerlink" title="1 使用 pip 安装"></a>1 使用 pip 安装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install django-ckeditor</span><br></pre></td></tr></table></figure>
+<h3 id="2-注册到-django-项目中的-setting-py-在-INSTALLED-APPS-中加入-‘ckeditor’"><a href="#2-注册到-django-项目中的-setting-py-在-INSTALLED-APPS-中加入-‘ckeditor’" class="headerlink" title="2 注册到 django 项目中的 setting.py 在 INSTALLED_APPS 中加入 ‘ckeditor’"></a>2 注册到 django 项目中的 <code>setting.py</code> 在 <code>INSTALLED_APPS</code> 中加入 ‘ckeditor’</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">INSTALLED_APPS = [</span><br><span class="line">    # ...</span><br><span class="line">    &apos;ckeditor&apos;,</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<h3 id="3-打开对应需要修改为富文本编辑的模型文件-models-py。例如我有个Blog模型："><a href="#3-打开对应需要修改为富文本编辑的模型文件-models-py。例如我有个Blog模型：" class="headerlink" title="3 打开对应需要修改为富文本编辑的模型文件 models.py。例如我有个Blog模型："></a>3 打开对应需要修改为富文本编辑的模型文件 <code>models.py</code>。例如我有个Blog模型：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from django.db import models</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">class Blog(models.Model):</span><br><span class="line">    title = models.CharField(max_length=50)</span><br><span class="line">    content = models.TextField()</span><br></pre></td></tr></table></figure>
+<p>其中，<code>title</code>是博客标题，<code>content</code>是博客内容。博客内容需要富文本编辑，则改成如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">from django.db import models</span><br><span class="line">from ckeditor.fields import RichTextField</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">class Blog(models.Model):</span><br><span class="line">    title = models.CharField(max_length=50)</span><br><span class="line">    content = RichTextField()</span><br></pre></td></tr></table></figure>
+<p>若你需要编辑器的语言是简体中文，设置<code>settings.py</code>的<code>LANGUAGE_CODE = &#39;zh-hans&#39;</code>。注意这里<code>zh-hans</code>都是小写。我发现写<code>zh-Hans</code>显示为繁体。另外，此时无法从本地上传图片，只能使用网络图片。可添加上传图片功能。</p>
+<a id="more"></a>
+<h2 id="添加上传图片功能"><a href="#添加上传图片功能" class="headerlink" title="添加上传图片功能"></a>添加上传图片功能</h2><h3 id="1）安装pillow库"><a href="#1）安装pillow库" class="headerlink" title="1）安装pillow库"></a>1）安装pillow库</h3><p>pillow库是图片处理库，上传图片需要该库。执行pip命令安装：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install pillow</span><br></pre></td></tr></table></figure>
+<h3 id="2）注册ckeditor-uploader应用"><a href="#2）注册ckeditor-uploader应用" class="headerlink" title="2）注册ckeditor_uploader应用"></a>2）注册ckeditor_uploader应用</h3><p><code>django-ckeditor</code>将上传文件的功能迁移到<code>ckeditor_uploader</code>应用中，所以需要注册该应用。同样打开<code>settings.py</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">INSTALLED_APPS = [</span><br><span class="line">    # ...</span><br><span class="line">    &apos;ckeditor&apos;,</span><br><span class="line">    &apos;ckeditor_uploader&apos;,</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<h3 id="3）配置settings"><a href="#3）配置settings" class="headerlink" title="3）配置settings"></a>3）配置settings</h3><p>使用上传功能，需要设置上传位置。该文件是上传到<code>media</code>目录，所以也需要设置media。打开<code>settings.py</code>添加如下设置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">MEDIA_URL = &apos;/media/&apos;</span><br><span class="line"></span><br><span class="line">#放在django项目根目录，同时也需要创建media文件夹</span><br><span class="line">MEDIA_ROOT = os.path.join(BASE_DIR, &apos;media&apos;)</span><br><span class="line"> </span><br><span class="line">CKEDITOR_UPLOAD_PATH = &apos;upload/&apos;</span><br></pre></td></tr></table></figure>
+<h3 id="4）配置上传url和media的访问"><a href="#4）配置上传url和media的访问" class="headerlink" title="4）配置上传url和media的访问"></a>4）配置上传url和media的访问</h3><p>上传功能需要有地址可以请求，需要需要提供上传的url。打开全局的urls.py，添加设置到urlpatterns中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">path(&apos;ckeditor/&apos;, include(&apos;ckeditor_uploader.urls&apos;)),</span><br></pre></td></tr></table></figure>
+<p>注意，这里我用的是django2.0。django1.x设置如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url(r&apos;^ckeditor/&apos;, include(&apos;ckeditor_uploader.urls&apos;)),</span><br></pre></td></tr></table></figure>
+<p>另外，上传的图片是到media中，不是在static中。我们还需要设置media可被访问，如下设置可用于开发中使用，若部署到服务器可用服务器软件设置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from django.conf import settings</span><br><span class="line">from django.conf.urls.static import static</span><br><span class="line"> </span><br><span class="line">urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)</span><br></pre></td></tr></table></figure>
+<h3 id="5）修改model"><a href="#5）修改model" class="headerlink" title="5）修改model"></a>5）修改model</h3><p>上面的RichTextField不可用于上传文件，需要修改model如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">from django.db import models</span><br><span class="line">from ckeditor_uploader.fields import RichTextUploadingField</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">class Blog(models.Model):</span><br><span class="line">    title = models.CharField(max_length=50)</span><br><span class="line">    content = RichTextUploadingField()</span><br></pre></td></tr></table></figure>
+<p>到这里，可以愉快使用富文本编辑功能。其它具体配置和说明可见<a href="https://pypi.python.org/pypi/django-ckeditor/5.4.0" target="_blank" rel="noopener">pypi</a>。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag"># Python</a>
+          
+            <a href="/tags/django/" rel="tag"># django</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/23/shell-bingfa/" rel="next" title="Shell脚本并发及并发数的控制">
+                <i class="fa fa-chevron-left"></i> Shell脚本并发及并发数的控制
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://ooky9xe9n.bkt.clouddn.com/avatar.png"
+                alt="卡布奇诺" />
+            
+              <p class="site-author-name" itemprop="name">卡布奇诺</p>
+              <p class="site-description motion-element" itemprop="description">记录编程中遇到的坑</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">152</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">94</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/aopao1" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:admin@wujinyu.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装-django-ckeditor"><span class="nav-number">1.</span> <span class="nav-text">安装 django-ckeditor</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-使用-pip-安装"><span class="nav-number">1.1.</span> <span class="nav-text">1 使用 pip 安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-注册到-django-项目中的-setting-py-在-INSTALLED-APPS-中加入-‘ckeditor’"><span class="nav-number">1.2.</span> <span class="nav-text">2 注册到 django 项目中的 setting.py 在 INSTALLED_APPS 中加入 ‘ckeditor’</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-打开对应需要修改为富文本编辑的模型文件-models-py。例如我有个Blog模型："><span class="nav-number">1.3.</span> <span class="nav-text">3 打开对应需要修改为富文本编辑的模型文件 models.py。例如我有个Blog模型：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加上传图片功能"><span class="nav-number">2.</span> <span class="nav-text">添加上传图片功能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1）安装pillow库"><span class="nav-number">2.1.</span> <span class="nav-text">1）安装pillow库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2）注册ckeditor-uploader应用"><span class="nav-number">2.2.</span> <span class="nav-text">2）注册ckeditor_uploader应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3）配置settings"><span class="nav-number">2.3.</span> <span class="nav-text">3）配置settings</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4）配置上传url和media的访问"><span class="nav-number">2.4.</span> <span class="nav-text">4）配置上传url和media的访问</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5）修改model"><span class="nav-number">2.5.</span> <span class="nav-text">5）修改model</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">卡布奇诺@心情</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

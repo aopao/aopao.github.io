@@ -271,6 +271,133 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2017/05/09/linux/linux-vi/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/05/09/linux/linux-vi/" itemprop="url">linux下vi命令速查手册</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-09T13:05:16+08:00">
+                2017-05-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="进入vi的命令"><a href="#进入vi的命令" class="headerlink" title="进入vi的命令"></a>进入vi的命令</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vi filename :打开或新建文件，并将光标置于第一行首</span><br><span class="line">vi +n filename ：打开文件，并将光标置于第n行首</span><br><span class="line">vi + filename ：打开文件，并将光标置于最后一行首</span><br><span class="line">vi +/pattern filename：打开文件，并将光标置于第一个与pattern匹配的串处</span><br><span class="line">vi -r filename ：在上次正用vi编辑时发生系统崩溃，恢复filename</span><br><span class="line">vi filename....filename ：打开多个文件，依次进行编辑</span><br></pre></td></tr></table></figure>
+<h2 id="移动光标类命令"><a href="#移动光标类命令" class="headerlink" title="移动光标类命令"></a>移动光标类命令</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">h ：光标左移一个字符</span><br><span class="line">l ：光标右移一个字符</span><br><span class="line">space：光标右移一个字符</span><br><span class="line">Backspace：光标左移一个字符</span><br><span class="line">k或Ctrl+p：光标上移一行</span><br><span class="line">j或Ctrl+n ：光标下移一行</span><br><span class="line">Enter ：光标下移一行</span><br><span class="line">w或W ：光标右移一个字至字首</span><br><span class="line">b或B ：光标左移一个字至字首</span><br><span class="line">e或E ：光标右移一个字至字尾</span><br><span class="line">) ：光标移至句尾</span><br><span class="line">( ：光标移至句首</span><br><span class="line">&#125;：光标移至段落开头</span><br><span class="line">&#123;：光标移至段落结尾</span><br><span class="line">nG：光标移至第n行首</span><br><span class="line">n+：光标下移n行</span><br><span class="line">n-：光标上移n行</span><br><span class="line">n$：光标移至第n行尾</span><br><span class="line">H ：光标移至屏幕顶行</span><br><span class="line">M ：光标移至屏幕中间行</span><br><span class="line">L ：光标移至屏幕最后行</span><br><span class="line">0：（注意是数字零）光标移至当前行首</span><br><span class="line">$：光标移至当前行尾</span><br></pre></td></tr></table></figure>
+<h2 id="屏幕翻滚类命令"><a href="#屏幕翻滚类命令" class="headerlink" title="屏幕翻滚类命令"></a>屏幕翻滚类命令</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Ctrl+u：向文件首翻半屏</span><br><span class="line">Ctrl+d：向文件尾翻半屏</span><br><span class="line">Ctrl+f：向文件尾翻一屏</span><br><span class="line">Ctrl＋b；向文件首翻一屏</span><br><span class="line">nz：将第n行滚至屏幕顶部，不指定n时将当前行滚至屏幕顶部。</span><br><span class="line"></span><br><span class="line">插入文本类命令</span><br><span class="line">i ：在光标前</span><br><span class="line">I ：在当前行首</span><br><span class="line">a：光标后</span><br><span class="line">A：在当前行尾</span><br><span class="line">o：在当前行之下新开一行</span><br><span class="line">O：在当前行之上新开一行</span><br><span class="line">r：替换当前字符</span><br><span class="line">R：替换当前字符及其后的字符，直至按ESC键</span><br><span class="line">s：从当前光标位置处开始，以输入的文本替代指定数目的字符</span><br><span class="line">S：删除指定数目的行，并以所输入文本代替之</span><br><span class="line">ncw或nCW：修改指定数目的字</span><br><span class="line">nCC：修改指定数目的行</span><br></pre></td></tr></table></figure>
+<h2 id="删除命令"><a href="#删除命令" class="headerlink" title="删除命令"></a>删除命令</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ndw或ndW：删除光标处开始及其后的n-1个字</span><br><span class="line">do：删至行首</span><br><span class="line">d$：删至行尾</span><br><span class="line">ndd：删除当前行及其后n-1行</span><br><span class="line">x或X：删除一个字符，x删除光标后的，而X删除光标前的</span><br><span class="line">Ctrl+u：删除输入方式下所输入的文本</span><br></pre></td></tr></table></figure>
+<h2 id="搜索及替换命令"><a href="#搜索及替换命令" class="headerlink" title="搜索及替换命令"></a>搜索及替换命令</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">/pattern：从光标开始处向文件尾搜索pattern</span><br><span class="line">?pattern：从光标开始处向文件首搜索pattern</span><br><span class="line">n：在同一方向重复上一次搜索命令</span><br><span class="line">N：在反方向上重复上一次搜索命令</span><br><span class="line">：s/p1/p2/g：将当前行中所有p1均用p2替代</span><br><span class="line">：n1,n2s/p1/p2/g：将第n1至n2行中所有p1均用p2替代</span><br><span class="line">：g/p1/s//p2/g：将文件中所有p1均用p2替换</span><br></pre></td></tr></table></figure>
+<h2 id="选项设置"><a href="#选项设置" class="headerlink" title="选项设置"></a>选项设置</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">all：列出所有选项设置情况</span><br><span class="line">term：设置终端类型</span><br><span class="line">ignorance：在搜索中忽略大小写</span><br><span class="line">list：显示制表位(Ctrl+I)和行尾标志（$)</span><br><span class="line">number：显示行号</span><br><span class="line">report：显示由面向行的命令修改过的数目</span><br><span class="line">terse：显示简短的警告信息</span><br><span class="line">warn：在转到别的文件时若没保存当前文件则显示NO write信息</span><br><span class="line">nomagic：允许在搜索模式中，使用前面不带“\”的特殊字符</span><br><span class="line">nowrapscan：禁止vi在搜索到达文件两端时，又从另一端开始</span><br><span class="line">mesg：允许vi显示其他用户用write写到自己终端上的信息</span><br></pre></td></tr></table></figure>
+<h2 id="最后行方式命令"><a href="#最后行方式命令" class="headerlink" title="最后行方式命令"></a>最后行方式命令</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">：n1,n2 co n3：将n1行到n2行之间的内容拷贝到第n3行下</span><br><span class="line">：n1,n2 m n3：将n1行到n2行之间的内容移至到第n3行下</span><br><span class="line">：n1,n2 d ：将n1行到n2行之间的内容删除</span><br><span class="line">：w ：保存当前文件</span><br><span class="line">：e filename：打开文件filename进行编辑</span><br><span class="line">：x：保存当前文件并退出</span><br><span class="line">：q：退出vi</span><br><span class="line">：q!：不保存文件并退出vi</span><br><span class="line">：!command：执行shell命令command</span><br><span class="line">：n1,n2 w!command：将文件中n1行至n2行的内容作为command的输入并执行之，若不指定n1，n2，则表示将整个文件内容作为command的输入</span><br><span class="line">：r!command：将命令command的输出结果放到当前行</span><br></pre></td></tr></table></figure>
+<h2 id="寄存器操作"><a href="#寄存器操作" class="headerlink" title="寄存器操作"></a>寄存器操作</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&quot;?nyy：将当前行及其下n行的内容保存到寄存器？中，其中?为一个字母，n为一个数字</span><br><span class="line">&quot;?nyw：将当前行及其下n个字保存到寄存器？中，其中?为一个字母，n为一个数字</span><br><span class="line">&quot;?nyl：将当前行及其下n个字符保存到寄存器？中，其中?为一个字母，n为一个数字</span><br><span class="line">&quot;?p：取出寄存器？中的内容并将其放到光标位置处。这里？可以是一个字母，也可以是一个数字</span><br><span class="line">ndd：将当前行及其下共n行文本删除，并将所删内容放到1号删除寄存器中。</span><br></pre></td></tr></table></figure>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2017/05/02/web/async/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -717,150 +844,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2017/04/23/python/python规范目录结构/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="卡布奇诺">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="卡布奇诺">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/04/23/python/python规范目录结构/" itemprop="url">python规范目录结构</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-23T22:07:42+08:00">
-                2017-04-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>假设项目名称为Foo</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Foo/</span><br><span class="line">|-- bin/ #存放项目的一些可执行文件</span><br><span class="line">|   |-- foo</span><br><span class="line">|-- foo/ # 所有模块、包都应该放在此目录，程序的入口最好命名为main.py</span><br><span class="line">|   |-- tests/ # 存放单元测试代码；</span><br><span class="line">|   |   |-- __init__.py</span><br><span class="line">|   |   |-- test_main.py</span><br><span class="line">|   |-- __init__.py</span><br><span class="line">|   |-- main.py</span><br><span class="line">|-- docs/ # 用于存放文档</span><br><span class="line">|   |-- conf.py</span><br><span class="line">|   |-- abc.rst</span><br><span class="line">|-- setup.py # 来管理代码的打包、安装、部署问题</span><br><span class="line">|-- requirements.txt # 存放软件依赖的外部Python包列表</span><br><span class="line">|-- README # 项目说明文件</span><br></pre></td></tr></table></figure>
-<p><a href="http://www.cnblogs.com/bigberg/p/6423164.html" target="_blank" rel="noopener">python基础6–目录结构</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2017/04/23/python/python协程与异步IO/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -993,148 +976,6 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install aiohttp</span><br></pre></td></tr></table></figure>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">from</span> aiohttp <span class="keyword">import</span> web</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">index</span><span class="params">(request)</span>:</span></span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">0.5</span>) <span class="comment"># 模拟io阻塞</span></span><br><span class="line">    <span class="keyword">return</span> web.Response(body=<span class="string">b'&lt;h1&gt;Index&lt;/h1&gt;'</span>,content_type=<span class="string">'text/html'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">hello</span><span class="params">(request)</span>:</span></span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">0.5</span>)</span><br><span class="line">    text = <span class="string">'&lt;h1&gt;hello, %s!&lt;/h1&gt;'</span> % request.match_info[<span class="string">'name'</span>]</span><br><span class="line">    <span class="keyword">return</span> web.Response(body=text.encode(<span class="string">'utf-8'</span>),content_type=<span class="string">'text/html'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">init</span><span class="params">(loop)</span>:</span></span><br><span class="line">    app = web.Application(loop=loop)</span><br><span class="line">    app.router.add_route(<span class="string">'GET'</span>, <span class="string">'/'</span>, index)</span><br><span class="line">    app.router.add_route(<span class="string">'GET'</span>, <span class="string">'/hello/&#123;name&#125;'</span>, hello)</span><br><span class="line">    srv = <span class="keyword">await</span> loop.create_server(app.make_handler(), <span class="string">'127.0.0.1'</span>, <span class="number">8000</span>)</span><br><span class="line">    print(<span class="string">'Server started at http://127.0.0.1:8000...'</span>)</span><br><span class="line">    <span class="keyword">return</span> srv</span><br><span class="line"></span><br><span class="line">loop = asyncio.get_event_loop()</span><br><span class="line">loop.run_until_complete(init(loop))</span><br><span class="line">loop.run_forever()</span><br></pre></td></tr></table></figure>
 <p><a href="http://blog.csdn.net/dutsoft/article/details/54729480" target="_blank" rel="noopener">python并发之协程</a><br><a href="http://developer.51cto.com/art/201403/434352_all.htm" target="_blank" rel="noopener">python:利用asyncio进行快速抓取</a><br><a href="https://www.oschina.net/translate/playing-around-with-await-async-in-python-3-5" target="_blank" rel="noopener">玩转 Python 3.5 的 await/async</a><br><a href="http://www.tuicool.com/articles/V7jQbmU" target="_blank" rel="noopener">Python 3.5 协程究竟是个啥</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2017/04/23/python/sqlite速查手册/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="卡布奇诺">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="卡布奇诺">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/04/23/python/sqlite速查手册/" itemprop="url">sqlite速查手册</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-23T22:07:42+08:00">
-                2017-04-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 返回数据表的最大行数</span></span><br><span class="line">sql = <span class="string">'SELECT count(*) FROM table_name;'</span></span><br><span class="line"><span class="comment"># 选择某列最大或最小值,计算平均值与和</span></span><br><span class="line">sql = <span class="string">'SELECT max(coloumn) FROM table_name;'</span></span><br><span class="line">sql = <span class="string">'SELECT min(coloumn) FROM table_name;'</span></span><br><span class="line">sql = <span class="string">'SELECT avg(coloumn) FROM table_name;'</span></span><br><span class="line">sql = <span class="string">'SELECT sum(coloumn) FROM table_name;'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">############ 操作数据库 ##############</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 得到所有的表名，使用fetchall</span></span><br><span class="line">sql = <span class="string">'select * from sqlite_master'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">############ 操作数据表 ##############</span></span><br><span class="line"><span class="comment"># 获得所有列名</span></span><br><span class="line">sql = <span class="string">"PRAGMA table_info(table_name)"</span></span><br><span class="line"><span class="comment"># 改变表名</span></span><br><span class="line">sql = <span class="string">'ALTER TABLE old_table_name RENAME new_table_name 新表名'</span></span><br><span class="line"><span class="comment"># 增加一列</span></span><br><span class="line">sql = <span class="string">'ALTER TABLE 表名 ADD COLUMN 列名 数据类型'</span></span><br></pre></td></tr></table></figure>
 
           
         
@@ -1339,7 +1180,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2017/04/23/python/将Python代码打包放到PyPI上/">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2017/04/23/python/python实现windows系统下自动拨号/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="卡布奇诺">
@@ -1358,7 +1199,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/04/23/python/将Python代码打包放到PyPI上/" itemprop="url">将Python代码打包放到PyPI上</a></h1>
+                <a class="post-title-link" href="/2017/04/23/python/python实现windows系统下自动拨号/" itemprop="url">python实现windows系统下自动拨号</a></h1>
         
 
         <div class="post-meta">
@@ -1432,165 +1273,7 @@
       
         
           
-            <h2 id="什么是PyPI"><a href="#什么是PyPI" class="headerlink" title="什么是PyPI"></a>什么是PyPI</h2><p>PyPI(Python Package Index)是python官方的第三方库的仓库。<br>所有人都可以下载第三方库或上传自己开发的库到PyPI。<br>PyPI推荐使用pip包管理器来下载第三方库</p>
-<h2 id="包的文件结构"><a href="#包的文件结构" class="headerlink" title="包的文件结构"></a>包的文件结构</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">foo</span><br><span class="line">|-- bin/ #存放项目的一些可执行文件</span><br><span class="line">|   |-- foo</span><br><span class="line">|-- foo/ # 所有模块、包都应该放在此目录，程序的入口最好命名为main.py</span><br><span class="line">|   |-- tests/ # 存放单元测试代码；</span><br><span class="line">|   |   |-- __init__.py</span><br><span class="line">|   |   |-- test_main.py</span><br><span class="line">|   |-- __init__.py</span><br><span class="line">|   |-- main.py</span><br><span class="line">|-- docs/ # 用于存放文档</span><br><span class="line">|   |-- conf.py</span><br><span class="line">|   |-- abc.rst</span><br><span class="line">|-- setup.py # 来管理代码的打包、安装、部署问题</span><br><span class="line">|-- requirements.txt # 存放软件依赖的外部Python包列表</span><br><span class="line">|-- README.rst # 项目说明文件</span><br></pre></td></tr></table></figure>
-<h2 id="setup文件"><a href="#setup文件" class="headerlink" title="setup文件"></a>setup文件</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> codecs</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">  <span class="keyword">from</span> setuptools <span class="keyword">import</span> setup</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">  <span class="keyword">from</span> distutils.core <span class="keyword">import</span> setup</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">read</span><span class="params">(fname)</span>:</span></span><br><span class="line">  <span class="keyword">return</span> codecs.open(os.path.join(os.path.dirname(__file__), fname)).read()</span><br><span class="line"></span><br><span class="line">NAME = <span class="string">"project_name"</span></span><br><span class="line">PACKAGES = [<span class="string">"somefunctions"</span>,]</span><br><span class="line">DESCRIPTION = <span class="string">"package description."</span></span><br><span class="line">LONG_DESCRIPTION = read(<span class="string">"README.rst"</span>)</span><br><span class="line">KEYWORDS = <span class="string">"test python package"</span></span><br><span class="line">AUTHOR = <span class="string">"your_name"</span></span><br><span class="line">AUTHOR_EMAIL = <span class="string">"youremail@email.com"</span></span><br><span class="line">URL = <span class="string">"http://your_blog/"</span></span><br><span class="line">VERSION = <span class="string">"1.0.1"</span></span><br><span class="line">LICENSE = <span class="string">"MIT"</span></span><br><span class="line">CLASSFIERS = [<span class="string">'License :: OSI Approved :: MIT License'</span>,<span class="string">'Programming Language :: Python'</span>,<span class="string">'Intended Audience :: Developers'</span>,<span class="string">'Operating System :: OS Independent'</span>]</span><br><span class="line"></span><br><span class="line">setup(</span><br><span class="line">  name = NAME,</span><br><span class="line">  version = VERSION,</span><br><span class="line">  description = DESCRIPTION,</span><br><span class="line">  long_description =LONG_DESCRIPTION,</span><br><span class="line">  classifiers =  CLASSFIERS,</span><br><span class="line">  keywords = KEYWORDS,</span><br><span class="line">  author = AUTHOR,</span><br><span class="line">  author_email = AUTHOR_EMAIL,</span><br><span class="line">  url = URL,</span><br><span class="line">  license = LICENSE,</span><br><span class="line">  packages = PACKAGES,</span><br><span class="line">  include_package_data=<span class="keyword">True</span>,</span><br><span class="line">  zip_safe=<span class="keyword">True</span>,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<h2 id="打包上传"><a href="#打包上传" class="headerlink" title="打包上传"></a>打包上传</h2><p>使用check命令查看是否存在语法问题，使用sdist进行打包。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python setup.py check</span><br><span class="line">python setup.py sdist</span><br></pre></td></tr></table></figure>
-<p>发布前，需要到<a href="https://pypi.python.org/pypi" target="_blank" rel="noopener">pypi官网</a>注册一个账号，并在用户目录新建文件 ~/.pypirc ，并键入以下内容</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[distutils]</span><br><span class="line">index-servers = pypi</span><br><span class="line">[pypi]</span><br><span class="line">repository: https://pypi.python.org/pypi</span><br><span class="line">username: yourname</span><br><span class="line">password: yourpwd</span><br></pre></td></tr></table></figure>
-<p>执行以下内容进行打包上传，服务器返回Server response (200): OK表示上传成功</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python setup.py sdist upload</span><br></pre></td></tr></table></figure>
-<p>发布成功后就可以使用<code>pip install</code>安装你自己的python包了！</p>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://github.com/pypa/setuptools/issues/941" target="_blank" rel="noopener">Invalid or non-existent authentication information</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2017/04/23/python/Python使用requirement.txt实现自动打包部署/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="卡布奇诺">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="卡布奇诺">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/04/23/python/Python使用requirement.txt实现自动打包部署/" itemprop="url">Python使用requirement.txt实现自动打包部署</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-23T22:07:42+08:00">
-                2017-04-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="不要在本地打包依赖"><a href="#不要在本地打包依赖" class="headerlink" title="不要在本地打包依赖"></a>不要在本地打包依赖</h2><p>python一些模块是下载源码然后本机编译的。如果本机打包模块发布在别的机器上可能会出现兼容性问题。所以，统一使用pip进行模块安装打包。</p>
-<h2 id="使用pip进行依赖部署"><a href="#使用pip进行依赖部署" class="headerlink" title="使用pip进行依赖部署"></a>使用pip进行依赖部署</h2><p>在开发环境中，统一运行以下命令安装依赖</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pip install xx</span><br></pre></td></tr></table></figure>
-<p>在开发环境中，运行以下命令导出依赖</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip freeze &gt; requirement.txt</span><br></pre></td></tr></table></figure>
-<p>在生产环境中，执行以下命令安装依赖</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -r requirement.txt</span><br></pre></td></tr></table></figure>
+            <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Adsl</span><span class="params">(object)</span>:</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">    <span class="comment"># 分别填写adsl名称，用户名与密码，dsl名称一般为宽带连接</span></span><br><span class="line">    self.name = <span class="string">"宽带连接"</span></span><br><span class="line">    self.username = <span class="string">'adsl_uname'</span></span><br><span class="line">    self.password = <span class="string">'adsl_upwd'</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">connect</span><span class="params">(self)</span>:</span></span><br><span class="line">    cmd_str = <span class="string">"rasdial %s %s %s"</span> % (self.name, self.username, self.password)</span><br><span class="line">    os.system(cmd_str)</span><br><span class="line">    time.sleep(<span class="number">5</span>)</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">disconnect</span><span class="params">(self)</span>:</span></span><br><span class="line">    cmd_str = <span class="string">"rasdial %s /disconnect"</span> % self.name</span><br><span class="line">    os.system(cmd_str)</span><br><span class="line">    time.sleep(<span class="number">5</span>)</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">reconnect</span><span class="params">(self)</span>:</span></span><br><span class="line">    self.disconnect()</span><br><span class="line">    self.connect()</span><br></pre></td></tr></table></figure>
 
           
         
@@ -1789,6 +1472,292 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2017/04/23/python/python规范目录结构/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/04/23/python/python规范目录结构/" itemprop="url">python规范目录结构</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-23T22:07:42+08:00">
+                2017-04-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>假设项目名称为Foo</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Foo/</span><br><span class="line">|-- bin/ #存放项目的一些可执行文件</span><br><span class="line">|   |-- foo</span><br><span class="line">|-- foo/ # 所有模块、包都应该放在此目录，程序的入口最好命名为main.py</span><br><span class="line">|   |-- tests/ # 存放单元测试代码；</span><br><span class="line">|   |   |-- __init__.py</span><br><span class="line">|   |   |-- test_main.py</span><br><span class="line">|   |-- __init__.py</span><br><span class="line">|   |-- main.py</span><br><span class="line">|-- docs/ # 用于存放文档</span><br><span class="line">|   |-- conf.py</span><br><span class="line">|   |-- abc.rst</span><br><span class="line">|-- setup.py # 来管理代码的打包、安装、部署问题</span><br><span class="line">|-- requirements.txt # 存放软件依赖的外部Python包列表</span><br><span class="line">|-- README # 项目说明文件</span><br></pre></td></tr></table></figure>
+<p><a href="http://www.cnblogs.com/bigberg/p/6423164.html" target="_blank" rel="noopener">python基础6–目录结构</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2017/04/23/python/sqlite速查手册/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/04/23/python/sqlite速查手册/" itemprop="url">sqlite速查手册</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-23T22:07:42+08:00">
+                2017-04-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 返回数据表的最大行数</span></span><br><span class="line">sql = <span class="string">'SELECT count(*) FROM table_name;'</span></span><br><span class="line"><span class="comment"># 选择某列最大或最小值,计算平均值与和</span></span><br><span class="line">sql = <span class="string">'SELECT max(coloumn) FROM table_name;'</span></span><br><span class="line">sql = <span class="string">'SELECT min(coloumn) FROM table_name;'</span></span><br><span class="line">sql = <span class="string">'SELECT avg(coloumn) FROM table_name;'</span></span><br><span class="line">sql = <span class="string">'SELECT sum(coloumn) FROM table_name;'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">############ 操作数据库 ##############</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 得到所有的表名，使用fetchall</span></span><br><span class="line">sql = <span class="string">'select * from sqlite_master'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">############ 操作数据表 ##############</span></span><br><span class="line"><span class="comment"># 获得所有列名</span></span><br><span class="line">sql = <span class="string">"PRAGMA table_info(table_name)"</span></span><br><span class="line"><span class="comment"># 改变表名</span></span><br><span class="line">sql = <span class="string">'ALTER TABLE old_table_name RENAME new_table_name 新表名'</span></span><br><span class="line"><span class="comment"># 增加一列</span></span><br><span class="line">sql = <span class="string">'ALTER TABLE 表名 ADD COLUMN 列名 数据类型'</span></span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
   </section>
 
   
@@ -1843,7 +1812,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">151</span>
+                  <span class="site-state-item-count">152</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1865,7 +1834,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">93</span>
+                  <span class="site-state-item-count">94</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
