@@ -271,6 +271,1023 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/09/11/Flask/Lesson for net Flask high-level programming practice - 2. Search routing to write books/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/11/Flask/Lesson for net Flask high-level programming practice - 2. Search routing to write books/" itemprop="url">慕课网Flask高级编程实战-2.搜索书籍路由编写</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-11T15:01:17+08:00">
+                2018-09-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><code>图书数据库的基地址</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 基地址</span><br><span class="line">http://t.yushu.im</span><br><span class="line"># 关键字搜索</span><br><span class="line">http://t.yushu.im/v2/book/search?q=&#123;&#125;&amp;start=&#123;&#125;&amp;count=&#123;&#125;</span><br><span class="line"># isbn搜索</span><br><span class="line">http://t.yushu.im/v2/book/search/isbn/&#123;isbn&#125;</span><br><span class="line"># 豆瓣api</span><br><span class="line">https://api.douban.com/v2/book</span><br></pre></td></tr></table></figure>
+<p><code>截止2018你那9月11日，以上地址已经无法访问，此地址仅为项目演示地址</code></p>
+<h2 id="定义参数，判断查询参数q是否是isbn号"><a href="#定义参数，判断查询参数q是否是isbn号" class="headerlink" title="定义参数，判断查询参数q是否是isbn号"></a>定义参数，判断查询参数q是否是isbn号</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">@app.route(&quot;/search/q/&lt;page&gt;&quot;)</span><br><span class="line">def search():</span><br><span class="line">	&quot;&quot;&quot;</span><br><span class="line">	搜索书籍路由</span><br><span class="line">	:param q: 关键字 OR isbn</span><br><span class="line">	:param page: 页码</span><br><span class="line">	# isbn isbn13 由13个0-9在数字组成</span><br><span class="line">	# isbn10 由10表0-9表数字组组成，中间可能包含&apos; - &apos;</span><br><span class="line">	&quot;&quot;&quot;</span><br><span class="line">	isbn_or_key = &apos;key&apos;</span><br><span class="line">	</span><br><span class="line">	isbn_or_key = &apos;key&apos;</span><br><span class="line">    if len(q) == 13 and q.isdigit():</span><br><span class="line">        isbn_or_key = &apos;isbn&apos;</span><br><span class="line">    short_q = q.replace(&apos;-&apos;, &apos;&apos;)</span><br><span class="line">    if &apos;-&apos; in q and len(short_q) == 10 and short_q.isdigit():</span><br><span class="line">        isbn_or_key = &apos;isbn&apos;</span><br><span class="line">    pass</span><br></pre></td></tr></table></figure>
+<h3 id="要点解析"><a href="#要点解析" class="headerlink" title="要点解析"></a>要点解析</h3><ul>
+<li>判断字符串是否是数字，可以使用函数 <code>isdigit()</code></li>
+<li><code>in</code> 关键字可以判断一个字符串是否包含在另外一个字符串中</li>
+<li>多个逻辑循环原则：<ul>
+<li>尽量把判断结构为的假的放在前边，利用 逻辑判断的短路优势，可以减少资源消耗。</li>
+<li>需要查询数据库的尽量放在后边。</li>
+</ul>
+</li>
+</ul>
+<h2 id="简单重构"><a href="#简单重构" class="headerlink" title="简单重构"></a>简单重构</h2><h3 id="上面代码的缺点"><a href="#上面代码的缺点" class="headerlink" title="上面代码的缺点"></a>上面代码的缺点</h3><ul>
+<li>判断代码太多，使得代码很臃肿。而且不利于以后代码的复用</li>
+<li>代码可读性查，使后来者不能一眼看出主要功能。</li>
+</ul>
+<h3 id="重构后的代码"><a href="#重构后的代码" class="headerlink" title="重构后的代码"></a>重构后的代码</h3><h4 id="fisher-py"><a href="#fisher-py" class="headerlink" title="fisher.py"></a>fisher.py</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@app.route(&quot;/search/&lt;q&gt;/&lt;page&gt;&quot;)</span><br><span class="line">def search(q, page):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    搜索书籍路由</span><br><span class="line">    :param q: 关键字 OR isbn</span><br><span class="line">    :param page: 页码</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    isbn_or_key = is_isbn_or_key(q)</span><br></pre></td></tr></table></figure>
+<h4 id="helper-py"><a href="#helper-py" class="headerlink" title="helper.py"></a>helper.py</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">def is_isbn_or_key(word):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">        判断word是isbn号还是查询关键字key</span><br><span class="line">        isbn isbn13 由13个0-9在数字组成</span><br><span class="line">        isbn10 由10表0-9表数字组组成，中间可能包含&apos; - &apos;</span><br><span class="line">    :param word:</span><br><span class="line">    :return: key or isbn</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    isbn_or_key = &apos;key&apos;</span><br><span class="line">    if len(word) == 13 and word.isdigit():</span><br><span class="line">        isbn_or_key = &apos;isbn&apos;</span><br><span class="line">    short_word = word.replace(&apos;-&apos;, &apos;&apos;)</span><br><span class="line">    if &apos;-&apos; in word and len(short_word) == 10 and short_word.isdigit():</span><br><span class="line">        isbn_or_key = &apos;isbn&apos;</span><br><span class="line">    return isbn_or_key</span><br></pre></td></tr></table></figure>
+<h4 id="要点解析-1"><a href="#要点解析-1" class="headerlink" title="要点解析:"></a>要点解析:</h4><ul>
+<li>把判断 isbn 的代码隔离出去，新建 <code>helper.py</code> 文件，可以重复利用。</li>
+</ul>
+<h4 id="建议"><a href="#建议" class="headerlink" title="建议"></a>建议</h4><ul>
+<li><p>其他地方的代码多一点还可以接受，视图函数中不可以，因为视图函数是一个web项目的入口。所有人阅读都是从这里入手，应该把细节屏蔽掉，给阅读者一个选择。</p>
+</li>
+<li><p>看源码的技巧：先通读整体，了解整体过程，再回过头来了解细节，不要从一开始就深究每一个细节</p>
+</li>
+<li><p>过多的注释会让代码变的臃肿，尽量使用易懂的函数名来代替注释，保持代码的简洁性</p>
+</li>
+</ul>
+<h2 id="requests发送http请求及代码的简化手段"><a href="#requests发送http请求及代码的简化手段" class="headerlink" title="requests发送http请求及代码的简化手段"></a>requests发送http请求及代码的简化手段</h2><h3 id="http-py"><a href="#http-py" class="headerlink" title="http.py"></a>http.py</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">class HTTP:</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    封装 request 请求类</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    @staticmethod</span><br><span class="line">    def get(url, return_json=True):</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">       发送get请求</span><br><span class="line">       :param url: 请求路径</span><br><span class="line">       :param return_json: 是否返回json格式的结果</span><br><span class="line">       :return:</span><br><span class="line">       &quot;&quot;&quot;</span><br><span class="line">        # r 是对这次HTTP请求调用结果的一个封装，并不是我们直接想要的结果，而是想要返回的内容</span><br><span class="line">        r = requests.get(url)</span><br><span class="line">        if r.status_code != 200:</span><br><span class="line">            return &#123;&#125; if return_json else &apos;&apos;</span><br><span class="line">        return r.json() if return_json else r.text</span><br></pre></td></tr></table></figure>
+<h3 id="知识点："><a href="#知识点：" class="headerlink" title="知识点："></a>知识点：</h3><ul>
+<li>简化<code>if-else</code>语句的几种方式 <ul>
+<li>1.使用三元表达式 ；</li>
+<li>2.<code>if+return</code>；</li>
+<li>3.将<code>if-else</code>里的代码提取成函数</li>
+</ul>
+</li>
+<li><code>if+return</code>的理解：<ul>
+<li>把最后一句<code>return</code>前的<code>if+return</code> 全都理解为正常流程之外的一种特例情况的处理；</li>
+<li>多次<code>if-return</code>，提前结束一些逻辑分支，可以提高代码思维的清晰性 </li>
+</ul>
+</li>
+<li><code>requests</code>的一些说明：<ul>
+<li>1.<code>get()</code>发送<code>get</code>请求；</li>
+<li>2.返回结果<code>r.status_code</code> 获取返回状态吗；</li>
+<li>3.<code>r.json()</code>将返回结果序列化成<code>json</code>;</li>
+<li>4.<code>r.text</code> 将返回结果不做处理直接返回 </li>
+</ul>
+</li>
+</ul>
+<h2 id="requests-vs-urllib"><a href="#requests-vs-urllib" class="headerlink" title="requests vs urllib"></a>requests vs urllib</h2><h3 id="发送http请求的两种方法："><a href="#发送http请求的两种方法：" class="headerlink" title="发送http请求的两种方法："></a>发送http请求的两种方法：</h3><ul>
+<li>1.使用urllib(python内置)</li>
+<li>2.使用requests（需要使用pip3安装）</li>
+</ul>
+<h3 id="urllib的用法："><a href="#urllib的用法：" class="headerlink" title="urllib的用法："></a>urllib的用法：</h3><p><img src="http://p5x7w1vrd.bkt.clouddn.com/61d6f916cd2cbb4367252a3f96538ca2.jpg" alt=""></p>
+<h4 id="urllib缺点分析"><a href="#urllib缺点分析" class="headerlink" title="urllib缺点分析"></a>urllib缺点分析</h4><ul>
+<li>需要对url进行编码，并且有些字符不需要编码还要声明出来</li>
+<li>返回的结果是字节码，需要包装成字符串</li>
+<li>404的情况是通过异常的形式抛出，现在流行的restful，404已经不是一种异常了</li>
+</ul>
+<h2 id="从API获取数据"><a href="#从API获取数据" class="headerlink" title="从API获取数据"></a>从API获取数据</h2><h3 id="将具体调用HTTP请求，获取结果的业务代码封装到-YuShuBook中"><a href="#将具体调用HTTP请求，获取结果的业务代码封装到-YuShuBook中" class="headerlink" title="将具体调用HTTP请求，获取结果的业务代码封装到`YuShuBook中"></a>将具体调用<code>HTTP</code>请求，获取结果的业务代码封装到`YuShuBook中</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">class YuShuBook:</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    请求接口的定义类</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    search_by_isbn_url = &quot;http://t.yushu.im/v2/book/search/isbn/&#123;&#125;&quot;</span><br><span class="line"></span><br><span class="line">    search_by_key_url = &quot;http://t.yushu.im/v2/book/search?q=&#123;&#125;&amp;count=&#123;&#125;&amp;start=&#123;&#125;&quot;</span><br><span class="line"></span><br><span class="line">    @classmethod</span><br><span class="line">    def search_by_isbn(cls, isbn):</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        1.组装 search_by_isbn_url 地址</span><br><span class="line">        2.返回对地址的请求数据,默认返回 Json 数据</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        url = cls.search_by_isbn_url.format(isbn)</span><br><span class="line">        return HTTP.get(url)</span><br><span class="line"></span><br><span class="line">    @classmethod</span><br><span class="line">    def search_by_key(cls, q, count=15, start=0):</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        1.组装 search_by_key_url 地址</span><br><span class="line">        2.返回对地址的请求数据,默认返回 Json 数据</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        url = cls.search_by_key_url.format(q, count, start)</span><br><span class="line">        return HTTP.get(url)</span><br></pre></td></tr></table></figure>
+<h3 id="使用-json-dumps-序列表返回结果，在视图函数中进行返回，并声明状态码和返回类型-一个元组"><a href="#使用-json-dumps-序列表返回结果，在视图函数中进行返回，并声明状态码和返回类型-一个元组" class="headerlink" title="使用 json.dumps 序列表返回结果，在视图函数中进行返回，并声明状态码和返回类型(一个元组)"></a>使用 <code>json.dumps</code> 序列表返回结果，在视图函数中进行返回，并声明状态码和返回类型(一个元组)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">@app.route(&quot;/book/search/&lt;q&gt;/&lt;page&gt;&quot;)</span><br><span class="line">def search(q, page):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    搜索书籍路由</span><br><span class="line">    :param q: 关键字 OR isbn</span><br><span class="line">    :param page: 页码</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    isbn_or_key = is_isbn_or_key(q)</span><br><span class="line">    if isbn_or_key == &apos;isbn&apos;:</span><br><span class="line">        result = YuShuBook.search_by_isbn(q)</span><br><span class="line">    else:</span><br><span class="line">        result = YuShuBook.search_by_key(q)</span><br><span class="line"></span><br><span class="line">    return json.dumps(result), 200, &#123;&apos;content-type&apos;: &apos;application/json&apos;&#125;</span><br><span class="line">    #可以使用 flask 提供的 jsonify 包替代</span><br><span class="line">    #return jsonify(result)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>可以使用<code>flask</code>提供的<code>jsonify</code>替换麻烦的<code>json.dumps</code>和元组</p>
+</blockquote>
+<h2 id="将视图函数拆分到单独的模块中"><a href="#将视图函数拆分到单独的模块中" class="headerlink" title="将视图函数拆分到单独的模块中"></a>将视图函数拆分到单独的模块中</h2><h3 id="1-将试图函数都放在一个文件中有哪些不足："><a href="#1-将试图函数都放在一个文件中有哪些不足：" class="headerlink" title="1.将试图函数都放在一个文件中有哪些不足："></a>1.将试图函数都放在一个文件中有哪些不足：</h3><ul>
+<li><p>代码太长，不利于维护</p>
+</li>
+<li><p>从业务模型抽象的角度，不应该把他们都放在一个文件中。关于书籍相关的API就应该放在书籍模型的视图函数文件中，跟用户相关的API就应该放在用户模型相关的文件中</p>
+</li>
+<li><p>入口文件的意义比较独特，会启动web服务器以及做很多初始化的操作，就算要放在一个文件也不应该业务的操作放在入口文件中来</p>
+</li>
+</ul>
+<h3 id="2-尝试拆分模块"><a href="#2-尝试拆分模块" class="headerlink" title="2.尝试拆分模块"></a>2.尝试拆分模块</h3><h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><blockquote>
+<p>将试图函数抽离到单独的包中，然后在新的试图文件中引入flask.py来导入app核心对象。</p>
+<p>为了新的试图文件中的路由可以成功注册，再在flask.py中引入刚刚抽离出的试图模块</p>
+</blockquote>
+<h4 id="修改后的fisher-py"><a href="#修改后的fisher-py" class="headerlink" title="修改后的fisher.py"></a>修改后的fisher.py</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">from flask import Flask</span><br><span class="line"></span><br><span class="line"># 为了可以注册book.py中的路由</span><br><span class="line">from app.web import book</span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line">app.config.from_object(&quot;config&quot;)</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">app.run(host=app.config[&quot;HOST&quot;], debug=app.config[&quot;DEBUG&quot;], port=app.config[&quot;PORT&quot;])</span><br></pre></td></tr></table></figure>
+<h4 id="新增的book-py"><a href="#新增的book-py" class="headerlink" title="新增的book.py"></a>新增的book.py</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">from flask import jsonify</span><br><span class="line"></span><br><span class="line">from helper import is_isbn_or_key</span><br><span class="line">from yushu_book import YuShuBook</span><br><span class="line"></span><br><span class="line"># 为了让book.py模块可以使用app对象</span><br><span class="line">from fisher import app</span><br><span class="line"></span><br><span class="line">__author__ = &quot;Jason&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@app.route(&quot;/book/search/&lt;q&gt;/&lt;page&gt;&quot;)</span><br><span class="line">def search(q, page):</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">搜索书籍路由</span><br><span class="line">:param q: 关键字 OR isbn</span><br><span class="line">:param page: 页码</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">isbn_or_key = is_isbn_or_key(q)</span><br><span class="line">if isbn_or_key == &apos;isbn&apos;:</span><br><span class="line">result = YuShuBook.search_by_isbn(q)</span><br><span class="line">else:</span><br><span class="line">result = YuShuBook.search_by_key(q)</span><br><span class="line"></span><br><span class="line">return jsonify(result)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>但是这样做并不是正确的做法，结果表明，这样修改以后，访问<code>search api</code>会404</p>
+<p>为了知道为什么这样做不行，我们需要先刨铣一下<code>Flask路由机制</code>的原理</p>
+</blockquote>
+<h3 id="3-Flask路由机制"><a href="#3-Flask路由机制" class="headerlink" title="3.Flask路由机制"></a>3.Flask路由机制</h3><h4 id="flask路由机制"><a href="#flask路由机制" class="headerlink" title="flask路由机制"></a>flask路由机制</h4><p><img src="http://p5x7w1vrd.bkt.clouddn.com/7b864e073c2666ac70b82307d7734e3b.jpg" alt="flask路由机制"></p>
+<blockquote>
+<p>flask的基本思想是内部会维护一个字典。</p>
+<p>每一个<code>url</code>都会对应一个视图函数，但是不仅仅是这样。</p>
+<p>每一个<code>url</code>还会对应一个<code>endpoint</code>端点。用于反向构建URL（后面会讲解)</p>
+</blockquote>
+<blockquote>
+<p>flask的路由注册<code>app_url_rule(url=,view_func=,endpoint=)</code>会接受三个参数，</p>
+<p>前两个我们都知道了，第三个就是上面说的<code>endpoint</code>。他的默认值是<code>view_func</code>的名称。</p>
+<p>当然，<code>app.route(&#39;url&#39;,endpoint=)</code>也可以传入</p>
+</blockquote>
+<h4 id="flask-route的部分源码"><a href="#flask-route的部分源码" class="headerlink" title="flask route的部分源码"></a>flask route的部分源码</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">def route(self, rule, **options):</span><br><span class="line">    &quot;&quot;&quot;A decorator that is used to register a view function for a</span><br><span class="line">    given URL rule.  This does the same thing as :meth:`add_url_rule`</span><br><span class="line">    but is intended for decorator usage::</span><br><span class="line"></span><br><span class="line">        @app.route(&apos;/&apos;)</span><br><span class="line">        def index():</span><br><span class="line">            return &apos;Hello World&apos;</span><br><span class="line"></span><br><span class="line">    For more information refer to :ref:`url-route-registrations`.</span><br><span class="line"></span><br><span class="line">    :param rule: the URL rule as string</span><br><span class="line">    :param endpoint: the endpoint for the registered URL rule.  Flask</span><br><span class="line">                     itself assumes the name of the view function as</span><br><span class="line">                     endpoint</span><br><span class="line">    :param options: the options to be forwarded to the underlying</span><br><span class="line">                    :class:`~werkzeug.routing.Rule` object.  A change</span><br><span class="line">                    to Werkzeug is handling of method options.  methods</span><br><span class="line">                    is a list of methods this rule should be limited</span><br><span class="line">                    to (``GET``, ``POST`` etc.).  By default a rule</span><br><span class="line">                    just listens for ``GET`` (and implicitly ``HEAD``).</span><br><span class="line">                    Starting with Flask 0.6, ``OPTIONS`` is implicitly</span><br><span class="line">                    added and handled by the standard request handling.</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    #注册路由的装饰器函数</span><br><span class="line">    def decorator(f):</span><br><span class="line">        endpoint = options.pop(&apos;endpoint&apos;, None)</span><br><span class="line">        #实际是调用内部的 add_url_rule 函数</span><br><span class="line">        self.add_url_rule(rule, endpoint, f, **options)</span><br><span class="line">        return f</span><br><span class="line">    return decorator</span><br></pre></td></tr></table></figure>
+<p><img src="http://p5x7w1vrd.bkt.clouddn.com/e0be648c7dbf4c769409d0207fa377c3.jpg" alt=""></p>
+<blockquote>
+<p>通过端点调试可以发现，Flask内部由<code>url_map</code> 维护一个<code>url-&gt;endpoint</code> 的指向。</p>
+<p>由<code>view_functions</code> 记录 <code>endpoint</code>所指向视图函数的函数，</p>
+<p>这样请求进入到Flask内部，才能通过<code>Url</code>找到对应的视图函数</p>
+</blockquote>
+<h3 id="4-循环引入流程分析"><a href="#4-循环引入流程分析" class="headerlink" title="4. 循环引入流程分析"></a>4. 循环引入流程分析</h3><blockquote>
+<p>从上面的断点调试中发现，我们的<code>url_map</code>和<code>view_functions</code>中都已经维护了相关的信息。</p>
+<p>但是为什么还是会出现404的情况，这是因为<code>fisher.py</code>和<code>book.py</code>出现了循环引入的情况。</p>
+</blockquote>
+<p>下面看下<code>fisher.py</code>和<code>book.py</code>的具体流程图</p>
+<p><img src="http://p5x7w1vrd.bkt.clouddn.com/ec3f47fbc6f2f4e4ffaf79059314b9d7.jpg" alt=""></p>
+<blockquote>
+<p>图中有两种颜色的线：红色的线是<code>fisher</code>主执行文件被执行之后的执行路径；</p>
+<p>蓝色的线是book模块被导入之后循环导入的执行路径。</p>
+</blockquote>
+<ul>
+<li>1.主流程开始之后，首先到达<code>导入book</code>的语句。然后<code>进入book</code>模块中执行</li>
+<li>2.book模块开始之后，首先到达<code>导入fisher</code>的语句（循环导入），这个时候主流程暂时结束，重新执行fisher中的代码</li>
+<li>3.这时候又回到fisher中的导入book的语句，由于book已经被导入一次，所以不会再次导入，进入if语句，这个时候的name是book导入fisher时候的name:fisher，不是主流程main，所以if语句条件为false。蓝色线执行终止，重新回到2. book导入fisher的语句。</li>
+<li>4.继续向下执行book 中app.route注册路由的语句。然后book执行完，回到fisher主流程执行中。</li>
+<li>5.到达if语句，这个时候name为main。执行run方法，启动服务</li>
+</ul>
+<h4 id="回答流程图中的两个问题："><a href="#回答流程图中的两个问题：" class="headerlink" title="回答流程图中的两个问题："></a>回答流程图中的两个问题：</h4><ul>
+<li>问题1：因为都是由fisher引入book，一个模块只会引入另一个模块一次。所以只执行了一次book</li>
+<li>问题2：由于一次是主流程执行fisher文件；一次是由book模块导入 fisher。</li>
+</ul>
+<h3 id="5-找不到视图函数的最终解释和证明"><a href="#5-找不到视图函数的最终解释和证明" class="headerlink" title="5.找不到视图函数的最终解释和证明"></a>5.找不到视图函数的最终解释和证明</h3><blockquote>
+<p>整个流程中，出现了两次核心app对象的初始化，注册路由是在蓝色流程中初始化的app注册的。</p>
+<p>但是启动服务是红色流程中的app启动的</p>
+</blockquote>
+<blockquote>
+<p>book中注册路由所使用的app对象，是他自己所导入fisher模块的app对象（蓝色流程中），</p>
+<p>而不是红色主流程中所实例化的app对象</p>
+</blockquote>
+<h4 id="加入一些日志出数验证我们的结论。"><a href="#加入一些日志出数验证我们的结论。" class="headerlink" title="加入一些日志出数验证我们的结论。"></a>加入一些日志出数验证我们的结论。</h4><p><code>我们在app实例化，启动，注册路由是哪个地方加入日志信息，来观察一下</code></p>
+<h5 id="book-py"><a href="#book-py" class="headerlink" title="book.py"></a>book.py</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">print(&quot;id为&quot;+str(id(app))+&quot;的app注册路由&quot;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@app.route(&quot;/book/search/&lt;q&gt;/&lt;page&gt;&quot;)</span><br><span class="line">def search(q, page):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    搜索书籍路由</span><br><span class="line">    :param q: 关键字 OR isbn</span><br><span class="line">    :param page: 页码</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    isbn_or_key = is_isbn_or_key(q)</span><br><span class="line">    if isbn_or_key == &apos;isbn&apos;:</span><br><span class="line">    result = YuShuBook.search_by_isbn(q)</span><br><span class="line">    else:</span><br><span class="line">    result = YuShuBook.search_by_key(q)</span><br><span class="line">    </span><br><span class="line">    return jsonify(result)</span><br></pre></td></tr></table></figure>
+<h5 id="fisher-py-1"><a href="#fisher-py-1" class="headerlink" title="fisher.py"></a>fisher.py</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">app = Flask(__name__)</span><br><span class="line">print(&quot;id为&quot;+str(id(app))+&quot;的app实例化&quot;)</span><br><span class="line"></span><br><span class="line">app.config.from_object(&quot;config&quot;)</span><br><span class="line"></span><br><span class="line"># 为了可以注册book.py中的路由</span><br><span class="line">from app.web import book</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    print(&quot;id为&quot; + str(id(app)) + &quot;的app启动&quot;)</span><br><span class="line">    app.run(host=app.config[&quot;HOST&quot;], debug=app.config[&quot;DEBUG&quot;], port=app.config[&quot;PORT&quot;])</span><br></pre></td></tr></table></figure>
+<h5 id="执行结果"><a href="#执行结果" class="headerlink" title="执行结果"></a>执行结果</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">pydev debugger: process 63816 is connecting</span><br><span class="line"></span><br><span class="line">id为4350444824的app实例化</span><br><span class="line">id为4355159656的app实例化</span><br><span class="line">id为4355159656的app注册路由</span><br><span class="line">id为4350444824的app启动</span><br><span class="line">* Debugger is active!</span><br><span class="line">* Debugger PIN: 176-669-651</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>可以看到注册路由的app，和启动服务的app不是同一个app。</p>
+<p>并且最后启动的app是最先实例化的app，也就是红色主流程的app；</p>
+<p>而注册路由的app是后实例化的app，也就是由book导入fisher模块的蓝色流程的app</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/09/11/Flask/Lesson for net Flask high-level programming practice - 3. The blueprint, model and CodeFirst/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/11/Flask/Lesson for net Flask high-level programming practice - 3. The blueprint, model and CodeFirst/" itemprop="url">慕课网Flask高级编程实战-3.蓝图、模型与CodeFirst</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-11T15:01:17+08:00">
+                2018-09-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="应用、蓝图与视图函数"><a href="#应用、蓝图与视图函数" class="headerlink" title="应用、蓝图与视图函数"></a>应用、蓝图与视图函数</h2><h3 id="1-Flask的层级关系"><a href="#1-Flask的层级关系" class="headerlink" title="1.Flask的层级关系"></a>1.Flask的层级关系</h3><p><img src="http://p5x7w1vrd.bkt.clouddn.com/5f8993085c5032f4b41b0bac34e28baf.jpg" alt=""></p>
+<ul>
+<li>Flask 最上层是 app 的核心对象</li>
+<li>在核心对象上可以新建若干蓝图，这个蓝图不能单独纯在，必须要和 app 关联。</li>
+<li>在每个蓝图上还可以注册很多静态文件、视图函数、模板等</li>
+<li>一个业务模块可以分为很多个蓝图 比如：<code>user</code>、<code>book</code>。可以把视图函数注册到蓝图上，然后再关联 app ，来达到模块化文件的分隔。</li>
+<li>之前的<code>book.py</code> 放到了<code>app/web/</code>路径下，就是考虑到了蓝图。<code>app</code>属于是整个Flask应用层。<code>web</code>属于是蓝图</li>
+</ul>
+<h3 id="2-代码规范化"><a href="#2-代码规范化" class="headerlink" title="2.代码规范化"></a>2.代码规范化</h3><p>应该讲一些初始化工作，放在对应层级的包的初始化文件 <code>__init__.py</code> 中。比如Flask核心应用app对象初始化应该放在应用层级app包的 <code>__init__.py</code> 中。</p>
+<p>蓝图的初始化，应该放在对应蓝图层级web包的<code>__init__.py</code>中，并且所有蓝图对应的试图函数都应该放在web目录下</p>
+<p><img src="http://p5x7w1vrd.bkt.clouddn.com/1a0a9f234dc9c2e57a45bf30ff829a1a.jpg" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># app/__init__.py</span><br><span class="line"></span><br><span class="line">from flask import Flask</span><br><span class="line"></span><br><span class="line">def create_app():</span><br><span class="line"></span><br><span class="line">	app = Flask(__name__)</span><br><span class="line"></span><br><span class="line">	app.config.from_object(&quot;config&quot;)</span><br><span class="line">	</span><br><span class="line">	return app</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># fisher.py</span><br><span class="line"></span><br><span class="line">from app import create_app</span><br><span class="line"></span><br><span class="line">__author__ = &quot;Jason&quot;</span><br><span class="line"></span><br><span class="line">app = create_app()</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">	print(&quot;id为&quot; + str(id(app)) + &quot;的app启动&quot;)</span><br><span class="line">	app.run(host=app.config[&quot;HOST&quot;], debug=app.config[&quot;DEBUG&quot;], port=app.config[&quot;PORT&quot;])</span><br></pre></td></tr></table></figure>
+<h3 id="3-用蓝图注册试图函数"><a href="#3-用蓝图注册试图函数" class="headerlink" title="3 用蓝图注册试图函数"></a>3 用蓝图注册试图函数</h3><h4 id="1-在蓝图中注册视图函数"><a href="#1-在蓝图中注册视图函数" class="headerlink" title="1.在蓝图中注册视图函数"></a>1.在蓝图中注册视图函数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"># 实例化蓝图</span><br><span class="line"># 第一个参数为蓝图所在模块名</span><br><span class="line"># 应用名称</span><br><span class="line">web = Blueprint(&apos;web&apos;, __name__)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@web.route(&quot;/book/search/&lt;q&gt;/&lt;page&gt;&quot;)</span><br><span class="line">def search(q, page):</span><br><span class="line">	&quot;&quot;&quot;</span><br><span class="line">	搜索书籍路由</span><br><span class="line">	:param q: 关键字 OR isbn</span><br><span class="line">	:param page: 页码</span><br><span class="line">	&quot;&quot;&quot;</span><br><span class="line">	isbn_or_key = is_isbn_or_key(q)</span><br><span class="line">	if isbn_or_key == &apos;isbn&apos;:</span><br><span class="line">		result = YuShuBook.search_by_isbn(q)</span><br><span class="line">	else:</span><br><span class="line">		result = YuShuBook.search_by_key(q)</span><br><span class="line">	</span><br><span class="line">	return jsonify(result)</span><br></pre></td></tr></table></figure>
+<h4 id="2-蓝图是不能替代app应用的，在蓝图中注册了视图函数后，还需要将蓝图插入app"><a href="#2-蓝图是不能替代app应用的，在蓝图中注册了视图函数后，还需要将蓝图插入app" class="headerlink" title="2.蓝图是不能替代app应用的，在蓝图中注册了视图函数后，还需要将蓝图插入app"></a>2.蓝图是不能替代app应用的，在蓝图中注册了视图函数后，还需要将蓝图插入app</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">#app/__init__.py</span><br><span class="line"></span><br><span class="line">def create_app():</span><br><span class="line">	app = Flask(__name__)</span><br><span class="line">	</span><br><span class="line">	app.config.from_object(&quot;config&quot;)</span><br><span class="line">	#注册 web 蓝图</span><br><span class="line">	register_blueprint(app)</span><br><span class="line"></span><br><span class="line">	return app</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def register_blueprint(app):</span><br><span class="line">	from app.web.book import web</span><br><span class="line">	app.register_blueprint(web)</span><br></pre></td></tr></table></figure>
+<h4 id="3-单蓝图多模块拆分视图函数"><a href="#3-单蓝图多模块拆分视图函数" class="headerlink" title="3.单蓝图多模块拆分视图函数"></a>3.单蓝图多模块拆分视图函数</h4><blockquote>
+<p>蓝图，他的出发点，是为了分模块的。</p>
+<p>什么是模块级别的呢?</p>
+<p>比如一个web系统属于一个web模块；</p>
+<p>一个提供给移动端使用的api是一个api模块；</p>
+<p>一个内容管理系统是一个CMS。</p>
+<p>我们不应该讲book,user这样的不同类别的py文件，做成多个蓝图（这样不是不行，只是小题大做了）</p>
+<p>正确的方式是:</p>
+<p>在一个模块的初识文件中定义蓝图对象，这个模块的不同文件都引入这个蓝图对象来注册路由函数。</p>
+<p>并在模块的初始化文件中引入这些py文件来完成试图函数注册代码的执行</p>
+</blockquote>
+<h5 id="book-py"><a href="#book-py" class="headerlink" title="book.py"></a>book.py</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">#book.py</span><br><span class="line"></span><br><span class="line">from flask import jsonify</span><br><span class="line">from helper import is_isbn_or_key</span><br><span class="line">from yushu_book import YuShuBook</span><br><span class="line"></span><br><span class="line"># 引入web模块</span><br><span class="line">from . import web</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">__author__ = &quot;Jason&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@web.route(&quot;/book/search/&lt;q&gt;/&lt;page&gt;&quot;)</span><br><span class="line">def search(q, page):</span><br><span class="line">	&quot;&quot;&quot;</span><br><span class="line">	搜索书籍路由</span><br><span class="line">	:param q: 关键字 OR isbn</span><br><span class="line">	:param page: 页码</span><br><span class="line">	&quot;&quot;&quot;</span><br><span class="line">	isbn_or_key = is_isbn_or_key(q)</span><br><span class="line">	if isbn_or_key == &apos;isbn&apos;:</span><br><span class="line">		result = YuShuBook.search_by_isbn(q)</span><br><span class="line">	else:</span><br><span class="line">		result = YuShuBook.search_by_key(q)</span><br><span class="line">	</span><br><span class="line">	return jsonify(result)</span><br></pre></td></tr></table></figure>
+<h5 id="后面还会有user模块。我们这里先建立一段伪代码"><a href="#后面还会有user模块。我们这里先建立一段伪代码" class="headerlink" title="后面还会有user模块。我们这里先建立一段伪代码"></a>后面还会有user模块。我们这里先建立一段伪代码</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#user.py</span><br><span class="line">from . import web</span><br><span class="line"></span><br><span class="line">__author__ = &quot;gaowenfeng&quot;</span><br><span class="line"></span><br><span class="line">@web.route(&quot;/user/login&quot;)</span><br><span class="line">def login():</span><br><span class="line">	return &quot;success&quot;</span><br></pre></td></tr></table></figure>
+<h5 id="web-init-py"><a href="#web-init-py" class="headerlink" title="web/init.py"></a>web/<strong>init</strong>.py</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">from flask import Blueprint</span><br><span class="line"></span><br><span class="line">__author__ = &quot;Jason&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">web = Blueprint(&apos;web&apos;, __name__)</span><br><span class="line"></span><br><span class="line"># 在这里导入不同文件，完成视图函数的注册</span><br><span class="line">from app.web import book</span><br><span class="line">from app.web import user</span><br></pre></td></tr></table></figure>
+<h4 id="4-Request对象"><a href="#4-Request对象" class="headerlink" title="4. Request对象"></a>4. Request对象</h4><blockquote>
+<p>之前我们定义的<code>url</code>请求路径是<code>rest</code>风格的 <code>/book/search/&lt;q&gt;/&lt;page&gt;</code>,</p>
+<p>Flask会将&lt;&gt;里的值自动映射成视图函数方法的参数。</p>
+</blockquote>
+<blockquote>
+<p>但是如果需要将方法参数做为请求参数传入进来。</p>
+<p>就需要用到Flask内置的<code>Request</code>了。</p>
+<p><code>Request</code>里包含了<code>HTTP</code>请求的详细信息，比如<code>param</code>，<code>method</code>，<code>url</code>，<code>remote</code> <code>ip</code>等。</p>
+</blockquote>
+<p><code>下面看一下我们之前search函数的改造来了解一下Requset获取请求参数的基本用法</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">from flask import request</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line">...</span><br><span class="line">@web.route(&quot;/book/search/&quot;)</span><br><span class="line">def search():</span><br><span class="line">	&quot;&quot;&quot;</span><br><span class="line">	搜索书籍路由</span><br><span class="line">	:param q: 关键字 OR isbn</span><br><span class="line">	:param page: 页码</span><br><span class="line">	&quot;&quot;&quot;</span><br><span class="line">	q = request.args[&apos;q&apos;]</span><br><span class="line">	page = request.args[&apos;page&apos;]</span><br><span class="line">	isbn_or_key = is_isbn_or_key(q)</span><br><span class="line">	if isbn_or_key == &apos;isbn&apos;:</span><br><span class="line">		result = YuShuBook.search_by_isbn(q)</span><br><span class="line">	else:</span><br><span class="line">		result = YuShuBook.search_by_key(q)</span><br><span class="line">	</span><br><span class="line">	return jsonify(result)</span><br></pre></td></tr></table></figure>
+<p><code>Request</code> 的<code>args</code>属性是一个不可变字典（继承了python内置的dict）<code>immutableDict</code>。里面放的就是http请求的参数。可以使用<code>to_dict()</code>方法获取请求参数的原生可变字典<code>request.args.to_dict()</code></p>
+<p><strong>注意，Flask的request是基于代理模式实现的。想让request正常使用，必须确保是http请求触发的函数或视图函数中使用</strong></p>
+<h4 id="5-WTForms参数验证"><a href="#5-WTForms参数验证" class="headerlink" title="5. WTForms参数验证"></a>5. WTForms参数验证</h4><p><code>WTForms</code> 是一款优秀的参数验证框架。可以将参数验证抽离出一个模块。与业务代码解耦。</p>
+<h5 id="使用pipenv引入WTForms"><a href="#使用pipenv引入WTForms" class="headerlink" title="使用pipenv引入WTForms"></a>使用<code>pipenv</code>引入<code>WTForms</code></h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pipenv install wtforms</span><br></pre></td></tr></table></figure>
+<h5 id="使用WTForms需要自定义一个类继承wtforms提供的Form类，然后定义参数校验规则"><a href="#使用WTForms需要自定义一个类继承wtforms提供的Form类，然后定义参数校验规则" class="headerlink" title="使用WTForms需要自定义一个类继承wtforms提供的Form类，然后定义参数校验规则"></a>使用<code>WTForms</code>需要自定义一个类继承<code>wtforms</code>提供的<code>Form</code>类，然后定义参数校验规则</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">from wtforms import Form, StringField, IntegerField</span><br><span class="line">from wtforms.validators import Length, NumberRange</span><br><span class="line"></span><br><span class="line">__author__ = &quot;Jason&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class SearchForm(Form):</span><br><span class="line">	# 参数校验规则：</span><br><span class="line">	# 1.定义的属性名q,page要与要校验的参数同名</span><br><span class="line">	# 2.根据要传入的参数类型选择不同的Field类进行实例化</span><br><span class="line">	# 3.传入一个数组，作为校验规则validators</span><br><span class="line">	# 4.可以设置默认值</span><br><span class="line">	q = StringField(validators=[</span><br><span class="line">            DataRequired(), </span><br><span class="line">            Length(min=1, max=30,message=&quot;查询关键字长度必须在1-30之间&quot;)</span><br><span class="line">        ], )</span><br><span class="line">	page = IntegerField(validators=[</span><br><span class="line">        NumberRange(min=1, max=99)</span><br><span class="line">    ], default=1)</span><br></pre></td></tr></table></figure>
+<h5 id="使用WTForms"><a href="#使用WTForms" class="headerlink" title="使用WTForms"></a>使用WTForms</h5><p><strong>book.py</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">@web.route(&quot;/book/search/&quot;)</span><br><span class="line">def search():</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    搜索书籍路由</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    # 实例化我们自定义的SearchForm，需要传入一个字典作为要校验的参数</span><br><span class="line">    form = SearchForm(request.args)</span><br><span class="line">    # validate()方法返回True/False来标示是否校验公国</span><br><span class="line">    if not form.validate():</span><br><span class="line">        # errors为错误信息提示（上面定义的message）</span><br><span class="line">        return jsonify(form.errors)</span><br><span class="line"></span><br><span class="line">    # 从form中获取校验后的参数，不从request里拿，因为我们可能会对数据进行预处理或者默认值的给定</span><br><span class="line">    q = form.q.data.strip()</span><br><span class="line">    page = form.page.data</span><br><span class="line">    isbn_or_key = is_isbn_or_key(q)</span><br><span class="line">    if isbn_or_key == &apos;isbn&apos;:</span><br><span class="line">        result = YuShuBook.search_by_isbn(q)</span><br><span class="line">    else:</span><br><span class="line">        result = YuShuBook.search_by_key(q)</span><br><span class="line"></span><br><span class="line">    return jsonify(result)</span><br></pre></td></tr></table></figure>
+<h4 id="6-配置文件拆分"><a href="#6-配置文件拆分" class="headerlink" title="6. 配置文件拆分"></a>6. 配置文件拆分</h4><p>我们之前的<code>YuShuBook</code>访问<code>api</code>分页获取数据的时候，<code>count</code>和<code>start</code>是写死的。现在来完善这一部分操作。</p>
+<p>首先看我们之前的代码，接受了<code>count</code>,<code>start</code>两个参数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@classmethod</span><br><span class="line">def search_by_key(cls, q, count=15, start=0):</span><br><span class="line">	url = cls.search_by_key_url.format(q, count, start)</span><br><span class="line">	return HTTP.get(url)</span><br></pre></td></tr></table></figure>
+<h5 id="考虑以下几点："><a href="#考虑以下几点：" class="headerlink" title="考虑以下几点："></a>考虑以下几点：</h5><blockquote>
+<p>1.我们的试图函数接受的参数是<code>page</code>，考虑到代码的封装性，应该尽可能的隐藏细节，</p>
+<p>我们应该把计算<code>count</code>,<code>start</code>的过程放到<code>YuShuBook</code>的<code>search_by_key</code>方法中来做</p>
+</blockquote>
+<p>.</p>
+<blockquote>
+<p>2.虽然计算<code>start</code>的方法很简单。</p>
+<p>但是这是一个单独的逻辑过程，不应该将这段过程放在访问api获取数据的方法中。</p>
+<p>而应该封装成一个方法，以方法名来代替这段逻辑</p>
+</blockquote>
+<p>.</p>
+<blockquote>
+<p>3.count的值应该放到配置文件中，这样方便修改。</p>
+<p>但是考虑到我们之前的配置<code>DEGUG</code>，<code>IP</code>,<code>PORT</code>等都属于私密配置，包括以后会使用的数据库信息等。</p>
+<p>而<code>COUNT</code>的值属于可公开的配置，所以应该把配置文件拆分成<code>secure.py</code>和<code>settings.py</code>。</p>
+<p><code>secure.py</code>保存私有配置，在上传git的时候不应该上传此文件，<code>settings.py</code>是共有配置</p>
+</blockquote>
+<h5 id="下面来看修改完后的代码yushu-book-py"><a href="#下面来看修改完后的代码yushu-book-py" class="headerlink" title="下面来看修改完后的代码yushu_book.py"></a>下面来看修改完后的代码<code>yushu_book.py</code></h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># flask提供了获取当前app的方法</span><br><span class="line">from flask import current_app</span><br><span class="line">...</span><br><span class="line">...</span><br><span class="line">@classmethod</span><br><span class="line">def search_by_key(cls, q, page=1):</span><br><span class="line">	url = cls.search_by_key_url.format(q, current_app.config[&quot;PRE_PAGE&quot;],</span><br><span class="line">	cls.calculate_start(page))</span><br><span class="line">	return HTTP.get(url)</span><br><span class="line"></span><br><span class="line">@staticmethod</span><br><span class="line">def calculate_start(page):</span><br><span class="line">	return (page-1) * current_app.config[&quot;PRE_PAGE&quot;]</span><br></pre></td></tr></table></figure>
+<h5 id="app-web-settings-py"><a href="#app-web-settings-py" class="headerlink" title="app/web/settings.py"></a>app/web/settings.py</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PRE_PAGE = 15</span><br></pre></td></tr></table></figure>
+<h5 id="app-web-secure-py"><a href="#app-web-secure-py" class="headerlink" title="app/web/secure.py"></a>app/web/secure.py</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DEBUG = True</span><br><span class="line">HOST = &quot;0.0.0.0&quot;</span><br><span class="line">PORT = 8090</span><br></pre></td></tr></table></figure>
+<h5 id="app-init-py"><a href="#app-init-py" class="headerlink" title="app/init.py"></a>app/<strong>init</strong>.py</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">def create_app():</span><br><span class="line">	app = Flask(__name__)</span><br><span class="line">	</span><br><span class="line">	#加载配置文件</span><br><span class="line">	app.config.from_object(&quot;app.secure&quot;)</span><br><span class="line">	app.config.from_object(&quot;app.settings&quot;)</span><br><span class="line">	</span><br><span class="line">	#注册蓝图</span><br><span class="line">	register_blueprint(app)</span><br><span class="line">	</span><br><span class="line">	return app</span><br></pre></td></tr></table></figure>
+<h3 id="7-数据表创建方式"><a href="#7-数据表创建方式" class="headerlink" title="7. 数据表创建方式"></a>7. 数据表创建方式</h3><h5 id="1-模块分成"><a href="#1-模块分成" class="headerlink" title="1.模块分成"></a>1.模块分成</h5><p>首先先将项目的层级结构重新调整一下，</p>
+<p>将<code>helper</code>,<code>httper</code>这些放在<code>libs</code>目录下，作为常用库函数。</p>
+<p>将<code>yushu_book</code>放在<code>spider</code>目录下，因为这里涉及到的访问外部<code>api</code>，或者访问数据库，都更像一个小的爬虫</p>
+<p><strong>更新完了目录结构为</strong><br><img src="http://p5x7w1vrd.bkt.clouddn.com/4bbef81fdd48e63d37b7e395f655fc1d.jpg" alt=""></p>
+<ul>
+<li>web flask 的web视图函数蓝图</li>
+<li>libs 库函数</li>
+<li>form 参数验证</li>
+<li>spider 数据爬取</li>
+</ul>
+<h4 id="2-数据表创建方式"><a href="#2-数据表创建方式" class="headerlink" title="2.数据表创建方式"></a>2.数据表创建方式</h4><h5 id="1-database-first"><a href="#1-database-first" class="headerlink" title="1.database first"></a>1.database first</h5><blockquote>
+<p>是最普标的。直接在数据库中编写DML语句，建表。</p>
+</blockquote>
+<h5 id="2-model-first"><a href="#2-model-first" class="headerlink" title="2.model first"></a>2.model first</h5><blockquote>
+<p>使用建模工具，根据绘制的数据模型，生成数据表。DMA最爱</p>
+</blockquote>
+<h5 id="3-code-first"><a href="#3-code-first" class="headerlink" title="3.code first"></a>3.code first</h5><blockquote>
+<p>在代码中创建业务模型（实体类），自动反向生成数据表。</p>
+<p>程序员最爱可以专注业务模型的设计，而不是数据库的设计<br>不需要关心数据库表以及数据库表是如何创建的，简化思维逻辑</p>
+</blockquote>
+<blockquote>
+<p>数据库只是用来存储数据的，他的表之间的关系应该有业务来决定</p>
+</blockquote>
+<h4 id="3-ORM与Code-first的区别"><a href="#3-ORM与Code-first的区别" class="headerlink" title="3.ORM与Code first的区别"></a>3.ORM与Code first的区别</h4><ul>
+<li><p><code>Code first</code> 关注的是相关的数据表是怎么创建的，他解决的是创建数据的问题</p>
+</li>
+<li><p><code>ORM（Object relation Map</code> 不仅仅是解决数据创建的问题，还包含了数据的查询，更新，添加，删除。ORM希望我们通过操作一个个模型来间接操作数据库，所以说他的范围是更加广阔的。我们后面的所有的数据库操作都是通过ORM来操作的</p>
+</li>
+</ul>
+<h5 id="定义第一个模型类以及反向生成"><a href="#定义第一个模型类以及反向生成" class="headerlink" title="定义第一个模型类以及反向生成"></a>定义第一个模型类以及反向生成</h5><blockquote>
+<p>新建一个模块model，用于存储数据库表对应的业务模型，在编写model层的模型时，</p>
+<p>一定要忘记数据库表，重点要放在业务模型的抽象中来</p>
+</blockquote>
+<ul>
+<li><p><code>sqlalchemy</code> 是一个类库，用于根据定义的model反向生成数据库表</p>
+</li>
+<li><p><code>Flask_SqlAlchemy</code> 是<code>Flask</code>在<code>sqlalchemy</code>基础上封装的一个组件。提供了更加人性化的API来操作数据库</p>
+</li>
+<li><p><code>pipenv</code> 按照 <code>pipenv install flask-sqlalchemy</code></p>
+</li>
+</ul>
+<p><strong>1.编写模型类</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">from sqlalchemy import Column,Integer,String</span><br><span class="line"></span><br><span class="line">__author__ = &quot;Jason&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class Book():</span><br><span class="line">	id = Column(Integer, primary_key=True, autoincrement=True)</span><br><span class="line">	title = Column(String(50), nullable=True)</span><br><span class="line">	author = Column(String(30), default=&quot;未名&quot;)</span><br><span class="line">	binding = Column(String(20))</span><br><span class="line">	publisher = Column(String(50))</span><br><span class="line">	price = Column(String(20))</span><br><span class="line">	pages = Column(Integer)</span><br><span class="line">	isbn = Column(String(15), nullable=True, unique=True)</span><br><span class="line">	summary = Column(String(1000))</span><br><span class="line">	image = Column(String(50))</span><br></pre></td></tr></table></figure>
+<p><strong>2.将模型映射到数据库中</strong></p>
+<h5 id="1-在模型类中引入Flask-SqlAlchemy，并做相关声明"><a href="#1-在模型类中引入Flask-SqlAlchemy，并做相关声明" class="headerlink" title="1.在模型类中引入Flask_SqlAlchemy，并做相关声明"></a>1.在模型类中引入Flask_SqlAlchemy，并做相关声明</h5><p><strong>app/models/book.py</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">from sqlalchemy import Column, Integer, String</span><br><span class="line">from flask_sqlalchemy import SQLAlchemy</span><br><span class="line"></span><br><span class="line">__author__ = &quot;Jason&quot;</span><br><span class="line"></span><br><span class="line">db = SQLAlchemy()</span><br><span class="line"></span><br><span class="line"># 继承db.Model</span><br><span class="line">class Book(db.Model):</span><br><span class="line">	id = Column(Integer, primary_key=True, autoincrement=True)</span><br><span class="line">	title = Column(String(50), nullable=True)</span><br><span class="line">	author = Column(String(30), default=&quot;未名&quot;)</span><br><span class="line">	binding = Column(String(20))</span><br><span class="line">	publisher = Column(String(50))</span><br><span class="line">	price = Column(String(20))</span><br><span class="line">	pages = Column(Integer)</span><br><span class="line">	isbn = Column(String(15), nullable=True, unique=True)</span><br><span class="line">	summary = Column(String(1000))</span><br><span class="line">	image = Column(String(50))</span><br></pre></td></tr></table></figure>
+<h5 id="2-在app中插入Flask-SqlAlchemy对象"><a href="#2-在app中插入Flask-SqlAlchemy对象" class="headerlink" title="2.在app中插入Flask_SqlAlchemy对象"></a>2.在app中插入Flask_SqlAlchemy对象</h5><p><strong>app/<strong>init</strong>.py</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">from app.models.book import db</span><br><span class="line"></span><br><span class="line">def create_app():</span><br><span class="line">	app = Flask(__name__)</span><br><span class="line">	app.config.from_object(&quot;app.secure&quot;)</span><br><span class="line">	app.config.from_object(&quot;app.settings&quot;)</span><br><span class="line">	register_blueprint(app)</span><br><span class="line"></span><br><span class="line">	# 将db插入app</span><br><span class="line">	db.init_app(app)</span><br><span class="line">	</span><br><span class="line">	# 创建所有的表</span><br><span class="line">	db.create_all()</span><br><span class="line">	</span><br><span class="line">	return app</span><br></pre></td></tr></table></figure>
+<h5 id="3-书写配置文件"><a href="#3-书写配置文件" class="headerlink" title="3.书写配置文件"></a>3.书写配置文件</h5><p><strong>app/secure.py</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># key-SQLALCHEMY_DATABASE_URI不能随意修改</span><br><span class="line"></span><br><span class="line"># URI规则:数据库类型+驱动://账号:密码@host:port/dbname</span><br><span class="line"></span><br><span class="line">SQLALCHEMY_DATABASE_URI = &quot;mysql+cymysql://root:root@localhost:3306/fisher&quot;</span><br></pre></td></tr></table></figure>
+<p><strong>cysql驱动需要安装</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pipenv install cymysql</span><br></pre></td></tr></table></figure>
+<p><strong>上面的操作完成以后启动项目，会报如下错误</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">/Users/gaowenfeng/.local/share/virtualenvs/fisher-4xlkyzha/lib/python3.6/site-packages/flask_sqlalchemy/__init__.py:794: FSADeprecationWarning: SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhead and will be disabled by default in the future. Set it to True or False to suppress this warning.</span><br><span class="line">&apos;SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhead and &apos;</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">File &quot;/Users/gaowenfeng/project/pycharm/fisher/fisher/fisher.py&quot;, line 10, in &lt;module&gt;</span><br><span class="line">app = create_app()</span><br><span class="line">File &quot;/Users/gaowenfeng/project/pycharm/fisher/fisher/app/__init__.py&quot;, line 14, in create_app</span><br><span class="line">db.create_all()</span><br><span class="line">File &quot;/Users/gaowenfeng/.local/share/virtualenvs/fisher-4xlkyzha/lib/python3.6/site-packages/flask_sqlalchemy/__init__.py&quot;, line 963, in create_all</span><br><span class="line">self._execute_for_all_tables(app, bind, &apos;create_all&apos;)</span><br><span class="line">File &quot;/Users/gaowenfeng/.local/share/virtualenvs/fisher-4xlkyzha/lib/python3.6/site-packages/flask_sqlalchemy/__init__.py&quot;, line 940, in _execute_for_all_tables</span><br><span class="line">app = self.get_app(app)</span><br><span class="line">File &quot;/Users/gaowenfeng/.local/share/virtualenvs/fisher-4xlkyzha/lib/python3.6/site-packages/flask_sqlalchemy/__init__.py&quot;, line 912, in get_app</span><br><span class="line">&apos;No application found. Either work inside a view function or push&apos;</span><br><span class="line">RuntimeError: No application found. Either work inside a view function or push an application context. See http://flask-sqlalchemy.pocoo.org/contexts/.</span><br><span class="line"></span><br><span class="line">Process finished with exit code 1</span><br></pre></td></tr></table></figure>
+<p>这是因为在<code>Flask</code>中，不是实例化了<code>app</code>核心对象，其他的代码就可以直接用到。所以在上面第二部<code>create_all()</code>方法中，应该将<code>app</code>传入</p>
+<p><strong>修改后的代码</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">def create_app():</span><br><span class="line">	app = Flask(__name__)</span><br><span class="line">	app.config.from_object(&quot;app.secure&quot;)</span><br><span class="line">	app.config.from_object(&quot;app.settings&quot;)</span><br><span class="line">	register_blueprint(app)</span><br><span class="line">	</span><br><span class="line">	# 将db插入app</span><br><span class="line">	db.init_app(app)</span><br><span class="line">	</span><br><span class="line">	# 创建所有的表</span><br><span class="line">	db.create_all(app=app)</span><br><span class="line">	</span><br><span class="line">	return app</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/09/11/Flask/Lesson for net Flask high-level programming of actual combat - mind mapping knowledge points/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/11/Flask/Lesson for net Flask high-level programming of actual combat - mind mapping knowledge points/" itemprop="url">慕课网Flask高级编程实战-知识点思维导图</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-11T15:01:17+08:00">
+                2018-09-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="PC端github地址"><a href="#PC端github地址" class="headerlink" title="PC端github地址"></a>PC端github地址</h2><p><a href="https://github.com/MarkGao11520/fisher" target="_blank" rel="noopener">Github</a></p>
+<h2 id="restfult-api-github-地址"><a href="#restfult-api-github-地址" class="headerlink" title="restfult api github 地址"></a>restfult api github 地址</h2><p><a href="https://github.com/MarkGao11520/ginger" target="_blank" rel="noopener">Github</a></p>
+<h2 id="知识点思维导图"><a href="#知识点思维导图" class="headerlink" title="知识点思维导图"></a>知识点思维导图</h2><p><img src="http://p5x7w1vrd.bkt.clouddn.com/4b11ef4683ebe16ba64d0fcf04305245.png" alt=""></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/09/11/Flask/Lesson for net Flask high-level programming practice - 1. Introduction to project preparation and Flask/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/11/Flask/Lesson for net Flask high-level programming practice - 1. Introduction to project preparation and Flask/" itemprop="url">慕课网Flask高级编程实战-知识点思维导图</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-11T15:01:17+08:00">
+                2018-09-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="虚拟环境搭建-二选一即可"><a href="#虚拟环境搭建-二选一即可" class="headerlink" title="虚拟环境搭建[二选一即可]"></a>虚拟环境搭建[二选一即可]</h2><h3 id="pipenv-安装与使用"><a href="#pipenv-安装与使用" class="headerlink" title="pipenv 安装与使用"></a>pipenv 安装与使用</h3><p><a href="https://github.com/pypa/pipenv" target="_blank" rel="noopener">Github</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">#方式一：</span><br><span class="line">## mac 用户</span><br><span class="line">$ brew install pipenv</span><br><span class="line"></span><br><span class="line">## Fedora用户</span><br><span class="line">$ sudo dnf install pipenv</span><br><span class="line"></span><br><span class="line">#方式二：</span><br><span class="line"></span><br><span class="line">#用 pip 安装 pipenv</span><br><span class="line">pip install pipenv</span><br><span class="line"></span><br><span class="line">#进入虚拟环境（需要在你放置项目的地方执行，如果没有文件则会新建文件夹）</span><br><span class="line">pipenv blog</span><br><span class="line"></span><br><span class="line"># 退出虚拟环境</span><br><span class="line">pipenv exit</span><br><span class="line"></span><br><span class="line">#使用 pipenv 安装类库</span><br><span class="line">pipenv install &#123;package&#125;</span><br><span class="line"></span><br><span class="line"># 卸载类库</span><br><span class="line">pipenv uninstall &#123;package&#125;</span><br><span class="line"></span><br><span class="line"># 查看安装包依赖</span><br><span class="line">pipenv graph</span><br><span class="line"></span><br><span class="line">#查看虚拟环境的执行文件路径</span><br><span class="line">pipenv --env</span><br></pre></td></tr></table></figure>
+<h3 id="virtualenvwrapper"><a href="#virtualenvwrapper" class="headerlink" title="virtualenvwrapper"></a>virtualenvwrapper</h3><p><code>virtualenvwrapper是用来管理virtualenv的扩展包，用着很方便。</code> </p>
+<h4 id="项目地址"><a href="#项目地址" class="headerlink" title="项目地址"></a>项目地址</h4><p><a href="https://virtualenvwrapper.readthedocs.io/en/latest/" target="_blank" rel="noopener">virtualenvwrapper</a></p>
+<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#安装virtualenv</span><br><span class="line">pip install virtualenv</span><br><span class="line"></span><br><span class="line">#安装virtualenvwrapper</span><br><span class="line">pip install virtualenvwrapper</span><br></pre></td></tr></table></figure>
+<h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><p><code>修改~/.bash_profile或其它环境变量相关文件(如 .bashrc（我的Ubuntu15.10 下的是这个） 或用 ZSH 之后的 .zshrc)，添加以下语句：</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#WORKON_HOME，PROJECT_HOME 可以替换成你自己的目录</span><br><span class="line">export WORKON_HOME=$HOME/.virtualenvs</span><br><span class="line">export PROJECT_HOME=$HOME/workspace</span><br><span class="line">source /usr/local/bin/virtualenvwrapper.sh</span><br><span class="line"></span><br><span class="line">#然后运行下面代买生效：</span><br><span class="line"></span><br><span class="line">source ~/.bash_profile</span><br></pre></td></tr></table></figure>
+<h4 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">#创建运行环境blog</span><br><span class="line">mkvirtualenv blog</span><br><span class="line"></span><br><span class="line">#工作在 blog 环境 或 从其它环境切换到 blog 环境</span><br><span class="line">workon blog</span><br><span class="line"></span><br><span class="line">#退出终端环境</span><br><span class="line">deactivate</span><br><span class="line"></span><br><span class="line">#删除运行环境ENV</span><br><span class="line">rmvirtualenv ENV</span><br><span class="line"></span><br><span class="line">#创建mic项目和运行环境mic</span><br><span class="line">mkproject mic</span><br><span class="line"></span><br><span class="line">#创建临时运行环境</span><br><span class="line">mktmpenv</span><br><span class="line"></span><br><span class="line">#列出可用的运行环境</span><br><span class="line">lsvirtualenv</span><br><span class="line"></span><br><span class="line">#列出当前环境安装了的包</span><br><span class="line">lssitepackages</span><br></pre></td></tr></table></figure>
+<h2 id="Flask-的实例化和启动"><a href="#Flask-的实例化和启动" class="headerlink" title="Flask 的实例化和启动"></a>Flask 的实例化和启动</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">#导入 Flask 模块包</span><br><span class="line">from flask import Flask</span><br><span class="line"></span><br><span class="line">#实例化对象 app 构造函数的参数会作为 Flask app 核心对象的标识。可以用其他的标识符代替。如：项目名称 blog</span><br><span class="line"></span><br><span class="line">app = Flask(__name__) </span><br><span class="line"></span><br><span class="line">#启动 web app</span><br><span class="line">#host 参数指定可以访问本网站的 IP 地址。“0.0.0.0”表示任何主机都可以访问</span><br><span class="line">#port 参数指定启动端口。如：localhost:8000</span><br><span class="line">#debug 参数表示开启调试模式，开启之后，有以下优势。但是生产环境不建议使用。</span><br><span class="line"># 1.修改文件不需要每次手动重启，服务器会自动重启，</span><br><span class="line"># 2.如果发生错误，可以看到详细的错误信息</span><br><span class="line"></span><br><span class="line">app.run(host=&quot;0.0.0.0&quot;,port=8000,debug=True)</span><br></pre></td></tr></table></figure>
+<h2 id="注册路由方式一"><a href="#注册路由方式一" class="headerlink" title="注册路由方式一"></a>注册路由方式一</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#使用装饰器来诸恶路由，启动的参数为 URL 的路径，对应的会调用 index() 函数</span><br><span class="line">@app.route(&apos;/index&apos;)</span><br><span class="line">def index():</span><br><span class="line">	“““定义视图函数 相当于 MVC 中的 Controller”””</span><br><span class="line">	return &quot;首页&quot;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>如果直接使用/index </p>
+<p>那么不能兼容浏览器不能访问/index/和/index，</p>
+<p>解决办法，路径定义改成/index/</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@app.route(&apos;/index/&apos;)</span><br><span class="line">def index():</span><br><span class="line">	“““基于类的视图，相当于 MVC 中的 Controller”””</span><br><span class="line">	return &quot;首页&quot;</span><br></pre></td></tr></table></figure>
+<h3 id="在路径xxx后添加斜杠-后就可以访问xxx-和-xxx的原理"><a href="#在路径xxx后添加斜杠-后就可以访问xxx-和-xxx的原理" class="headerlink" title="在路径xxx后添加斜杠/后就可以访问xxx/ 和 xxx的原理"></a>在路径xxx后添加斜杠/后就可以访问xxx/ 和 xxx的原理</h3><blockquote>
+<p>重定向：当你访问url1的时候，服务器返回状态码302让用户访问url2</p>
+</blockquote>
+<p><img src="http://p5x7w1vrd.bkt.clouddn.com/7723806d8c55d0dfed46c9071638f04e.jpg" alt=""></p>
+<p>访问<code>http://localhost:5000/index</code>,观察浏览器网络请求情况，可以看到发生了重定向，重定向到了<code>http://localhost:5000/index/</code></p>
+<p><img src="http://p5x7w1vrd.bkt.clouddn.com/78036abb7fc223fc2ad28464d79865b7.jpg" alt=""></p>
+<h3 id="为什么这么做呢？"><a href="#为什么这么做呢？" class="headerlink" title="为什么这么做呢？"></a>为什么这么做呢？</h3><blockquote>
+<p>这是因为，如果不做重定向，不带/ 的（index）和带/的（index/）都可以访问到视图函数。</p>
+<p>那么就是说同一个视图函数对应着两个不同的路由，没有保证唯一url的原则</p>
+</blockquote>
+<h3 id="唯一url的好处"><a href="#唯一url的好处" class="headerlink" title="唯一url的好处"></a>唯一url的好处</h3><blockquote>
+<p>如果有两个url，那么在搜索引擎中会被索引两次,</p>
+<p>这样会浪费性能，影响搜索引擎的优化，没有这个必要。</p>
+</blockquote>
+<h2 id="注册路由方式二"><a href="#注册路由方式二" class="headerlink" title="注册路由方式二"></a>注册路由方式二</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#通过调用app的add_url_rule函数</span><br><span class="line">app.add_url_rule(&quot;/hello&quot;,view_func=hello)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>实际上方法1装饰器的模式，内部就是调用了add_url_rule函数。下面来看一下源码</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">def route(self, rule, **options):</span><br><span class="line">    &quot;&quot;&quot;Like :meth:`Flask.route` but for a blueprint.  The endpoint for the</span><br><span class="line">    :func:`url_for` function is prefixed with the name of the blueprint.</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    def decorator(f):</span><br><span class="line">        endpoint = options.pop(&quot;endpoint&quot;, f.__name__)</span><br><span class="line">        #划重点：实际内部调用的就是 add_url_rule</span><br><span class="line">        self.add_url_rule(rule, endpoint, f, **options)</span><br><span class="line">        return f</span><br><span class="line">    return decorator</span><br></pre></td></tr></table></figure>
+<h2 id="Flask-配置文件"><a href="#Flask-配置文件" class="headerlink" title="Flask 配置文件"></a>Flask 配置文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#载入配置文件</span><br><span class="line">app.config.from_object(&quot;cofing&quot;)</span><br><span class="line"></span><br><span class="line">#读取配置文件</span><br><span class="line">pritn(app.config[&quot;APP_NAME&quot;])</span><br></pre></td></tr></table></figure>
+<h3 id="要点"><a href="#要点" class="headerlink" title="要点"></a>要点</h3><ul>
+<li>配置文件中的 KEY <code>必须全部是大写</code>！[必须大写！]</li>
+<li>DEBUG 是 Flask 中的一个默认变量，如果想要覆盖，<code>必须名字一模一样</code>。</li>
+</ul>
+<h2 id="if-name-“name“"><a href="#if-name-“name“" class="headerlink" title="if name == “name“:"></a>if <strong>name</strong> == “<strong>name</strong>“:</h2><h3 id="为什么要添加这句：if-name-quot-name-quot"><a href="#为什么要添加这句：if-name-quot-name-quot" class="headerlink" title="为什么要添加这句：if __name__ == &quot;__name__&quot;"></a>为什么要添加这句：<code>if __name__ == &quot;__name__&quot;</code></h3><p>加入这个判断以后，只有在启动入口文件以后，才会执行。而在被其他模块导入的时候不会执行</p>
+<h3 id="加入的优势："><a href="#加入的优势：" class="headerlink" title="加入的优势："></a>加入的优势：</h3><p>在生产环境中，我们一般是采用 Nginx + uwsgi 来部署我们的 Python 项目，我们使用 uwsgi 来启动项目的 flask 服务的时候，这个时候项目的启动文件（我们这项目文件名为：run.py），只是作为一个模块被调用，这时加上入口判断，在生产环境就就不会执行 app.run()方法，否则就会启动两个 Flask 服务。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># run.py 文件代码</span><br><span class="line">if __name__ == &quot;__name__&quot;:</span><br><span class="line">    app.run(host=app.config[&quot;HOST&quot;], debug=app.config[&quot;DEBUG&quot;], port=app.config[&quot;PORT&quot;])</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/09/11/Flask/1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/11/Flask/1/" itemprop="url">慕课网Flask高级编程实战-知识点思维导图</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-11T15:01:17+08:00">
+                2018-09-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/09/07/window-to-mac/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1539,672 +2556,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/08/18/django-ckeditor/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="卡布奇诺">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="卡布奇诺">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/18/django-ckeditor/" itemprop="url">django-ckeditor后台富文本编辑器</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-18T08:04:10+08:00">
-                2018-08-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="安装-django-ckeditor"><a href="#安装-django-ckeditor" class="headerlink" title="安装 django-ckeditor"></a>安装 django-ckeditor</h2><h3 id="1-使用-pip-安装"><a href="#1-使用-pip-安装" class="headerlink" title="1 使用 pip 安装"></a>1 使用 pip 安装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install django-ckeditor</span><br></pre></td></tr></table></figure>
-<h3 id="2-注册到-django-项目中的-setting-py-在-INSTALLED-APPS-中加入-‘ckeditor’"><a href="#2-注册到-django-项目中的-setting-py-在-INSTALLED-APPS-中加入-‘ckeditor’" class="headerlink" title="2 注册到 django 项目中的 setting.py 在 INSTALLED_APPS 中加入 ‘ckeditor’"></a>2 注册到 django 项目中的 <code>setting.py</code> 在 <code>INSTALLED_APPS</code> 中加入 ‘ckeditor’</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">INSTALLED_APPS = [</span><br><span class="line">    # ...</span><br><span class="line">    &apos;ckeditor&apos;,</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-<h3 id="3-打开对应需要修改为富文本编辑的模型文件-models-py。例如我有个Blog模型："><a href="#3-打开对应需要修改为富文本编辑的模型文件-models-py。例如我有个Blog模型：" class="headerlink" title="3 打开对应需要修改为富文本编辑的模型文件 models.py。例如我有个Blog模型："></a>3 打开对应需要修改为富文本编辑的模型文件 <code>models.py</code>。例如我有个Blog模型：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from django.db import models</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">class Blog(models.Model):</span><br><span class="line">    title = models.CharField(max_length=50)</span><br><span class="line">    content = models.TextField()</span><br></pre></td></tr></table></figure>
-<p>其中，<code>title</code>是博客标题，<code>content</code>是博客内容。博客内容需要富文本编辑，则改成如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">from django.db import models</span><br><span class="line">from ckeditor.fields import RichTextField</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">class Blog(models.Model):</span><br><span class="line">    title = models.CharField(max_length=50)</span><br><span class="line">    content = RichTextField()</span><br></pre></td></tr></table></figure>
-<p>若你需要编辑器的语言是简体中文，设置<code>settings.py</code>的<code>LANGUAGE_CODE = &#39;zh-hans&#39;</code>。注意这里<code>zh-hans</code>都是小写。我发现写<code>zh-Hans</code>显示为繁体。另外，此时无法从本地上传图片，只能使用网络图片。可添加上传图片功能。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/08/18/django-ckeditor/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/05/23/shell-bingfa/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="卡布奇诺">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="卡布奇诺">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/23/shell-bingfa/" itemprop="url">Shell脚本并发及并发数的控制</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-23T10:10:38+08:00">
-                2018-05-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line"># Step1 创建有名管道</span><br><span class="line">[ -e ./fd1 ] || mkfifo ./fd1</span><br><span class="line"></span><br><span class="line"># 创建文件描述符，以可读（&lt;）可写（&gt;）的方式关联管道文件，这时候文件描述符3就有了有名管道文件的所有特性</span><br><span class="line">exec 3&lt;&gt; ./fd1   </span><br><span class="line"></span><br><span class="line"># 关联后的文件描述符拥有管道文件的所有特性,所以这时候管道文件可以删除，我们留下文件描述符来用就可以了</span><br><span class="line">rm -rf ./fd1                    </span><br><span class="line"></span><br><span class="line"># Step2 创建令牌 </span><br><span class="line">for i in `seq 1 2`;</span><br><span class="line">do</span><br><span class="line">    # echo 每次输出一个换行符,也就是一个令牌</span><br><span class="line">    echo &gt;&amp;3                   </span><br><span class="line">done</span><br><span class="line"></span><br><span class="line"># Step3 拿出令牌，进行并发操作</span><br><span class="line">for line in `seq 1 10`;</span><br><span class="line">do</span><br><span class="line">    read -u3                    # read 命令每次读取一行，也就是拿到一个令牌   </span><br><span class="line">    &#123;</span><br><span class="line">        echo $line </span><br><span class="line">        echo &gt;&amp;3                # 执行完一条命令会将令牌放回管道</span><br><span class="line">    &#125;&amp;</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line">wait</span><br><span class="line"></span><br><span class="line">exec 3&lt;&amp;-                       # 关闭文件描述符的读</span><br><span class="line">exec 3&gt;&amp;-                       # 关闭文件描述符的写</span><br><span class="line"></span><br><span class="line">作者：不智鱼</span><br><span class="line">链接：https://www.jianshu.com/p/701952ffb755</span><br><span class="line">來源：简书</span><br><span class="line">著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/05/08/laravel-log/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="卡布奇诺">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="卡布奇诺">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/08/laravel-log/" itemprop="url">laravel 利用中间件进行操作日志记录</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-08T21:50:18+08:00">
-                2018-05-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="利用中间件进行操作日志记录过程："><a href="#利用中间件进行操作日志记录过程：" class="headerlink" title="利用中间件进行操作日志记录过程："></a>利用中间件进行操作日志记录过程：</h2><h3 id="1、创建中间件"><a href="#1、创建中间件" class="headerlink" title="1、创建中间件"></a>1、创建中间件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php artisan make:middleware AdminOperationLog</span><br></pre></td></tr></table></figure>
-<h3 id="2、生成了文件-app-Http-Middleware-AdminOperationLog-php"><a href="#2、生成了文件-app-Http-Middleware-AdminOperationLog-php" class="headerlink" title="2、生成了文件./app/Http/Middleware/AdminOperationLog.php"></a>2、生成了文件<code>./app/Http/Middleware/AdminOperationLog.php</code></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">代码如下：</span><br><span class="line"></span><br><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">namespace App\Http\Middleware;</span><br><span class="line"></span><br><span class="line">use Closure;</span><br><span class="line">use Illuminate\Http\Request;</span><br><span class="line">use Illuminate\Support\Facades\Auth;</span><br><span class="line">use App\Http\Models\OperationLog;</span><br><span class="line"></span><br><span class="line">class AdminOperationLog</span><br><span class="line">&#123;</span><br><span class="line">    /**</span><br><span class="line">     * Handle an incoming request.</span><br><span class="line">     *</span><br><span class="line">     * @param  \Illuminate\Http\Request  $request</span><br><span class="line">     * @param  \Closure  $next</span><br><span class="line">     * @return mixed</span><br><span class="line">     */</span><br><span class="line">    public function handle($request, Closure $next)</span><br><span class="line">    &#123;</span><br><span class="line">        $user_id = 0;</span><br><span class="line">        if(Auth::check()) &#123;</span><br><span class="line">            $user_id = (int) Auth::id();</span><br><span class="line">        &#125;</span><br><span class="line">        $_SERVER[&apos;admin_uid&apos;] = $user_id;</span><br><span class="line">        if(&apos;GET&apos; != $request-&gt;method())&#123;</span><br><span class="line">            $input = $request-&gt;all();</span><br><span class="line">            $log = new OperationLog(); # 提前创建表、model</span><br><span class="line">            $log-&gt;uid = $user_id;</span><br><span class="line">            $log-&gt;path = $request-&gt;path();</span><br><span class="line">            $log-&gt;method = $request-&gt;method();</span><br><span class="line">            $log-&gt;ip = $request-&gt;ip();</span><br><span class="line">            $log-&gt;sql = &apos;&apos;;</span><br><span class="line">            $log-&gt;input = json_encode($input, JSON_UNESCAPED_UNICODE);</span><br><span class="line">            $log-&gt;save();   # 记录日志</span><br><span class="line">        &#125;</span><br><span class="line">        return $next($request);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="3、中间件引入-app-Http-Kernel-php"><a href="#3、中间件引入-app-Http-Kernel-php" class="headerlink" title="3、中间件引入 ./app/Http/Kernel.php"></a>3、中间件引入 <code>./app/Http/Kernel.php</code></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">protected $middlewareGroups = [</span><br><span class="line">        &apos;web&apos; =&gt; [</span><br><span class="line">            ...</span><br><span class="line">            \App\Http\Middleware\AdminOperationLog::class,</span><br><span class="line">            ...</span><br><span class="line">        ],</span><br><span class="line"></span><br><span class="line">        &apos;api&apos; =&gt; [</span><br><span class="line">            &apos;throttle:60,1&apos;,</span><br><span class="line">            &apos;bindings&apos;,</span><br><span class="line">        ],</span><br><span class="line">    ];</span><br></pre></td></tr></table></figure>
-<h3 id="此时进行操作时就会记录操作日志"><a href="#此时进行操作时就会记录操作日志" class="headerlink" title="此时进行操作时就会记录操作日志"></a>此时进行操作时就会记录操作日志</h3>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/05/08/laravel-install-captcha/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="卡布奇诺">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="卡布奇诺">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/08/laravel-install-captcha/" itemprop="url">laravel 5.5 登录验证码 captcha 引入</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-08T21:47:45+08:00">
-                2018-05-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>前提： 开启<code>Laravel</code>的用户认证功能</p>
-<h2 id="1、安装-Captcha"><a href="#1、安装-Captcha" class="headerlink" title="1、安装 Captcha"></a>1、安装 Captcha</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">安装 Captcha+</span><br><span class="line"></span><br><span class="line">$ composer require mews/captcha</span><br><span class="line"></span><br><span class="line">配置</span><br><span class="line"></span><br><span class="line">/config/app.php</span><br><span class="line">&apos;providers&apos; =&gt; [</span><br><span class="line">    // ...</span><br><span class="line">    Mews\Captcha\CaptchaServiceProvider::class,</span><br><span class="line">]</span><br><span class="line">&apos;aliases&apos; =&gt; [</span><br><span class="line">    // ...</span><br><span class="line">    &apos;Captcha&apos; =&gt; Mews\Captcha\Facades\Captcha::class,</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">自定义配置</span><br><span class="line">$ php artisan vendor:publish</span><br><span class="line"></span><br><span class="line">运行之后，就可以在 config/captcha.php 中进行配置了。这里使用默认配置。</span><br></pre></td></tr></table></figure>
-<h2 id="2、使用-Captcha-为-auth-组件添加验证码功能"><a href="#2、使用-Captcha-为-auth-组件添加验证码功能" class="headerlink" title="2、使用 Captcha 为 auth 组件添加验证码功能"></a>2、使用 Captcha 为 auth 组件添加验证码功能</h2><p>在登录视图中增加验证码的选项，可以加到密码和 <code>remember me</code> 之间</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">/resources/views/auth/login.blade.php</span><br><span class="line">&lt;div class=&quot;form-group&quot;&gt;</span><br><span class="line">  &lt;label for=&quot;captcha&quot; class=&quot;col-md-4 control-label&quot;&gt;验证码&lt;/label&gt;</span><br><span class="line">      &lt;div class=&quot;form-group&quot;&gt;</span><br><span class="line">          &lt;div class=&quot;col-md-3&quot;&gt;</span><br><span class="line">              &lt;input id=&quot;captcha&quot;  class=&quot;form-control&quot; type=&quot;captcha&quot; name=&quot;captcha&quot; value=&quot;&#123;&#123; old(&apos;captcha&apos;)  &#125;&#125;&quot; required&gt;</span><br><span class="line">              @if($errors-&gt;has(&apos;captcha&apos;))</span><br><span class="line">                  &lt;div class=&quot;col-md-12&quot;&gt;</span><br><span class="line">                      &lt;p class=&quot;text-danger text-left&quot;&gt;&lt;strong&gt;&#123;&#123;$errors-&gt;first(&apos;captcha&apos;)&#125;&#125;&lt;/strong&gt;&lt;/p&gt;</span><br><span class="line">                  &lt;/div&gt;</span><br><span class="line">              @endif</span><br><span class="line">          &lt;/div&gt;</span><br><span class="line">          &lt;div class=&quot;col-md-4&quot;&gt;</span><br><span class="line">              &lt;img src=&quot;&#123;&#123;captcha_src()&#125;&#125;&quot; style=&quot;cursor: pointer&quot; onclick=&quot;this.src=&apos;&#123;&#123;captcha_src()&#125;&#125;&apos;+Math.random()&quot;&gt;</span><br><span class="line">          &lt;/div&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br></pre></td></tr></table></figure>
-<p>重写 <code>AuthController</code> 登录验证方法，并自定义提示信息：<br>修改 <code>AppHttpControllersAuthLoginController</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">首先要引入如下代码：</span><br><span class="line">use Illuminate\Http\Request;</span><br><span class="line"></span><br><span class="line">重写validateLogin方法：</span><br><span class="line"></span><br><span class="line">在验证里面加入验证码的规则验证即可</span><br><span class="line">/**</span><br><span class="line"> * DESC: 重写 AuthenticatesUsers 登录验证方法，并自定义提示信息;</span><br><span class="line"> * 原验证方法 Illuminate\Foundation\Auth\AuthenticatesUsers</span><br><span class="line"> * @param Request $request</span><br><span class="line"> */</span><br><span class="line">protected function validateLogin(Request $request)&#123;</span><br><span class="line">    $this-&gt;validate($request, [</span><br><span class="line">        $this-&gt;username() =&gt; &apos;required|string&apos;,</span><br><span class="line">        &apos;password&apos; =&gt; &apos;required|string&apos;,</span><br><span class="line">        &apos;captcha&apos; =&gt; &apos;required|captcha&apos;,</span><br><span class="line">    ],[</span><br><span class="line">        &apos;captcha.required&apos; =&gt; &apos;请填写验证码&apos;,</span><br><span class="line">        &apos;captcha.captcha&apos; =&gt; &apos;验证码错误&apos;,</span><br><span class="line">    ]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/05/02/centos-install-mongodb/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="卡布奇诺">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="卡布奇诺">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/02/centos-install-mongodb/" itemprop="url">centos7 yum安装mongodb 3.6</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-02T12:56:58+08:00">
-                2018-05-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MongoDB/" itemprop="url" rel="index">
-                    <span itemprop="name">MongoDB</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="配置MongoDB的yum源"><a href="#配置MongoDB的yum源" class="headerlink" title="配置MongoDB的yum源"></a>配置MongoDB的yum源</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 编辑文件</span><br><span class="line">vim /etc/yum.repos.d/mongodb-org-3.6.repo </span><br><span class="line"></span><br><span class="line"># 添加以下内容</span><br><span class="line">[mongodb-org-3.6]</span><br><span class="line">name=MongoDB Repository</span><br><span class="line">baseurl=https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.6/x86_64/</span><br><span class="line">gpgcheck=1</span><br><span class="line">enabled=1</span><br><span class="line">gpgkey=https://www.mongodb.org/static/pgp/server-3.6.asc</span><br></pre></td></tr></table></figure>
-<h3 id="安装mongodb"><a href="#安装mongodb" class="headerlink" title="安装mongodb"></a>安装mongodb</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y mongodb-org</span><br></pre></td></tr></table></figure>
-<h3 id="相关操作"><a href="#相关操作" class="headerlink" title="相关操作"></a>相关操作</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 启动</span><br><span class="line">systemctl start mongod.service</span><br><span class="line"></span><br><span class="line"># 停止</span><br><span class="line">systemctl stop mongod.service</span><br><span class="line"></span><br><span class="line"># 重启</span><br><span class="line">systemctl restart mongod.service</span><br></pre></td></tr></table></figure>
-<h3 id="编辑配置文件"><a href="#编辑配置文件" class="headerlink" title="编辑配置文件"></a>编辑配置文件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"># 编辑默认配置文件</span><br><span class="line">vim /etc/mongod.conf</span><br><span class="line"></span><br><span class="line"># 数据存放位置</span><br><span class="line">storage:</span><br><span class="line">  dbPath: /var/lib/mongo</span><br><span class="line">  journal:</span><br><span class="line">    enabled: true</span><br><span class="line">#  engine:</span><br><span class="line">#  mmapv1:</span><br><span class="line">#  wiredTiger:</span><br><span class="line"></span><br><span class="line"># 网络相关配置</span><br><span class="line">net:</span><br><span class="line">  port: 27017    # 默认端口</span><br><span class="line">  bindIp: 0.0.0.0  # 监听IP配置，开启远程连接可以注释本行或者修改IP为0.0.0.0</span><br><span class="line"></span><br><span class="line"># 是否开启权限验证</span><br><span class="line">security:</span><br><span class="line">  authorization: enabled</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2254,7 +2610,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">160</span>
+                  <span class="site-state-item-count">165</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2276,7 +2632,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">101</span>
+                  <span class="site-state-item-count">102</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

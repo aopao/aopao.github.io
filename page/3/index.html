@@ -271,6 +271,955 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/04/28/Ubuntu16-04-install-lnmp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/28/Ubuntu16-04-install-lnmp/" itemprop="url">Ubuntu 16.04 编译安装 LNMP 环境</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-28T13:02:32+08:00">
+                2018-04-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>源代码包放在 /usr/local/src 目录下，安装路径在 /usr/local下</p>
+</blockquote>
+<h2 id="编译-Nginx"><a href="#编译-Nginx" class="headerlink" title="编译 Nginx"></a>编译 Nginx</h2><ul>
+<li><p>下载 Nginx 源码包，我选择的是 1.10.3 稳定版</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># cd /usr/local/src</span><br><span class="line">$ wget http://nginx.org/download/nginx-1.10.3.tar.gz</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>解压源码包</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd /usr/local/src</span><br><span class="line">$ tar vfzx nginx-1.10.3.tar.gz</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>配置安装路径</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd /usr/local/src/nginx-1.10.3/</span><br><span class="line">$ ./configure --prefix=usr/local/nginx</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>此时编译报错：没有 C 编译器 <code>./configure: error: C compiler cc is not found</code></p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install build-essential</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>再次配置安装路径，报错：缺少 PCRE 库 <code>./configure: error: the HTTP rewrite module requires the PCRE library.</code></p>
+<ul>
+<li><p>下载 pcre 库源码并解压</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ cd /usr/local/src/</span><br><span class="line">$ wget https://ftp.pcre.org/pub/pcre/pcre-8.40.tar.gz</span><br><span class="line">$ tar vfxz pcre-8.40.tar.gz</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>再次配置安装路径</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd /usr/local/src/nginx-1.10.3/</span><br><span class="line">$ ./configure --prefix=/usr/local/nginx --with-pcre=/usr/local/src/pcre-8.40</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>报错：缺少 zlib 库  <code>./configure: error: the HTTP gzip module requires the zlib library.</code></p>
+<ul>
+<li><p>如上方法，下载 zlib 源码并解压</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ cd /usr/local/src/</span><br><span class="line">$ wget http://www.zlib.net/zlib-1.2.11.tar.gz</span><br><span class="line">$ tar vfzx zlib-1.2.11.tar.gz</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>再次配置安装路径</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd /usr/local/src/nginx-1.10.3/</span><br><span class="line">$ ./configure --prefix=/usr/local/nginx --with-pcre=/usr/local/src/pcre-8.40 --with-zlib=/usr/local/src/zlib-1.2.11</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>此时成功了 o(￣▽￣)<br>  <img src="http://p5x7w1vrd.bkt.clouddn.com/ae1e13a91055019a0649d572917d7166.jpg" alt=""></p>
+</li>
+<li><p>别忘了最后一步</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>启动 nginx</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ /user/local/nginx/sbin/nginx</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>可能会出现的问题</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">The program &apos;nginx&apos; can be found in the following packages:</span><br><span class="line"> * nginx-core</span><br><span class="line"> * nginx-extras</span><br><span class="line"> * nginx-full</span><br><span class="line"> * nginx-light</span><br><span class="line">Try: apt install &lt;selected package&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code>* 解决方案：
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">apt-get install nginx-core</span><br><span class="line">apt-get install nginx-extras</span><br><span class="line">apt-get install nginx-full</span><br><span class="line">apt-get install nginx-light</span><br></pre></td></tr></table></figure>
+</code></pre><ul>
+<li><p>查看网页</p>
+<ul>
+<li><p>在chrome查看80端口，出现该页面，说明我已经成功安装nginx了o(￣▽￣)</p>
+<p><img src="http://p5x7w1vrd.bkt.clouddn.com/13fe2074a8c91c34a29bbfe7f2974ffd.jpg" alt=""></p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="编译-PHP"><a href="#编译-PHP" class="headerlink" title="编译 PHP"></a>编译 PHP</h3><ul>
+<li>下载源码包，我选择的是最新稳定版 7.1.4</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ cd /usr/local/src/</span><br><span class="line">$ wget http://cn2.php.net/get/php-7.1.4.tar.gz/from/this/mirror</span><br><span class="line">$ mv mirror php-7.1.4.tar.gz</span><br></pre></td></tr></table></figure>
+<ul>
+<li>解压源码包</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd /usr/local/src/</span><br><span class="line">$ tar vfxz php-7.1.4.tar.gz</span><br></pre></td></tr></table></figure>
+<ul>
+<li>配置安装路径</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd /usr/local/src/php-7.1.4</span><br><span class="line">$ ./configure --prefix=/usr/local/php --with-gd --enable-gd-native-ttf --enable-gd-jis-conv --enable-mysqlnd --with-pdo-mysql=mysqlnd --with-openssl --enable-mbstring --enable-fpm</span><br></pre></td></tr></table></figure>
+<ul>
+<li>报错：缺少xml2-config，需要安装libxml2 <code>configure: error: xml2-config not found. Please check your libxml2 installation.</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 安装libxml2和libxml2-dev</span><br><span class="line">$ apt-get install libxml2 libxml2-dev</span><br></pre></td></tr></table></figure>
+<ul>
+<li>继续配置安装路径，报错：缺少openssl <code>configure: error: Cannot find OpenSSL’s</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 安装openssl和libssl-dev Ubuntu上没有openssl-develb包</span><br><span class="line">$ apt-get install openssl libssl-dev</span><br></pre></td></tr></table></figure>
+<ul>
+<li>继续配置安装路径，报错：<code>configure: error: Cannot find OpenSSL’s libraries</code></li>
+</ul>
+<blockquote>
+<p>解决方案：<a href="http://stackoverflow.com/questions/39919283/configure-error-cannot-find-openssls-libraries-ubuntu-16-04" target="_blank" rel="noopener">http://stackoverflow.com/questions/39919283/configure-error-cannot-find-openssls-libraries-ubuntu-16-04</a></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ apt-get install pkg-config libssl-dev openssl</span><br></pre></td></tr></table></figure>
+<ul>
+<li>继续配置安装路径，缺少gd库，但是我找了下，并没有php7.1-gd这个库，退而且其次，安装了jpeg和png的库 <code>configure: error: png.h not found.</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ apt-get install libjpeg-dev libpng-dev</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>继续配置安装路径，这一次终于成功了😄<br><img src="http://p5x7w1vrd.bkt.clouddn.com/ff3f0366b94548a473c74f8030cfdad9.jpg" alt=""></p>
+</li>
+<li><p>编译PHP</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd /usr/local/src/php-7.1.4</span><br><span class="line">$ make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+<ul>
+<li>几个PHP相关的配置文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ cd /usr/local/php</span><br><span class="line">$ cp etc/php-fpm.conf.default etc/php-fpm.conf</span><br><span class="line">$ cd /usr/local/src/php-7.1.4</span><br><span class="line">$ cp php.ini-development /usr/local/php/etc/php.ini</span><br></pre></td></tr></table></figure>
+<h3 id="Nginx和PHP整合"><a href="#Nginx和PHP整合" class="headerlink" title="Nginx和PHP整合"></a>Nginx和PHP整合</h3><ul>
+<li>修改 Nginx 配置文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 位置 /etc/nginx/nginx.conf</span><br><span class="line">location ~ \.php$ &#123;</span><br><span class="line">	root           /var/wwwroot/test.com/;</span><br><span class="line">	fastcgi_pass   127.0.0.1:9000;</span><br><span class="line">	fastcgi_index  index.php;</span><br><span class="line">	fastcgi_param  SCRIPT_FILENAME $DOCUMENT_ROOT$fastcgi_script_name;</span><br><span class="line">	include        fastcgi_params;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>配置文件里这些都给你写了，其实只要把注释去掉即可。</p>
+<p>然后优雅的重启下 <code>Nginx</code> 和 <code>php-fpm</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># 目录 /usr/local/nginx</span><br><span class="line">$ ./sbin/nginx -s reload</span><br><span class="line"># 目录 /usr/local/php</span><br><span class="line">$ ./sbin/php-fpm</span><br><span class="line">```	</span><br><span class="line"></span><br><span class="line">报错：**WARNING: Nothing matches the include pattern /usr/local/php/etc/php-fpm.d/*.conf from /usr/local/php/etc/php-fpm.conf at line 125.**</span><br><span class="line"></span><br><span class="line">很简单，在 `/usr/local/php/etc/php-fpm.d/` 目录下，把 `www.conf.default` 重命名或复制份，以 `conf` 为后缀即可</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- 出现报错：</span><br></pre></td></tr></table></figure>
+<p>ERROR: [pool www] cannot get gid for group ‘nobody’<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 解决：</span><br></pre></td></tr></table></figure></p>
+<p>$ cd /usr/local/php/etc/php-fpm.d/<br>$ vim <a href="http://www.conf" target="_blank" rel="noopener">www.conf</a></p>
+<h1 id="把group-后边的-nobody-改为-www-data"><a href="#把group-后边的-nobody-改为-www-data" class="headerlink" title="把group 后边的 nobody  改为 www-data"></a>把<code>group</code> 后边的 <code>nobody</code>  改为 <code>www-data</code></h1><p>group=www-data<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">然后再启动`php-fpm`。</span><br><span class="line"></span><br><span class="line">ok~</span><br><span class="line">![](http://p5x7w1vrd.bkt.clouddn.com/cca4245fe2abe651899ca691fcdcee56.jpg)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">### 编译MySQL</span><br><span class="line"></span><br><span class="line">* 新增mysql用户组和用户</span><br></pre></td></tr></table></figure></p>
+<p>groupadd mysql<br>useradd -g mysql mysql<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 下载源码</span><br></pre></td></tr></table></figure></p>
+<h1 id="目录-usr-local-src"><a href="#目录-usr-local-src" class="headerlink" title="目录 /usr/local/src/"></a>目录 /usr/local/src/</h1><p>$ wget <a href="http://dev.mysql.com/get/Downloads/MySQL-5.7/mysql-5.7.10.tar.gz" target="_blank" rel="noopener">http://dev.mysql.com/get/Downloads/MySQL-5.7/mysql-5.7.10.tar.gz</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 安装说明文档</span><br></pre></td></tr></table></figure></p>
+<h1 id="Preconfiguration-setup"><a href="#Preconfiguration-setup" class="headerlink" title="Preconfiguration setup"></a>Preconfiguration setup</h1><p>shell&gt; groupadd mysql<br>shell&gt; useradd -r -g mysql -s /bin/false mysql</p>
+<h1 id="Beginning-of-source-build-specific-instructions"><a href="#Beginning-of-source-build-specific-instructions" class="headerlink" title="Beginning of source-build specific instructions"></a>Beginning of source-build specific instructions</h1><p>shell&gt; tar zxvf mysql-VERSION.tar.gz<br>shell&gt; cd mysql-VERSION<br>shell&gt; mkdir bld<br>shell&gt; cd bld<br>shell&gt; cmake ..<br>shell&gt; make<br>shell&gt; make install</p>
+<h1 id="End-of-source-build-specific-instructions"><a href="#End-of-source-build-specific-instructions" class="headerlink" title="End of source-build specific instructions"></a>End of source-build specific instructions</h1><h1 id="Postinstallation-setup"><a href="#Postinstallation-setup" class="headerlink" title="Postinstallation setup"></a>Postinstallation setup</h1><p>shell&gt; cd /usr/local/mysql<br>shell&gt; chown -R mysql .<br>shell&gt; chgrp -R mysql .<br>shell&gt; bin/mysql_install_db –user=mysql    # Before MySQL 5.7.6<br>shell&gt; bin/mysqld –initialize –user=mysql # MySQL 5.7.6 and up<br>shell&gt; bin/mysql_ssl_rsa_setup              # MySQL 5.7.6 and up<br>shell&gt; chown -R root .<br>shell&gt; chown -R mysql data<br>shell&gt; bin/mysqld_safe –user=mysql &amp;</p>
+<h1 id="Next-command-is-optional"><a href="#Next-command-is-optional" class="headerlink" title="Next command is optional"></a>Next command is optional</h1><p>shell&gt; cp support-files/mysql.server /etc/init.d/mysql.server<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 报错`The program &apos;cmake&apos; is currently not installed. `</span><br></pre></td></tr></table></figure></p>
+<p>$ apt install cmake<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+<p>cmake -DCMAKE_INSTALL_PREFIX=/usr/local/mysql -DMYSQL_DATADIR=/usr/local/mysql/data -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLLATION=utf8_general_ci -DMYSQL_TCP_PORT=3306 -DMYSQL_USER=mysql -DWITH_MYISAM_STORAGE_ENGINE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_ARCHIVE_STORAGE_ENGINE=1 -DWITH_BLACKHOLE_STORAGE_ENGINE=1 -DWITH_MEMORY_STORAGE_ENGINE=1 -DDOWNLOAD_BOOST=1 -DWITH_BOOST=/usr/local/boost<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">### 安装 nginx-rtmp-module</span><br><span class="line"></span><br><span class="line">- 下载 nginx-rtmp-module</span><br></pre></td></tr></table></figure></p>
+<p>git clone <a href="https://github.com/sergey-dryabzhinsky/nginx-rtmp-module.git" target="_blank" rel="noopener">https://github.com/sergey-dryabzhinsky/nginx-rtmp-module.git</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 安装 Nginx 依赖关系</span><br></pre></td></tr></table></figure></p>
+<p>sudo apt-get install build-essential libpcre3 libpcre3-dev libssl-dev<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 安装</span><br></pre></td></tr></table></figure></p>
+<p>./configure –prefix=/usr/local/nginx –with-pcre=/usr/local/src/pcre-8.40 –with-zlib=/usr/local/src/zlib-1.2.11 –with-http_ssl_module –add-module=/usr/local/src/nginx-rtmp-module<br>make -j 1<br>sudo make install<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&gt; `--add-module=/usr/local/src/nginx-rtmp-module` 写成你 Git 下来的那个路径</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- 配置 `Nginx` 文件</span><br><span class="line"> </span><br><span class="line">`nginx`中的应用程序意味着`rtmp`端点。</span><br><span class="line">基本`uri`语法:`rtmp://nginx_host[:nginx_port]/app_name/stream_name`</span><br><span class="line">我们将使用流作为流名称，因此我们的端点将是:`rtmp://localhost/show/stream`，以后可以作为`http://localhost:8080/hls/stream.m3u8`。</span><br><span class="line"></span><br><span class="line">- `rtmp module config`</span><br></pre></td></tr></table></figure></p>
+<p>rtmp {<br>    server {<br>        listen 1935; # Listen on standard RTMP port<br>        chunk_size 4000;</p>
+<pre><code>    application show {
+        live on;
+        # Turn on HLS
+        hls on;
+        hls_path /mnt/hls/; #是播放的流文件以及视频分段文件的地址，你可以更改任意位置
+        hls_fragment 3; #3秒片段
+        hls_playlist_length 60; #60秒播放列表。
+        # disable consuming the stream from nginx as rtmp
+        deny play all;
+    }
+}
+</code></pre><p>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">* `http server config`</span><br></pre></td></tr></table></figure></p>
+<p>server {<br>    listen 8080;</p>
+<pre><code>location /hls {
+    # Disable cache
+    add_header Cache-Control no-cache;
+
+    # CORS setup
+    add_header &apos;Access-Control-Allow-Origin&apos; &apos;*&apos; always;
+    add_header &apos;Access-Control-Expose-Headers&apos; &apos;Content-Length&apos;;
+
+    # allow CORS preflight requests
+    if ($request_method = &apos;OPTIONS&apos;) {
+        add_header &apos;Access-Control-Allow-Origin&apos; &apos;*&apos;;
+        add_header &apos;Access-Control-Max-Age&apos; 1728000;
+        add_header &apos;Content-Type&apos; &apos;text/plain charset=UTF-8&apos;;
+        add_header &apos;Content-Length&apos; 0;
+        return 204;
+    }
+
+    types {
+        application/vnd.apple.mpegurl m3u8;
+        video/mp2t ts;
+    }
+
+    root /mnt/;
+}
+</code></pre><p>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">* `nginx.conf` 配置文件模板</span><br></pre></td></tr></table></figure></p>
+<p>worker_processes  auto;<br>events {<br>    worker_connections  1024;<br>}</p>
+<h1 id="RTMP-configuration"><a href="#RTMP-configuration" class="headerlink" title="RTMP configuration"></a>RTMP configuration</h1><p>rtmp {<br>    server {<br>        listen 1935; # Listen on standard RTMP port<br>        chunk_size 4000;</p>
+<pre><code>    application show {
+        live on;
+        # Turn on HLS
+        hls on;
+        hls_path /mnt/hls/;
+        hls_fragment 3;
+        hls_playlist_length 60;
+        # disable consuming the stream from nginx as rtmp
+        deny play all;
+    }
+}
+</code></pre><p>}</p>
+<p>http {<br>    sendfile off;<br>    tcp_nopush on;<br>    aio on;<br>    directio 512;<br>    default_type application/octet-stream;</p>
+<pre><code>server {
+    listen 8080;
+
+    location / {
+        # Disable cache
+        add_header &apos;Cache-Control&apos; &apos;no-cache&apos;;
+
+        # CORS setup
+        add_header &apos;Access-Control-Allow-Origin&apos; &apos;*&apos; always;
+        add_header &apos;Access-Control-Expose-Headers&apos; &apos;Content-Length&apos;;
+
+        # allow CORS preflight requests
+        if ($request_method = &apos;OPTIONS&apos;) {
+            add_header &apos;Access-Control-Allow-Origin&apos; &apos;*&apos;;
+            add_header &apos;Access-Control-Max-Age&apos; 1728000;
+            add_header &apos;Content-Type&apos; &apos;text/plain charset=UTF-8&apos;;
+            add_header &apos;Content-Length&apos; 0;
+            return 204;
+        }
+
+        types {
+            application/dash+xml mpd;
+            application/vnd.apple.mpegurl m3u8;
+            video/mp2t ts;
+        }
+
+        root /mnt/;
+    }
+}
+</code></pre><p>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 重启 `Nginx`</span><br></pre></td></tr></table></figure></p>
+<p>$ /usr/local/nginx/sbin/nginx -t #测试配置文件是否成功<br>$ /usr/local/nginx/sbin/nginx -t &amp;&amp; nginx -s reload #启动并重新加载配置文件<br><code>`</code></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/04/26/Centos-install-Docker/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/26/Centos-install-Docker/" itemprop="url">CentOS7安装Docker</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-26T09:28:17+08:00">
+                2018-04-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="1-、安装说明"><a href="#1-、安装说明" class="headerlink" title="1 、安装说明"></a>1 、安装说明</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Docker支持以下的CentOS版本：</span><br><span class="line"></span><br><span class="line">CentOS 7 (64-bit)</span><br><span class="line"></span><br><span class="line">CentOS 6.5 (64-bit) 或更高的版本</span><br></pre></td></tr></table></figure>
+<h4 id="前提条件"><a href="#前提条件" class="headerlink" title="前提条件"></a>前提条件</h4><p>目前，CentOS 仅发行版本中的内核支持 Docker。<br>Docker 运行在 CentOS 7 上，要求系统为64位、系统内核版本为 3.10 以上。<br>Docker 运行在 CentOS-6.5 或更高的版本的 CentOS 上，要求系统为64位、系统内核版本为 2.6.32-431 或者更高版本。</p>
+<p>###2、使用 yum 安装（CentOS 7下）</p>
+<p>Docker 要求 CentOS 系统的内核版本高于 3.10 ，查看本页面的前提条件来验证你的CentOS 版本是否支持 Docker 。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#查看你当前的内核版本</span><br><span class="line">uname -r</span><br><span class="line"></span><br><span class="line">#安装 Docker</span><br><span class="line">yum -y install docker</span><br><span class="line"></span><br><span class="line">#启动 Docker 后台服务</span><br><span class="line">service docker start</span><br><span class="line"></span><br><span class="line">#测试运行 hello-world,由于本地没有hello-world这个镜像，所以会下载一个hello-world的镜像，并在容器内运行。</span><br><span class="line">docker run hello-world</span><br></pre></td></tr></table></figure>
+<h3 id="3、使用脚本安装-Docker"><a href="#3、使用脚本安装-Docker" class="headerlink" title="3、使用脚本安装 Docker"></a>3、使用脚本安装 Docker</h3><p>1、使用 sudo 或 root 权限登录 Centos。<br>2、确保 yum 包更新到最新。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#确保 yum 包更新到最新</span><br><span class="line">sudo yum update</span><br><span class="line"></span><br><span class="line">#执行 Docker 安装脚本,执行这个脚本会添加 docker.repo 源并安装 Docker。</span><br><span class="line">curl -fsSL https://get.docker.com/ | sh</span><br><span class="line"></span><br><span class="line">#启动 Docker 进程</span><br><span class="line">sudo service docker start</span><br><span class="line"></span><br><span class="line">#验证 docker 是否安装成功并在容器中执行一个测试的镜像</span><br><span class="line">sudo docker run hello-world</span><br></pre></td></tr></table></figure>
+<p>到此，docker 在 CentOS 系统的安装完成。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/04/26/brew_change/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/26/brew_change/" itemprop="url">HomeBrew 更换源</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-26T09:28:17+08:00">
+                2018-04-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mac/" itemprop="url" rel="index">
+                    <span itemprop="name">Mac</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="1-、更换国内源"><a href="#1-、更换国内源" class="headerlink" title="1 、更换国内源"></a>1 、更换国内源</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">替换brew.git:</span><br><span class="line">cd &quot;$(brew --repo)&quot;</span><br><span class="line">git remote set-url origin https://mirrors.ustc.edu.cn/brew.git</span><br><span class="line"></span><br><span class="line">替换homebrew-core.git:</span><br><span class="line">cd &quot;$(brew --repo)/Library/Taps/homebrew/homebrew-core&quot;</span><br><span class="line">git remote set-url origin https://mirrors.ustc.edu.cn/homebrew-core.git</span><br></pre></td></tr></table></figure>
+<h3 id="1-、更换默认源"><a href="#1-、更换默认源" class="headerlink" title="1 、更换默认源"></a>1 、更换默认源</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">重置brew.git:</span><br><span class="line">cd &quot;$(brew --repo)&quot;</span><br><span class="line">git remote set-url origin https://github.com/Homebrew/brew.git</span><br><span class="line"></span><br><span class="line">重置homebrew-core.git:</span><br><span class="line">cd &quot;$(brew --repo)/Library/Taps/homebrew/homebrew-core&quot;</span><br><span class="line">git remote set-url origin https://github.com/Homebrew/homebrew-core.git</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/04/25/phome-sign/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/25/phome-sign/" itemprop="url">phome标签</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-25T11:11:05+08:00">
+                2018-04-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="首页模板支持的变量说明"><a href="#首页模板支持的变量说明" class="headerlink" title="首页模板支持的变量说明"></a>首页模板支持的变量说明</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[!--news.url--]：网站地址(参数设置的站点地址)</span><br><span class="line"></span><br><span class="line">[!--class.menu--]：一级栏目导航</span><br><span class="line"></span><br><span class="line">[!--pagetitle--]：网站名称</span><br><span class="line"></span><br><span class="line">[!--pagekey--]：页面关键字</span><br><span class="line"></span><br><span class="line">[!--pagedes--]：页面描述</span><br></pre></td></tr></table></figure>
+<h3 id="封面模板"><a href="#封面模板" class="headerlink" title="封面模板"></a>封面模板</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">[!--pagetitle--]：页面标题	</span><br><span class="line"></span><br><span class="line">[!--pagekey--]：页面关键字	</span><br><span class="line"></span><br><span class="line">[!--pagedes--]：页面描述</span><br><span class="line"></span><br><span class="line">[!--news.url--]:网站地址(参数设置的站点地址)	</span><br><span class="line"></span><br><span class="line">[!--newsnav--]：所在位置导航条	</span><br><span class="line"></span><br><span class="line">[!--class.menu--]：一级栏目导航</span><br><span class="line"></span><br><span class="line">[!--self.classid--]: 本栏目/专题ID	</span><br><span class="line"></span><br><span class="line">[!--class.keywords--]: 栏目/专题关键字	</span><br><span class="line"></span><br><span class="line">[!--class.classimg--]: 栏目/专题缩略图</span><br><span class="line"></span><br><span class="line">[!--class.name--]：栏目名	</span><br><span class="line"></span><br><span class="line">[!--class.intro--]:栏目/专题简介	</span><br><span class="line"></span><br><span class="line">[!--bclass.id--]: 父栏目ID</span><br><span class="line"></span><br><span class="line">[!--bclass.name--]:父栏目名称</span><br></pre></td></tr></table></figure>
+<h3 id="内容模板支持的变量："><a href="#内容模板支持的变量：" class="headerlink" title="内容模板支持的变量："></a>内容模板支持的变量：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line">[!--pagetitle--]:页面标题	</span><br><span class="line"></span><br><span class="line">[!--pagekey--]：页面关键字	</span><br><span class="line"></span><br><span class="line">[!--pagedes--]：页面描述</span><br><span class="line"></span><br><span class="line">[!--newsnav--]: 导航条</span><br><span class="line"></span><br><span class="line">[!--class.menu--]：一级栏目导航	</span><br><span class="line"></span><br><span class="line">[!--page.stats--]:统计访问</span><br><span class="line"></span><br><span class="line">[!--id--]:信息ID	</span><br><span class="line"></span><br><span class="line">[!--titleurl--]:标题链接</span><br><span class="line"></span><br><span class="line">[!--keyboard--]:关键字</span><br><span class="line"></span><br><span class="line">[!--classid--]:栏目ID	</span><br><span class="line"></span><br><span class="line">[!--class.name--]:栏目名称	</span><br><span class="line"></span><br><span class="line">[!--self.classid--]:本栏目ID</span><br><span class="line"></span><br><span class="line">[!--bclass.id--]: 父栏目ID	</span><br><span class="line"></span><br><span class="line">[!--bclass.name--]:父栏目名称	</span><br><span class="line"></span><br><span class="line">[!--other.link--]:相关链接</span><br><span class="line"></span><br><span class="line">[!--p.title--]：分页标题	</span><br><span class="line"></span><br><span class="line">[!--ttid--]：标题分类ID	</span><br><span class="line"></span><br><span class="line">[!--tt.name--]：标题分类名称</span><br><span class="line"></span><br><span class="line">[!--class.url--]：栏目页面地址	</span><br><span class="line"></span><br><span class="line">[!--news.url--]:网站地址(参数设置的站点地址)	</span><br><span class="line"></span><br><span class="line">[!--no.num--]:信息编号</span><br><span class="line"></span><br><span class="line">[!--userid--]:发布者ID	</span><br><span class="line"></span><br><span class="line">[!--username--]:发布者	</span><br><span class="line"></span><br><span class="line">[!--linkusername--]:带链接的用户名</span><br><span class="line"></span><br><span class="line">[!--userfen--]:查看信息扣除点数	</span><br><span class="line"></span><br><span class="line">[!--pinfopfen--]:平均评分	</span><br><span class="line"></span><br><span class="line">[!--infopfennum--]:评分人数</span><br><span class="line"></span><br><span class="line">[!--onclick--]:点击数	</span><br><span class="line"></span><br><span class="line">[!--totaldown--]:下载数	</span><br><span class="line"></span><br><span class="line">[!--plnum--]:评论数</span><br><span class="line"></span><br><span class="line">[!--page.url--]:分页导航	</span><br><span class="line"></span><br><span class="line">[!--title.select--]:标题式分页导航	</span><br><span class="line"></span><br><span class="line">[!--next.page--]:内容下一页链接</span><br><span class="line"></span><br><span class="line">[!--info.next--]:下一篇链接	</span><br><span class="line"></span><br><span class="line">[!--info.pre--]:上一篇链接	</span><br><span class="line"></span><br><span class="line">[!--info.vote--]:信息投票</span><br><span class="line"></span><br><span class="line">[!--hotnews--]:热门信息JS调用(默认表)</span><br><span class="line"></span><br><span class="line">[!--self.hotnews--]:本栏目热门信息JS调用	</span><br><span class="line"></span><br><span class="line">[!--newnews--]:最新信息JS调用(默认表)</span><br><span class="line"></span><br><span class="line">[!--self.newnews--]:本栏目最新信息JS调用	</span><br><span class="line"></span><br><span class="line">[!--goodnews--]:推荐信息JS调用(默认表)</span><br><span class="line"></span><br><span class="line">[!--self.goodnews--]:本栏目推荐信息JS调用</span><br><span class="line"></span><br><span class="line">[!--hotplnews--]:评论热门信息JS调用(默认表)</span><br><span class="line"></span><br><span class="line">[!--self.hotplnews--]:本栏目评论热门信息JS调用</span><br><span class="line"></span><br><span class="line">[!--firstnews--]:头条信息JS调用(默认表)</span><br><span class="line"></span><br><span class="line">[!--self.firstnews--]:本栏目头条信息JS调用</span><br></pre></td></tr></table></figure>
+<h3 id="其它JS调用及地址说明"><a href="#其它JS调用及地址说明" class="headerlink" title="其它JS调用及地址说明"></a>其它JS调用及地址说明</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">实时显示点击数(不统计)	&lt;script src=[!--news.url--]e/public/ViewClick/?classid=[!--classid--]&amp;id=[!--id--]&gt;&lt;/script&gt;</span><br><span class="line">实时显示点击数(显示+统计)	&lt;script src=[!--news.url--]e/public/ViewClick/?classid=[!--classid--]&amp;id=[!--id--]&amp;addclick=1&gt;&lt;/script&gt;</span><br><span class="line">实时显示下载数	&lt;script src=[!--news.url--]e/public/ViewClick/?classid=[!--classid--]&amp;id=[!--id--]&amp;down=1&gt;&lt;/script&gt;</span><br><span class="line">实时显示评论数	&lt;script src=[!--news.url--]e/public/ViewClick/?classid=[!--classid--]&amp;id=[!--id--]&amp;down=2&gt;&lt;/script&gt;</span><br><span class="line">实时显示平均评分数	&lt;script src=[!--news.url--]e/public/ViewClick/?classid=[!--classid--]&amp;id=[!--id--]&amp;down=3&gt;&lt;/script&gt;</span><br><span class="line">实时显示评分人数	&lt;script src=[!--news.url--]e/public/ViewClick/?classid=[!--classid--]&amp;id=[!--id--]&amp;down=4&gt;&lt;/script&gt;</span><br><span class="line">实时显示顶数	&lt;script src=[!--news.url--]e/public/ViewClick/?classid=[!--classid--]&amp;id=[!--id--]&amp;down=5&gt;&lt;/script&gt;</span><br><span class="line">实时显示踩数	&lt;script src=[!--news.url--]e/public/ViewClick/?classid=[!--classid--]&amp;id=[!--id--]&amp;down=6&gt;&lt;/script&gt;</span><br><span class="line">上面多变量同时显示</span><br><span class="line">(变量1为显示,0为不显示)	&lt;script src=[!--news.url--]e/public/ViewClick/ViewMore.php?classid=[!--classid--]&amp;id=[!--id--]&amp;onclick=1&amp;down=1&amp;plnum=1&amp;pfen=0&amp;pfennum=0&amp;diggtop=0&amp;diggdown=0&amp;addclick=0&gt;&lt;/script&gt;</span><br><span class="line">显示内容地方要加id=&quot;变量showdiv&quot;，比如点击数：&lt;span id=&quot;onclickshowdiv&quot;&gt;0&lt;/span&gt;</span><br><span class="line">购物车地址	[!--news.url--]e/ShopSys/buycar/?classid=[!--classid--]&amp;id=[!--id--]</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/04/25/phpstrom-key/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/25/phpstrom-key/" itemprop="url">phpstrom-webstorm-2018 激活破解方法大全</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-25T08:42:37+08:00">
+                2018-04-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="方法：（更新时间：2018-1-23）v3-3"><a href="#方法：（更新时间：2018-1-23）v3-3" class="headerlink" title="方法：（更新时间：2018/1/23）v3.3"></a>方法：（更新时间：2018/1/23）v3.3</h3><p>注册时，在打开的<code>License Activation</code>窗口中选择<code>“License server”</code>，在输入框输入下面的网址：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">http://idea.codebeta.cn （新，感谢Rachelsalaheiyo提供）</span><br><span class="line"></span><br><span class="line">http://idea.imsxm.com/</span><br></pre></td></tr></table></figure></p>
+<p>点击：<code>Activate</code> 即可。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/04/24/ssh-no-password/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1008,750 +1957,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/04/19/laravel-construct-get-auth-user/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="卡布奇诺">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="卡布奇诺">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/19/laravel-construct-get-auth-user/" itemprop="url">laravel_construct_get_auth_user</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-19T14:47:26+08:00">
-                2018-04-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/PHP/" itemprop="url" rel="index">
-                    <span itemprop="name">PHP</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>应该不少同学都遇到这个问题了：5.3 起，由于框架运行流程的修改，你无法在控制器的构造函数里获取登录用户，那么我们怎么办呢？以下是几个方法：</p>
-<ol>
-<li>不再从构造函数取用户</li>
-</ol>
-<p>我们可以从 request 中获取登录用户：<code>request()-&gt;user()</code>。</p>
-<ol>
-<li>或者在控制器方法里我们使用  <code>Auth::user()</code></li>
-</ol>
-<p>除了上面的折中的办法，我们一定要在构造函数搞定的话那么请看这里：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">protected $user;</span><br><span class="line"></span><br><span class="line">public function __construct()</span><br><span class="line">&#123;</span><br><span class="line">    $this-&gt;middleware(function ($request, $next) &#123;</span><br><span class="line">        $this-&gt;user = $request-&gt;user();</span><br><span class="line"></span><br><span class="line">        return $next($request);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这样你就可以在其它方法里使用 <code>$this-&gt;user</code> 来访问当前登录用户了。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/04/03/laravel-print-sql/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="卡布奇诺">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="卡布奇诺">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/03/laravel-print-sql/" itemprop="url">Laravel 实时监听打印 SQL</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-03T16:06:28+08:00">
-                2018-04-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/PHP/" itemprop="url" rel="index">
-                    <span itemprop="name">PHP</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="创建监听器"><a href="#创建监听器" class="headerlink" title="创建监听器"></a>创建监听器</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php artisan make:listener QueryListener --event=Illuminate\Database\\Events\\QueryExecuted</span><br></pre></td></tr></table></figure>
-<p>打开 <code>app/ProvidersEventServiceProvider.php</code> ，在<code>$listen</code>中添加</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">protected $listen = [</span><br><span class="line">    &apos;Illuminate\Database\Events\QueryExecuted&apos; =&gt; [</span><br><span class="line">        &apos;App\Listeners\QueryListener,</span><br><span class="line">    ]</span><br><span class="line">];</span><br><span class="line">#头部添加</span><br><span class="line">use App\Listeners\QueryListener;</span><br></pre></td></tr></table></figure>
-<p>打开<code>QueryListener</code>文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public function handle (QueryExecuted $event)</span><br><span class="line">&#123;</span><br><span class="line">    if (env(&apos;APP_ENV&apos;, &apos;production&apos;) == &apos;local&apos;) &#123;</span><br><span class="line">        $sql = str_replace(&quot;?&quot;, &quot;&apos;%s&apos;&quot;, $event-&gt;sql);</span><br><span class="line">        $log = vsprintf($sql, $event-&gt;bindings);</span><br><span class="line">        Log::info($log);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/04/03/mac-item/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="卡布奇诺">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="卡布奇诺">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/03/mac-item/" itemprop="url">Mac文件夹多语言显示设置</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-03T11:17:01+08:00">
-                2018-04-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Mac/" itemprop="url" rel="index">
-                    <span itemprop="name">Mac</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>当我们使用Mac中文语言的时候，使用终端Terminal看到的文件夹列表和直接在Finder里面看到的不一样。经常我们使用一个中文的文件夹在终端cd选择的时候切换输入法会感觉比较恶心。</p>
-<p>但是系统默认的几个文件夹 桌面，下载… 在终端看到的会是英文的 Desktop, Dowload…等，这里就来说明怎么实现这种多语言的文件夹命名。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /System/Library/CoreServices/SystemFolderLocalizations/zh_CN.lproj </span><br><span class="line">sudo chmod -R 777 *</span><br><span class="line">open . # 在文件夹中打开，以便之后操作</span><br></pre></td></tr></table></figure>
-<p>如果加了<code>sudo</code>命令还是无法给权限请开启Rootless功能，开启方法：</p>
-<p>重启电脑并按住 <code>cmd + R</code> 键。进入恢复模式。<br>顶部的菜单 栏<code>Utilities &gt; Terminal</code>打开终端。<br>键入命令 <code>csrutil disable</code> 重启即可。<br>开启之后再做之前操作。<br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/04/03/mac-item/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2017/09/07/php/Laravel-qa/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="卡布奇诺">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="卡布奇诺">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/07/php/Laravel-qa/" itemprop="url">Laravel QA</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-07T13:02:42+08:00">
-                2017-09-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/PHP/" itemprop="url" rel="index">
-                    <span itemprop="name">PHP</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="记录一下一些短代码"><a href="#记录一下一些短代码" class="headerlink" title="记录一下一些短代码:"></a>记录一下一些短代码:</h2><h3 id="Laravel页面引入css-js"><a href="#Laravel页面引入css-js" class="headerlink" title="Laravel页面引入css/js"></a>Laravel页面引入css/js</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;link rel=&quot;stylesheet&quot; href=&quot;&#123;&#123; URL::asset(&apos;css/bootstrap.css&apos;) &#125;&#125;&quot;&gt;</span><br><span class="line">&lt;script type=&quot;text/javascript&quot; src=&quot;&#123;&#123; URL::asset(&apos;js/jquery.min.js&apos;) &#125;&#125;&quot;&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>文件目录默认是在 <code>public/</code> 自行放置即可</p>
-</blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2017/09/07/php/Laravel-versions/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="卡布奇诺">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="卡布奇诺">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/07/php/Laravel-versions/" itemprop="url">安装指定Laravel 版本</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-07T13:02:42+08:00">
-                2017-09-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/PHP/" itemprop="url" rel="index">
-                    <span itemprop="name">PHP</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="安装指定-Laravel-版本"><a href="#安装指定-Laravel-版本" class="headerlink" title="安装指定 Laravel 版本!"></a>安装指定 Laravel 版本!</h1><h3 id="更新时间-2017-09-07-13-02-42"><a href="#更新时间-2017-09-07-13-02-42" class="headerlink" title="更新时间:2017-09-07 13:02:42"></a>更新时间:2017-09-07 13:02:42</h3><h2 id="Laravel-5-5"><a href="#Laravel-5-5" class="headerlink" title="Laravel 5.5"></a>Laravel 5.5</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer create-project laravel/laravel your-project-name dev-develop</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/09/07/php/Laravel-versions/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1801,7 +2011,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">160</span>
+                  <span class="site-state-item-count">165</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1823,7 +2033,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">101</span>
+                  <span class="site-state-item-count">102</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

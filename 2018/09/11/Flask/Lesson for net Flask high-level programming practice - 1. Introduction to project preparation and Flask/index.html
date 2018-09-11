@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Python,Flask," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="虚拟环境搭建[二选一即可]pipenv 安装与使用Github 1234567891011121314151617181920212223242526272829#方式一：## mac 用户$ brew install pipenv## Fedora用户$ sudo dnf install pipenv#方式二：#用 pip 安装 pipenvpip install pipenv#进入虚拟环境（需">
+<meta name="keywords" content="Python,Flask">
+<meta property="og:type" content="article">
+<meta property="og:title" content="慕课网Flask高级编程实战-知识点思维导图">
+<meta property="og:url" content="http://www.wujinyu.com/2018/09/11/Flask/Lesson for net Flask high-level programming practice - 1. Introduction to project preparation and Flask/index.html">
+<meta property="og:site_name" content="卡布奇诺">
+<meta property="og:description" content="虚拟环境搭建[二选一即可]pipenv 安装与使用Github 1234567891011121314151617181920212223242526272829#方式一：## mac 用户$ brew install pipenv## Fedora用户$ sudo dnf install pipenv#方式二：#用 pip 安装 pipenvpip install pipenv#进入虚拟环境（需">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p5x7w1vrd.bkt.clouddn.com/7723806d8c55d0dfed46c9071638f04e.jpg">
+<meta property="og:image" content="http://p5x7w1vrd.bkt.clouddn.com/78036abb7fc223fc2ad28464d79865b7.jpg">
+<meta property="og:updated_time" content="2018-09-11T01:28:54.181Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="慕课网Flask高级编程实战-知识点思维导图">
+<meta name="twitter:description" content="虚拟环境搭建[二选一即可]pipenv 安装与使用Github 1234567891011121314151617181920212223242526272829#方式一：## mac 用户$ brew install pipenv## Fedora用户$ sudo dnf install pipenv#方式二：#用 pip 安装 pipenvpip install pipenv#进入虚拟环境（需">
+<meta name="twitter:image" content="http://p5x7w1vrd.bkt.clouddn.com/7723806d8c55d0dfed46c9071638f04e.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.wujinyu.com/2018/09/11/Flask/Lesson for net Flask high-level programming practice - 1. Introduction to project preparation and Flask/"/>
+
+
+
+
+
+  <title>慕课网Flask高级编程实战-知识点思维导图 | 卡布奇诺</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-21552344-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卡布奇诺</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生活心情</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-分类">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-归档">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-标签">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-关于">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/09/11/Flask/Lesson for net Flask high-level programming practice - 1. Introduction to project preparation and Flask/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">慕课网Flask高级编程实战-知识点思维导图</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-11T15:01:17+08:00">
+                2018-09-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="虚拟环境搭建-二选一即可"><a href="#虚拟环境搭建-二选一即可" class="headerlink" title="虚拟环境搭建[二选一即可]"></a>虚拟环境搭建[二选一即可]</h2><h3 id="pipenv-安装与使用"><a href="#pipenv-安装与使用" class="headerlink" title="pipenv 安装与使用"></a>pipenv 安装与使用</h3><p><a href="https://github.com/pypa/pipenv" target="_blank" rel="noopener">Github</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">#方式一：</span><br><span class="line">## mac 用户</span><br><span class="line">$ brew install pipenv</span><br><span class="line"></span><br><span class="line">## Fedora用户</span><br><span class="line">$ sudo dnf install pipenv</span><br><span class="line"></span><br><span class="line">#方式二：</span><br><span class="line"></span><br><span class="line">#用 pip 安装 pipenv</span><br><span class="line">pip install pipenv</span><br><span class="line"></span><br><span class="line">#进入虚拟环境（需要在你放置项目的地方执行，如果没有文件则会新建文件夹）</span><br><span class="line">pipenv blog</span><br><span class="line"></span><br><span class="line"># 退出虚拟环境</span><br><span class="line">pipenv exit</span><br><span class="line"></span><br><span class="line">#使用 pipenv 安装类库</span><br><span class="line">pipenv install &#123;package&#125;</span><br><span class="line"></span><br><span class="line"># 卸载类库</span><br><span class="line">pipenv uninstall &#123;package&#125;</span><br><span class="line"></span><br><span class="line"># 查看安装包依赖</span><br><span class="line">pipenv graph</span><br><span class="line"></span><br><span class="line">#查看虚拟环境的执行文件路径</span><br><span class="line">pipenv --env</span><br></pre></td></tr></table></figure>
+<h3 id="virtualenvwrapper"><a href="#virtualenvwrapper" class="headerlink" title="virtualenvwrapper"></a>virtualenvwrapper</h3><p><code>virtualenvwrapper是用来管理virtualenv的扩展包，用着很方便。</code> </p>
+<h4 id="项目地址"><a href="#项目地址" class="headerlink" title="项目地址"></a>项目地址</h4><p><a href="https://virtualenvwrapper.readthedocs.io/en/latest/" target="_blank" rel="noopener">virtualenvwrapper</a></p>
+<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#安装virtualenv</span><br><span class="line">pip install virtualenv</span><br><span class="line"></span><br><span class="line">#安装virtualenvwrapper</span><br><span class="line">pip install virtualenvwrapper</span><br></pre></td></tr></table></figure>
+<h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><p><code>修改~/.bash_profile或其它环境变量相关文件(如 .bashrc（我的Ubuntu15.10 下的是这个） 或用 ZSH 之后的 .zshrc)，添加以下语句：</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#WORKON_HOME，PROJECT_HOME 可以替换成你自己的目录</span><br><span class="line">export WORKON_HOME=$HOME/.virtualenvs</span><br><span class="line">export PROJECT_HOME=$HOME/workspace</span><br><span class="line">source /usr/local/bin/virtualenvwrapper.sh</span><br><span class="line"></span><br><span class="line">#然后运行下面代买生效：</span><br><span class="line"></span><br><span class="line">source ~/.bash_profile</span><br></pre></td></tr></table></figure>
+<h4 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">#创建运行环境blog</span><br><span class="line">mkvirtualenv blog</span><br><span class="line"></span><br><span class="line">#工作在 blog 环境 或 从其它环境切换到 blog 环境</span><br><span class="line">workon blog</span><br><span class="line"></span><br><span class="line">#退出终端环境</span><br><span class="line">deactivate</span><br><span class="line"></span><br><span class="line">#删除运行环境ENV</span><br><span class="line">rmvirtualenv ENV</span><br><span class="line"></span><br><span class="line">#创建mic项目和运行环境mic</span><br><span class="line">mkproject mic</span><br><span class="line"></span><br><span class="line">#创建临时运行环境</span><br><span class="line">mktmpenv</span><br><span class="line"></span><br><span class="line">#列出可用的运行环境</span><br><span class="line">lsvirtualenv</span><br><span class="line"></span><br><span class="line">#列出当前环境安装了的包</span><br><span class="line">lssitepackages</span><br></pre></td></tr></table></figure>
+<h2 id="Flask-的实例化和启动"><a href="#Flask-的实例化和启动" class="headerlink" title="Flask 的实例化和启动"></a>Flask 的实例化和启动</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">#导入 Flask 模块包</span><br><span class="line">from flask import Flask</span><br><span class="line"></span><br><span class="line">#实例化对象 app 构造函数的参数会作为 Flask app 核心对象的标识。可以用其他的标识符代替。如：项目名称 blog</span><br><span class="line"></span><br><span class="line">app = Flask(__name__) </span><br><span class="line"></span><br><span class="line">#启动 web app</span><br><span class="line">#host 参数指定可以访问本网站的 IP 地址。“0.0.0.0”表示任何主机都可以访问</span><br><span class="line">#port 参数指定启动端口。如：localhost:8000</span><br><span class="line">#debug 参数表示开启调试模式，开启之后，有以下优势。但是生产环境不建议使用。</span><br><span class="line"># 1.修改文件不需要每次手动重启，服务器会自动重启，</span><br><span class="line"># 2.如果发生错误，可以看到详细的错误信息</span><br><span class="line"></span><br><span class="line">app.run(host=&quot;0.0.0.0&quot;,port=8000,debug=True)</span><br></pre></td></tr></table></figure>
+<h2 id="注册路由方式一"><a href="#注册路由方式一" class="headerlink" title="注册路由方式一"></a>注册路由方式一</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#使用装饰器来诸恶路由，启动的参数为 URL 的路径，对应的会调用 index() 函数</span><br><span class="line">@app.route(&apos;/index&apos;)</span><br><span class="line">def index():</span><br><span class="line">	“““定义视图函数 相当于 MVC 中的 Controller”””</span><br><span class="line">	return &quot;首页&quot;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>如果直接使用/index </p>
+<p>那么不能兼容浏览器不能访问/index/和/index，</p>
+<p>解决办法，路径定义改成/index/</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@app.route(&apos;/index/&apos;)</span><br><span class="line">def index():</span><br><span class="line">	“““基于类的视图，相当于 MVC 中的 Controller”””</span><br><span class="line">	return &quot;首页&quot;</span><br></pre></td></tr></table></figure>
+<h3 id="在路径xxx后添加斜杠-后就可以访问xxx-和-xxx的原理"><a href="#在路径xxx后添加斜杠-后就可以访问xxx-和-xxx的原理" class="headerlink" title="在路径xxx后添加斜杠/后就可以访问xxx/ 和 xxx的原理"></a>在路径xxx后添加斜杠/后就可以访问xxx/ 和 xxx的原理</h3><blockquote>
+<p>重定向：当你访问url1的时候，服务器返回状态码302让用户访问url2</p>
+</blockquote>
+<p><img src="http://p5x7w1vrd.bkt.clouddn.com/7723806d8c55d0dfed46c9071638f04e.jpg" alt=""></p>
+<p>访问<code>http://localhost:5000/index</code>,观察浏览器网络请求情况，可以看到发生了重定向，重定向到了<code>http://localhost:5000/index/</code></p>
+<p><img src="http://p5x7w1vrd.bkt.clouddn.com/78036abb7fc223fc2ad28464d79865b7.jpg" alt=""></p>
+<h3 id="为什么这么做呢？"><a href="#为什么这么做呢？" class="headerlink" title="为什么这么做呢？"></a>为什么这么做呢？</h3><blockquote>
+<p>这是因为，如果不做重定向，不带/ 的（index）和带/的（index/）都可以访问到视图函数。</p>
+<p>那么就是说同一个视图函数对应着两个不同的路由，没有保证唯一url的原则</p>
+</blockquote>
+<h3 id="唯一url的好处"><a href="#唯一url的好处" class="headerlink" title="唯一url的好处"></a>唯一url的好处</h3><blockquote>
+<p>如果有两个url，那么在搜索引擎中会被索引两次,</p>
+<p>这样会浪费性能，影响搜索引擎的优化，没有这个必要。</p>
+</blockquote>
+<h2 id="注册路由方式二"><a href="#注册路由方式二" class="headerlink" title="注册路由方式二"></a>注册路由方式二</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#通过调用app的add_url_rule函数</span><br><span class="line">app.add_url_rule(&quot;/hello&quot;,view_func=hello)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>实际上方法1装饰器的模式，内部就是调用了add_url_rule函数。下面来看一下源码</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">def route(self, rule, **options):</span><br><span class="line">    &quot;&quot;&quot;Like :meth:`Flask.route` but for a blueprint.  The endpoint for the</span><br><span class="line">    :func:`url_for` function is prefixed with the name of the blueprint.</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    def decorator(f):</span><br><span class="line">        endpoint = options.pop(&quot;endpoint&quot;, f.__name__)</span><br><span class="line">        #划重点：实际内部调用的就是 add_url_rule</span><br><span class="line">        self.add_url_rule(rule, endpoint, f, **options)</span><br><span class="line">        return f</span><br><span class="line">    return decorator</span><br></pre></td></tr></table></figure>
+<h2 id="Flask-配置文件"><a href="#Flask-配置文件" class="headerlink" title="Flask 配置文件"></a>Flask 配置文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#载入配置文件</span><br><span class="line">app.config.from_object(&quot;cofing&quot;)</span><br><span class="line"></span><br><span class="line">#读取配置文件</span><br><span class="line">pritn(app.config[&quot;APP_NAME&quot;])</span><br></pre></td></tr></table></figure>
+<h3 id="要点"><a href="#要点" class="headerlink" title="要点"></a>要点</h3><ul>
+<li>配置文件中的 KEY <code>必须全部是大写</code>！[必须大写！]</li>
+<li>DEBUG 是 Flask 中的一个默认变量，如果想要覆盖，<code>必须名字一模一样</code>。</li>
+</ul>
+<h2 id="if-name-“name“"><a href="#if-name-“name“" class="headerlink" title="if name == “name“:"></a>if <strong>name</strong> == “<strong>name</strong>“:</h2><h3 id="为什么要添加这句：if-name-quot-name-quot"><a href="#为什么要添加这句：if-name-quot-name-quot" class="headerlink" title="为什么要添加这句：if __name__ == &quot;__name__&quot;"></a>为什么要添加这句：<code>if __name__ == &quot;__name__&quot;</code></h3><p>加入这个判断以后，只有在启动入口文件以后，才会执行。而在被其他模块导入的时候不会执行</p>
+<h3 id="加入的优势："><a href="#加入的优势：" class="headerlink" title="加入的优势："></a>加入的优势：</h3><p>在生产环境中，我们一般是采用 Nginx + uwsgi 来部署我们的 Python 项目，我们使用 uwsgi 来启动项目的 flask 服务的时候，这个时候项目的启动文件（我们这项目文件名为：run.py），只是作为一个模块被调用，这时加上入口判断，在生产环境就就不会执行 app.run()方法，否则就会启动两个 Flask 服务。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># run.py 文件代码</span><br><span class="line">if __name__ == &quot;__name__&quot;:</span><br><span class="line">    app.run(host=app.config[&quot;HOST&quot;], debug=app.config[&quot;DEBUG&quot;], port=app.config[&quot;PORT&quot;])</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag"># Python</a>
+          
+            <a href="/tags/Flask/" rel="tag"># Flask</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/11/Flask/1/" rel="next" title="慕课网Flask高级编程实战-知识点思维导图">
+                <i class="fa fa-chevron-left"></i> 慕课网Flask高级编程实战-知识点思维导图
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/11/Flask/Lesson for net Flask high-level programming of actual combat - mind mapping knowledge points/" rel="prev" title="慕课网Flask高级编程实战-知识点思维导图">
+                慕课网Flask高级编程实战-知识点思维导图 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://ooky9xe9n.bkt.clouddn.com/avatar.png"
+                alt="卡布奇诺" />
+            
+              <p class="site-author-name" itemprop="name">卡布奇诺</p>
+              <p class="site-description motion-element" itemprop="description">记录编程中遇到的坑</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">165</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">102</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/aopao1" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:admin@wujinyu.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#虚拟环境搭建-二选一即可"><span class="nav-number">1.</span> <span class="nav-text">虚拟环境搭建[二选一即可]</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pipenv-安装与使用"><span class="nav-number">1.1.</span> <span class="nav-text">pipenv 安装与使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#virtualenvwrapper"><span class="nav-number">1.2.</span> <span class="nav-text">virtualenvwrapper</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#项目地址"><span class="nav-number">1.2.1.</span> <span class="nav-text">项目地址</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装"><span class="nav-number">1.2.2.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置"><span class="nav-number">1.2.3.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#用法"><span class="nav-number">1.2.4.</span> <span class="nav-text">用法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Flask-的实例化和启动"><span class="nav-number">2.</span> <span class="nav-text">Flask 的实例化和启动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注册路由方式一"><span class="nav-number">3.</span> <span class="nav-text">注册路由方式一</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#在路径xxx后添加斜杠-后就可以访问xxx-和-xxx的原理"><span class="nav-number">3.1.</span> <span class="nav-text">在路径xxx后添加斜杠/后就可以访问xxx/ 和 xxx的原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么这么做呢？"><span class="nav-number">3.2.</span> <span class="nav-text">为什么这么做呢？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#唯一url的好处"><span class="nav-number">3.3.</span> <span class="nav-text">唯一url的好处</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注册路由方式二"><span class="nav-number">4.</span> <span class="nav-text">注册路由方式二</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Flask-配置文件"><span class="nav-number">5.</span> <span class="nav-text">Flask 配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#要点"><span class="nav-number">5.1.</span> <span class="nav-text">要点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#if-name-“name“"><span class="nav-number">6.</span> <span class="nav-text">if name == “name“:</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么要添加这句：if-name-quot-name-quot"><span class="nav-number">6.1.</span> <span class="nav-text">为什么要添加这句：if __name__ == &quot;__name__&quot;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加入的优势："><span class="nav-number">6.2.</span> <span class="nav-text">加入的优势：</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">卡布奇诺@心情</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

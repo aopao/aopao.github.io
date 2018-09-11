@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Python,Flask," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="应用、蓝图与视图函数1.Flask的层级关系  Flask 最上层是 app 的核心对象 在核心对象上可以新建若干蓝图，这个蓝图不能单独纯在，必须要和 app 关联。 在每个蓝图上还可以注册很多静态文件、视图函数、模板等 一个业务模块可以分为很多个蓝图 比如：user、book。可以把视图函数注册到蓝图上，然后再关联 app ，来达到模块化文件的分隔。 之前的book.py 放到了app/web/">
+<meta name="keywords" content="Python,Flask">
+<meta property="og:type" content="article">
+<meta property="og:title" content="慕课网Flask高级编程实战-3.蓝图、模型与CodeFirst">
+<meta property="og:url" content="http://www.wujinyu.com/2018/09/11/Flask/Lesson for net Flask high-level programming practice - 3. The blueprint, model and CodeFirst/index.html">
+<meta property="og:site_name" content="卡布奇诺">
+<meta property="og:description" content="应用、蓝图与视图函数1.Flask的层级关系  Flask 最上层是 app 的核心对象 在核心对象上可以新建若干蓝图，这个蓝图不能单独纯在，必须要和 app 关联。 在每个蓝图上还可以注册很多静态文件、视图函数、模板等 一个业务模块可以分为很多个蓝图 比如：user、book。可以把视图函数注册到蓝图上，然后再关联 app ，来达到模块化文件的分隔。 之前的book.py 放到了app/web/">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p5x7w1vrd.bkt.clouddn.com/5f8993085c5032f4b41b0bac34e28baf.jpg">
+<meta property="og:image" content="http://p5x7w1vrd.bkt.clouddn.com/1a0a9f234dc9c2e57a45bf30ff829a1a.jpg">
+<meta property="og:image" content="http://p5x7w1vrd.bkt.clouddn.com/4bbef81fdd48e63d37b7e395f655fc1d.jpg">
+<meta property="og:updated_time" content="2018-09-11T03:07:22.562Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="慕课网Flask高级编程实战-3.蓝图、模型与CodeFirst">
+<meta name="twitter:description" content="应用、蓝图与视图函数1.Flask的层级关系  Flask 最上层是 app 的核心对象 在核心对象上可以新建若干蓝图，这个蓝图不能单独纯在，必须要和 app 关联。 在每个蓝图上还可以注册很多静态文件、视图函数、模板等 一个业务模块可以分为很多个蓝图 比如：user、book。可以把视图函数注册到蓝图上，然后再关联 app ，来达到模块化文件的分隔。 之前的book.py 放到了app/web/">
+<meta name="twitter:image" content="http://p5x7w1vrd.bkt.clouddn.com/5f8993085c5032f4b41b0bac34e28baf.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.wujinyu.com/2018/09/11/Flask/Lesson for net Flask high-level programming practice - 3. The blueprint, model and CodeFirst/"/>
+
+
+
+
+
+  <title>慕课网Flask高级编程实战-3.蓝图、模型与CodeFirst | 卡布奇诺</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-21552344-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卡布奇诺</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生活心情</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-分类">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-归档">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-标签">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-关于">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/09/11/Flask/Lesson for net Flask high-level programming practice - 3. The blueprint, model and CodeFirst/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">慕课网Flask高级编程实战-3.蓝图、模型与CodeFirst</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-11T15:01:17+08:00">
+                2018-09-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="应用、蓝图与视图函数"><a href="#应用、蓝图与视图函数" class="headerlink" title="应用、蓝图与视图函数"></a>应用、蓝图与视图函数</h2><h3 id="1-Flask的层级关系"><a href="#1-Flask的层级关系" class="headerlink" title="1.Flask的层级关系"></a>1.Flask的层级关系</h3><p><img src="http://p5x7w1vrd.bkt.clouddn.com/5f8993085c5032f4b41b0bac34e28baf.jpg" alt=""></p>
+<ul>
+<li>Flask 最上层是 app 的核心对象</li>
+<li>在核心对象上可以新建若干蓝图，这个蓝图不能单独纯在，必须要和 app 关联。</li>
+<li>在每个蓝图上还可以注册很多静态文件、视图函数、模板等</li>
+<li>一个业务模块可以分为很多个蓝图 比如：<code>user</code>、<code>book</code>。可以把视图函数注册到蓝图上，然后再关联 app ，来达到模块化文件的分隔。</li>
+<li>之前的<code>book.py</code> 放到了<code>app/web/</code>路径下，就是考虑到了蓝图。<code>app</code>属于是整个Flask应用层。<code>web</code>属于是蓝图</li>
+</ul>
+<h3 id="2-代码规范化"><a href="#2-代码规范化" class="headerlink" title="2.代码规范化"></a>2.代码规范化</h3><p>应该讲一些初始化工作，放在对应层级的包的初始化文件 <code>__init__.py</code> 中。比如Flask核心应用app对象初始化应该放在应用层级app包的 <code>__init__.py</code> 中。</p>
+<p>蓝图的初始化，应该放在对应蓝图层级web包的<code>__init__.py</code>中，并且所有蓝图对应的试图函数都应该放在web目录下</p>
+<p><img src="http://p5x7w1vrd.bkt.clouddn.com/1a0a9f234dc9c2e57a45bf30ff829a1a.jpg" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># app/__init__.py</span><br><span class="line"></span><br><span class="line">from flask import Flask</span><br><span class="line"></span><br><span class="line">def create_app():</span><br><span class="line"></span><br><span class="line">	app = Flask(__name__)</span><br><span class="line"></span><br><span class="line">	app.config.from_object(&quot;config&quot;)</span><br><span class="line">	</span><br><span class="line">	return app</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># fisher.py</span><br><span class="line"></span><br><span class="line">from app import create_app</span><br><span class="line"></span><br><span class="line">__author__ = &quot;Jason&quot;</span><br><span class="line"></span><br><span class="line">app = create_app()</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">	print(&quot;id为&quot; + str(id(app)) + &quot;的app启动&quot;)</span><br><span class="line">	app.run(host=app.config[&quot;HOST&quot;], debug=app.config[&quot;DEBUG&quot;], port=app.config[&quot;PORT&quot;])</span><br></pre></td></tr></table></figure>
+<h3 id="3-用蓝图注册试图函数"><a href="#3-用蓝图注册试图函数" class="headerlink" title="3 用蓝图注册试图函数"></a>3 用蓝图注册试图函数</h3><h4 id="1-在蓝图中注册视图函数"><a href="#1-在蓝图中注册视图函数" class="headerlink" title="1.在蓝图中注册视图函数"></a>1.在蓝图中注册视图函数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"># 实例化蓝图</span><br><span class="line"># 第一个参数为蓝图所在模块名</span><br><span class="line"># 应用名称</span><br><span class="line">web = Blueprint(&apos;web&apos;, __name__)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@web.route(&quot;/book/search/&lt;q&gt;/&lt;page&gt;&quot;)</span><br><span class="line">def search(q, page):</span><br><span class="line">	&quot;&quot;&quot;</span><br><span class="line">	搜索书籍路由</span><br><span class="line">	:param q: 关键字 OR isbn</span><br><span class="line">	:param page: 页码</span><br><span class="line">	&quot;&quot;&quot;</span><br><span class="line">	isbn_or_key = is_isbn_or_key(q)</span><br><span class="line">	if isbn_or_key == &apos;isbn&apos;:</span><br><span class="line">		result = YuShuBook.search_by_isbn(q)</span><br><span class="line">	else:</span><br><span class="line">		result = YuShuBook.search_by_key(q)</span><br><span class="line">	</span><br><span class="line">	return jsonify(result)</span><br></pre></td></tr></table></figure>
+<h4 id="2-蓝图是不能替代app应用的，在蓝图中注册了视图函数后，还需要将蓝图插入app"><a href="#2-蓝图是不能替代app应用的，在蓝图中注册了视图函数后，还需要将蓝图插入app" class="headerlink" title="2.蓝图是不能替代app应用的，在蓝图中注册了视图函数后，还需要将蓝图插入app"></a>2.蓝图是不能替代app应用的，在蓝图中注册了视图函数后，还需要将蓝图插入app</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">#app/__init__.py</span><br><span class="line"></span><br><span class="line">def create_app():</span><br><span class="line">	app = Flask(__name__)</span><br><span class="line">	</span><br><span class="line">	app.config.from_object(&quot;config&quot;)</span><br><span class="line">	#注册 web 蓝图</span><br><span class="line">	register_blueprint(app)</span><br><span class="line"></span><br><span class="line">	return app</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def register_blueprint(app):</span><br><span class="line">	from app.web.book import web</span><br><span class="line">	app.register_blueprint(web)</span><br></pre></td></tr></table></figure>
+<h4 id="3-单蓝图多模块拆分视图函数"><a href="#3-单蓝图多模块拆分视图函数" class="headerlink" title="3.单蓝图多模块拆分视图函数"></a>3.单蓝图多模块拆分视图函数</h4><blockquote>
+<p>蓝图，他的出发点，是为了分模块的。</p>
+<p>什么是模块级别的呢?</p>
+<p>比如一个web系统属于一个web模块；</p>
+<p>一个提供给移动端使用的api是一个api模块；</p>
+<p>一个内容管理系统是一个CMS。</p>
+<p>我们不应该讲book,user这样的不同类别的py文件，做成多个蓝图（这样不是不行，只是小题大做了）</p>
+<p>正确的方式是:</p>
+<p>在一个模块的初识文件中定义蓝图对象，这个模块的不同文件都引入这个蓝图对象来注册路由函数。</p>
+<p>并在模块的初始化文件中引入这些py文件来完成试图函数注册代码的执行</p>
+</blockquote>
+<h5 id="book-py"><a href="#book-py" class="headerlink" title="book.py"></a>book.py</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">#book.py</span><br><span class="line"></span><br><span class="line">from flask import jsonify</span><br><span class="line">from helper import is_isbn_or_key</span><br><span class="line">from yushu_book import YuShuBook</span><br><span class="line"></span><br><span class="line"># 引入web模块</span><br><span class="line">from . import web</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">__author__ = &quot;Jason&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@web.route(&quot;/book/search/&lt;q&gt;/&lt;page&gt;&quot;)</span><br><span class="line">def search(q, page):</span><br><span class="line">	&quot;&quot;&quot;</span><br><span class="line">	搜索书籍路由</span><br><span class="line">	:param q: 关键字 OR isbn</span><br><span class="line">	:param page: 页码</span><br><span class="line">	&quot;&quot;&quot;</span><br><span class="line">	isbn_or_key = is_isbn_or_key(q)</span><br><span class="line">	if isbn_or_key == &apos;isbn&apos;:</span><br><span class="line">		result = YuShuBook.search_by_isbn(q)</span><br><span class="line">	else:</span><br><span class="line">		result = YuShuBook.search_by_key(q)</span><br><span class="line">	</span><br><span class="line">	return jsonify(result)</span><br></pre></td></tr></table></figure>
+<h5 id="后面还会有user模块。我们这里先建立一段伪代码"><a href="#后面还会有user模块。我们这里先建立一段伪代码" class="headerlink" title="后面还会有user模块。我们这里先建立一段伪代码"></a>后面还会有user模块。我们这里先建立一段伪代码</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#user.py</span><br><span class="line">from . import web</span><br><span class="line"></span><br><span class="line">__author__ = &quot;gaowenfeng&quot;</span><br><span class="line"></span><br><span class="line">@web.route(&quot;/user/login&quot;)</span><br><span class="line">def login():</span><br><span class="line">	return &quot;success&quot;</span><br></pre></td></tr></table></figure>
+<h5 id="web-init-py"><a href="#web-init-py" class="headerlink" title="web/init.py"></a>web/<strong>init</strong>.py</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">from flask import Blueprint</span><br><span class="line"></span><br><span class="line">__author__ = &quot;Jason&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">web = Blueprint(&apos;web&apos;, __name__)</span><br><span class="line"></span><br><span class="line"># 在这里导入不同文件，完成视图函数的注册</span><br><span class="line">from app.web import book</span><br><span class="line">from app.web import user</span><br></pre></td></tr></table></figure>
+<h4 id="4-Request对象"><a href="#4-Request对象" class="headerlink" title="4. Request对象"></a>4. Request对象</h4><blockquote>
+<p>之前我们定义的<code>url</code>请求路径是<code>rest</code>风格的 <code>/book/search/&lt;q&gt;/&lt;page&gt;</code>,</p>
+<p>Flask会将&lt;&gt;里的值自动映射成视图函数方法的参数。</p>
+</blockquote>
+<blockquote>
+<p>但是如果需要将方法参数做为请求参数传入进来。</p>
+<p>就需要用到Flask内置的<code>Request</code>了。</p>
+<p><code>Request</code>里包含了<code>HTTP</code>请求的详细信息，比如<code>param</code>，<code>method</code>，<code>url</code>，<code>remote</code> <code>ip</code>等。</p>
+</blockquote>
+<p><code>下面看一下我们之前search函数的改造来了解一下Requset获取请求参数的基本用法</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">from flask import request</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line">...</span><br><span class="line">@web.route(&quot;/book/search/&quot;)</span><br><span class="line">def search():</span><br><span class="line">	&quot;&quot;&quot;</span><br><span class="line">	搜索书籍路由</span><br><span class="line">	:param q: 关键字 OR isbn</span><br><span class="line">	:param page: 页码</span><br><span class="line">	&quot;&quot;&quot;</span><br><span class="line">	q = request.args[&apos;q&apos;]</span><br><span class="line">	page = request.args[&apos;page&apos;]</span><br><span class="line">	isbn_or_key = is_isbn_or_key(q)</span><br><span class="line">	if isbn_or_key == &apos;isbn&apos;:</span><br><span class="line">		result = YuShuBook.search_by_isbn(q)</span><br><span class="line">	else:</span><br><span class="line">		result = YuShuBook.search_by_key(q)</span><br><span class="line">	</span><br><span class="line">	return jsonify(result)</span><br></pre></td></tr></table></figure>
+<p><code>Request</code> 的<code>args</code>属性是一个不可变字典（继承了python内置的dict）<code>immutableDict</code>。里面放的就是http请求的参数。可以使用<code>to_dict()</code>方法获取请求参数的原生可变字典<code>request.args.to_dict()</code></p>
+<p><strong>注意，Flask的request是基于代理模式实现的。想让request正常使用，必须确保是http请求触发的函数或视图函数中使用</strong></p>
+<h4 id="5-WTForms参数验证"><a href="#5-WTForms参数验证" class="headerlink" title="5. WTForms参数验证"></a>5. WTForms参数验证</h4><p><code>WTForms</code> 是一款优秀的参数验证框架。可以将参数验证抽离出一个模块。与业务代码解耦。</p>
+<h5 id="使用pipenv引入WTForms"><a href="#使用pipenv引入WTForms" class="headerlink" title="使用pipenv引入WTForms"></a>使用<code>pipenv</code>引入<code>WTForms</code></h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pipenv install wtforms</span><br></pre></td></tr></table></figure>
+<h5 id="使用WTForms需要自定义一个类继承wtforms提供的Form类，然后定义参数校验规则"><a href="#使用WTForms需要自定义一个类继承wtforms提供的Form类，然后定义参数校验规则" class="headerlink" title="使用WTForms需要自定义一个类继承wtforms提供的Form类，然后定义参数校验规则"></a>使用<code>WTForms</code>需要自定义一个类继承<code>wtforms</code>提供的<code>Form</code>类，然后定义参数校验规则</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">from wtforms import Form, StringField, IntegerField</span><br><span class="line">from wtforms.validators import Length, NumberRange</span><br><span class="line"></span><br><span class="line">__author__ = &quot;Jason&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class SearchForm(Form):</span><br><span class="line">	# 参数校验规则：</span><br><span class="line">	# 1.定义的属性名q,page要与要校验的参数同名</span><br><span class="line">	# 2.根据要传入的参数类型选择不同的Field类进行实例化</span><br><span class="line">	# 3.传入一个数组，作为校验规则validators</span><br><span class="line">	# 4.可以设置默认值</span><br><span class="line">	q = StringField(validators=[</span><br><span class="line">            DataRequired(), </span><br><span class="line">            Length(min=1, max=30,message=&quot;查询关键字长度必须在1-30之间&quot;)</span><br><span class="line">        ], )</span><br><span class="line">	page = IntegerField(validators=[</span><br><span class="line">        NumberRange(min=1, max=99)</span><br><span class="line">    ], default=1)</span><br></pre></td></tr></table></figure>
+<h5 id="使用WTForms"><a href="#使用WTForms" class="headerlink" title="使用WTForms"></a>使用WTForms</h5><p><strong>book.py</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">@web.route(&quot;/book/search/&quot;)</span><br><span class="line">def search():</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    搜索书籍路由</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    # 实例化我们自定义的SearchForm，需要传入一个字典作为要校验的参数</span><br><span class="line">    form = SearchForm(request.args)</span><br><span class="line">    # validate()方法返回True/False来标示是否校验公国</span><br><span class="line">    if not form.validate():</span><br><span class="line">        # errors为错误信息提示（上面定义的message）</span><br><span class="line">        return jsonify(form.errors)</span><br><span class="line"></span><br><span class="line">    # 从form中获取校验后的参数，不从request里拿，因为我们可能会对数据进行预处理或者默认值的给定</span><br><span class="line">    q = form.q.data.strip()</span><br><span class="line">    page = form.page.data</span><br><span class="line">    isbn_or_key = is_isbn_or_key(q)</span><br><span class="line">    if isbn_or_key == &apos;isbn&apos;:</span><br><span class="line">        result = YuShuBook.search_by_isbn(q)</span><br><span class="line">    else:</span><br><span class="line">        result = YuShuBook.search_by_key(q)</span><br><span class="line"></span><br><span class="line">    return jsonify(result)</span><br></pre></td></tr></table></figure>
+<h4 id="6-配置文件拆分"><a href="#6-配置文件拆分" class="headerlink" title="6. 配置文件拆分"></a>6. 配置文件拆分</h4><p>我们之前的<code>YuShuBook</code>访问<code>api</code>分页获取数据的时候，<code>count</code>和<code>start</code>是写死的。现在来完善这一部分操作。</p>
+<p>首先看我们之前的代码，接受了<code>count</code>,<code>start</code>两个参数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@classmethod</span><br><span class="line">def search_by_key(cls, q, count=15, start=0):</span><br><span class="line">	url = cls.search_by_key_url.format(q, count, start)</span><br><span class="line">	return HTTP.get(url)</span><br></pre></td></tr></table></figure>
+<h5 id="考虑以下几点："><a href="#考虑以下几点：" class="headerlink" title="考虑以下几点："></a>考虑以下几点：</h5><blockquote>
+<p>1.我们的试图函数接受的参数是<code>page</code>，考虑到代码的封装性，应该尽可能的隐藏细节，</p>
+<p>我们应该把计算<code>count</code>,<code>start</code>的过程放到<code>YuShuBook</code>的<code>search_by_key</code>方法中来做</p>
+</blockquote>
+<p>.</p>
+<blockquote>
+<p>2.虽然计算<code>start</code>的方法很简单。</p>
+<p>但是这是一个单独的逻辑过程，不应该将这段过程放在访问api获取数据的方法中。</p>
+<p>而应该封装成一个方法，以方法名来代替这段逻辑</p>
+</blockquote>
+<p>.</p>
+<blockquote>
+<p>3.count的值应该放到配置文件中，这样方便修改。</p>
+<p>但是考虑到我们之前的配置<code>DEGUG</code>，<code>IP</code>,<code>PORT</code>等都属于私密配置，包括以后会使用的数据库信息等。</p>
+<p>而<code>COUNT</code>的值属于可公开的配置，所以应该把配置文件拆分成<code>secure.py</code>和<code>settings.py</code>。</p>
+<p><code>secure.py</code>保存私有配置，在上传git的时候不应该上传此文件，<code>settings.py</code>是共有配置</p>
+</blockquote>
+<h5 id="下面来看修改完后的代码yushu-book-py"><a href="#下面来看修改完后的代码yushu-book-py" class="headerlink" title="下面来看修改完后的代码yushu_book.py"></a>下面来看修改完后的代码<code>yushu_book.py</code></h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># flask提供了获取当前app的方法</span><br><span class="line">from flask import current_app</span><br><span class="line">...</span><br><span class="line">...</span><br><span class="line">@classmethod</span><br><span class="line">def search_by_key(cls, q, page=1):</span><br><span class="line">	url = cls.search_by_key_url.format(q, current_app.config[&quot;PRE_PAGE&quot;],</span><br><span class="line">	cls.calculate_start(page))</span><br><span class="line">	return HTTP.get(url)</span><br><span class="line"></span><br><span class="line">@staticmethod</span><br><span class="line">def calculate_start(page):</span><br><span class="line">	return (page-1) * current_app.config[&quot;PRE_PAGE&quot;]</span><br></pre></td></tr></table></figure>
+<h5 id="app-web-settings-py"><a href="#app-web-settings-py" class="headerlink" title="app/web/settings.py"></a>app/web/settings.py</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PRE_PAGE = 15</span><br></pre></td></tr></table></figure>
+<h5 id="app-web-secure-py"><a href="#app-web-secure-py" class="headerlink" title="app/web/secure.py"></a>app/web/secure.py</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DEBUG = True</span><br><span class="line">HOST = &quot;0.0.0.0&quot;</span><br><span class="line">PORT = 8090</span><br></pre></td></tr></table></figure>
+<h5 id="app-init-py"><a href="#app-init-py" class="headerlink" title="app/init.py"></a>app/<strong>init</strong>.py</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">def create_app():</span><br><span class="line">	app = Flask(__name__)</span><br><span class="line">	</span><br><span class="line">	#加载配置文件</span><br><span class="line">	app.config.from_object(&quot;app.secure&quot;)</span><br><span class="line">	app.config.from_object(&quot;app.settings&quot;)</span><br><span class="line">	</span><br><span class="line">	#注册蓝图</span><br><span class="line">	register_blueprint(app)</span><br><span class="line">	</span><br><span class="line">	return app</span><br></pre></td></tr></table></figure>
+<h3 id="7-数据表创建方式"><a href="#7-数据表创建方式" class="headerlink" title="7. 数据表创建方式"></a>7. 数据表创建方式</h3><h5 id="1-模块分成"><a href="#1-模块分成" class="headerlink" title="1.模块分成"></a>1.模块分成</h5><p>首先先将项目的层级结构重新调整一下，</p>
+<p>将<code>helper</code>,<code>httper</code>这些放在<code>libs</code>目录下，作为常用库函数。</p>
+<p>将<code>yushu_book</code>放在<code>spider</code>目录下，因为这里涉及到的访问外部<code>api</code>，或者访问数据库，都更像一个小的爬虫</p>
+<p><strong>更新完了目录结构为</strong><br><img src="http://p5x7w1vrd.bkt.clouddn.com/4bbef81fdd48e63d37b7e395f655fc1d.jpg" alt=""></p>
+<ul>
+<li>web flask 的web视图函数蓝图</li>
+<li>libs 库函数</li>
+<li>form 参数验证</li>
+<li>spider 数据爬取</li>
+</ul>
+<h4 id="2-数据表创建方式"><a href="#2-数据表创建方式" class="headerlink" title="2.数据表创建方式"></a>2.数据表创建方式</h4><h5 id="1-database-first"><a href="#1-database-first" class="headerlink" title="1.database first"></a>1.database first</h5><blockquote>
+<p>是最普标的。直接在数据库中编写DML语句，建表。</p>
+</blockquote>
+<h5 id="2-model-first"><a href="#2-model-first" class="headerlink" title="2.model first"></a>2.model first</h5><blockquote>
+<p>使用建模工具，根据绘制的数据模型，生成数据表。DMA最爱</p>
+</blockquote>
+<h5 id="3-code-first"><a href="#3-code-first" class="headerlink" title="3.code first"></a>3.code first</h5><blockquote>
+<p>在代码中创建业务模型（实体类），自动反向生成数据表。</p>
+<p>程序员最爱可以专注业务模型的设计，而不是数据库的设计<br>不需要关心数据库表以及数据库表是如何创建的，简化思维逻辑</p>
+</blockquote>
+<blockquote>
+<p>数据库只是用来存储数据的，他的表之间的关系应该有业务来决定</p>
+</blockquote>
+<h4 id="3-ORM与Code-first的区别"><a href="#3-ORM与Code-first的区别" class="headerlink" title="3.ORM与Code first的区别"></a>3.ORM与Code first的区别</h4><ul>
+<li><p><code>Code first</code> 关注的是相关的数据表是怎么创建的，他解决的是创建数据的问题</p>
+</li>
+<li><p><code>ORM（Object relation Map</code> 不仅仅是解决数据创建的问题，还包含了数据的查询，更新，添加，删除。ORM希望我们通过操作一个个模型来间接操作数据库，所以说他的范围是更加广阔的。我们后面的所有的数据库操作都是通过ORM来操作的</p>
+</li>
+</ul>
+<h5 id="定义第一个模型类以及反向生成"><a href="#定义第一个模型类以及反向生成" class="headerlink" title="定义第一个模型类以及反向生成"></a>定义第一个模型类以及反向生成</h5><blockquote>
+<p>新建一个模块model，用于存储数据库表对应的业务模型，在编写model层的模型时，</p>
+<p>一定要忘记数据库表，重点要放在业务模型的抽象中来</p>
+</blockquote>
+<ul>
+<li><p><code>sqlalchemy</code> 是一个类库，用于根据定义的model反向生成数据库表</p>
+</li>
+<li><p><code>Flask_SqlAlchemy</code> 是<code>Flask</code>在<code>sqlalchemy</code>基础上封装的一个组件。提供了更加人性化的API来操作数据库</p>
+</li>
+<li><p><code>pipenv</code> 按照 <code>pipenv install flask-sqlalchemy</code></p>
+</li>
+</ul>
+<p><strong>1.编写模型类</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">from sqlalchemy import Column,Integer,String</span><br><span class="line"></span><br><span class="line">__author__ = &quot;Jason&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class Book():</span><br><span class="line">	id = Column(Integer, primary_key=True, autoincrement=True)</span><br><span class="line">	title = Column(String(50), nullable=True)</span><br><span class="line">	author = Column(String(30), default=&quot;未名&quot;)</span><br><span class="line">	binding = Column(String(20))</span><br><span class="line">	publisher = Column(String(50))</span><br><span class="line">	price = Column(String(20))</span><br><span class="line">	pages = Column(Integer)</span><br><span class="line">	isbn = Column(String(15), nullable=True, unique=True)</span><br><span class="line">	summary = Column(String(1000))</span><br><span class="line">	image = Column(String(50))</span><br></pre></td></tr></table></figure>
+<p><strong>2.将模型映射到数据库中</strong></p>
+<h5 id="1-在模型类中引入Flask-SqlAlchemy，并做相关声明"><a href="#1-在模型类中引入Flask-SqlAlchemy，并做相关声明" class="headerlink" title="1.在模型类中引入Flask_SqlAlchemy，并做相关声明"></a>1.在模型类中引入Flask_SqlAlchemy，并做相关声明</h5><p><strong>app/models/book.py</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">from sqlalchemy import Column, Integer, String</span><br><span class="line">from flask_sqlalchemy import SQLAlchemy</span><br><span class="line"></span><br><span class="line">__author__ = &quot;Jason&quot;</span><br><span class="line"></span><br><span class="line">db = SQLAlchemy()</span><br><span class="line"></span><br><span class="line"># 继承db.Model</span><br><span class="line">class Book(db.Model):</span><br><span class="line">	id = Column(Integer, primary_key=True, autoincrement=True)</span><br><span class="line">	title = Column(String(50), nullable=True)</span><br><span class="line">	author = Column(String(30), default=&quot;未名&quot;)</span><br><span class="line">	binding = Column(String(20))</span><br><span class="line">	publisher = Column(String(50))</span><br><span class="line">	price = Column(String(20))</span><br><span class="line">	pages = Column(Integer)</span><br><span class="line">	isbn = Column(String(15), nullable=True, unique=True)</span><br><span class="line">	summary = Column(String(1000))</span><br><span class="line">	image = Column(String(50))</span><br></pre></td></tr></table></figure>
+<h5 id="2-在app中插入Flask-SqlAlchemy对象"><a href="#2-在app中插入Flask-SqlAlchemy对象" class="headerlink" title="2.在app中插入Flask_SqlAlchemy对象"></a>2.在app中插入Flask_SqlAlchemy对象</h5><p><strong>app/<strong>init</strong>.py</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">from app.models.book import db</span><br><span class="line"></span><br><span class="line">def create_app():</span><br><span class="line">	app = Flask(__name__)</span><br><span class="line">	app.config.from_object(&quot;app.secure&quot;)</span><br><span class="line">	app.config.from_object(&quot;app.settings&quot;)</span><br><span class="line">	register_blueprint(app)</span><br><span class="line"></span><br><span class="line">	# 将db插入app</span><br><span class="line">	db.init_app(app)</span><br><span class="line">	</span><br><span class="line">	# 创建所有的表</span><br><span class="line">	db.create_all()</span><br><span class="line">	</span><br><span class="line">	return app</span><br></pre></td></tr></table></figure>
+<h5 id="3-书写配置文件"><a href="#3-书写配置文件" class="headerlink" title="3.书写配置文件"></a>3.书写配置文件</h5><p><strong>app/secure.py</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># key-SQLALCHEMY_DATABASE_URI不能随意修改</span><br><span class="line"></span><br><span class="line"># URI规则:数据库类型+驱动://账号:密码@host:port/dbname</span><br><span class="line"></span><br><span class="line">SQLALCHEMY_DATABASE_URI = &quot;mysql+cymysql://root:root@localhost:3306/fisher&quot;</span><br></pre></td></tr></table></figure>
+<p><strong>cysql驱动需要安装</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pipenv install cymysql</span><br></pre></td></tr></table></figure>
+<p><strong>上面的操作完成以后启动项目，会报如下错误</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">/Users/gaowenfeng/.local/share/virtualenvs/fisher-4xlkyzha/lib/python3.6/site-packages/flask_sqlalchemy/__init__.py:794: FSADeprecationWarning: SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhead and will be disabled by default in the future. Set it to True or False to suppress this warning.</span><br><span class="line">&apos;SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhead and &apos;</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">File &quot;/Users/gaowenfeng/project/pycharm/fisher/fisher/fisher.py&quot;, line 10, in &lt;module&gt;</span><br><span class="line">app = create_app()</span><br><span class="line">File &quot;/Users/gaowenfeng/project/pycharm/fisher/fisher/app/__init__.py&quot;, line 14, in create_app</span><br><span class="line">db.create_all()</span><br><span class="line">File &quot;/Users/gaowenfeng/.local/share/virtualenvs/fisher-4xlkyzha/lib/python3.6/site-packages/flask_sqlalchemy/__init__.py&quot;, line 963, in create_all</span><br><span class="line">self._execute_for_all_tables(app, bind, &apos;create_all&apos;)</span><br><span class="line">File &quot;/Users/gaowenfeng/.local/share/virtualenvs/fisher-4xlkyzha/lib/python3.6/site-packages/flask_sqlalchemy/__init__.py&quot;, line 940, in _execute_for_all_tables</span><br><span class="line">app = self.get_app(app)</span><br><span class="line">File &quot;/Users/gaowenfeng/.local/share/virtualenvs/fisher-4xlkyzha/lib/python3.6/site-packages/flask_sqlalchemy/__init__.py&quot;, line 912, in get_app</span><br><span class="line">&apos;No application found. Either work inside a view function or push&apos;</span><br><span class="line">RuntimeError: No application found. Either work inside a view function or push an application context. See http://flask-sqlalchemy.pocoo.org/contexts/.</span><br><span class="line"></span><br><span class="line">Process finished with exit code 1</span><br></pre></td></tr></table></figure>
+<p>这是因为在<code>Flask</code>中，不是实例化了<code>app</code>核心对象，其他的代码就可以直接用到。所以在上面第二部<code>create_all()</code>方法中，应该将<code>app</code>传入</p>
+<p><strong>修改后的代码</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">def create_app():</span><br><span class="line">	app = Flask(__name__)</span><br><span class="line">	app.config.from_object(&quot;app.secure&quot;)</span><br><span class="line">	app.config.from_object(&quot;app.settings&quot;)</span><br><span class="line">	register_blueprint(app)</span><br><span class="line">	</span><br><span class="line">	# 将db插入app</span><br><span class="line">	db.init_app(app)</span><br><span class="line">	</span><br><span class="line">	# 创建所有的表</span><br><span class="line">	db.create_all(app=app)</span><br><span class="line">	</span><br><span class="line">	return app</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag"># Python</a>
+          
+            <a href="/tags/Flask/" rel="tag"># Flask</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/11/Flask/Lesson for net Flask high-level programming of actual combat - mind mapping knowledge points/" rel="next" title="慕课网Flask高级编程实战-知识点思维导图">
+                <i class="fa fa-chevron-left"></i> 慕课网Flask高级编程实战-知识点思维导图
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/11/Flask/Lesson for net Flask high-level programming practice - 2. Search routing to write books/" rel="prev" title="慕课网Flask高级编程实战-2.搜索书籍路由编写">
+                慕课网Flask高级编程实战-2.搜索书籍路由编写 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://ooky9xe9n.bkt.clouddn.com/avatar.png"
+                alt="卡布奇诺" />
+            
+              <p class="site-author-name" itemprop="name">卡布奇诺</p>
+              <p class="site-description motion-element" itemprop="description">记录编程中遇到的坑</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">165</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">102</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/aopao1" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:admin@wujinyu.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#应用、蓝图与视图函数"><span class="nav-number">1.</span> <span class="nav-text">应用、蓝图与视图函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Flask的层级关系"><span class="nav-number">1.1.</span> <span class="nav-text">1.Flask的层级关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-代码规范化"><span class="nav-number">1.2.</span> <span class="nav-text">2.代码规范化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-用蓝图注册试图函数"><span class="nav-number">1.3.</span> <span class="nav-text">3 用蓝图注册试图函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-在蓝图中注册视图函数"><span class="nav-number">1.3.1.</span> <span class="nav-text">1.在蓝图中注册视图函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-蓝图是不能替代app应用的，在蓝图中注册了视图函数后，还需要将蓝图插入app"><span class="nav-number">1.3.2.</span> <span class="nav-text">2.蓝图是不能替代app应用的，在蓝图中注册了视图函数后，还需要将蓝图插入app</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-单蓝图多模块拆分视图函数"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.单蓝图多模块拆分视图函数</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#book-py"><span class="nav-number">1.3.3.1.</span> <span class="nav-text">book.py</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#后面还会有user模块。我们这里先建立一段伪代码"><span class="nav-number">1.3.3.2.</span> <span class="nav-text">后面还会有user模块。我们这里先建立一段伪代码</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#web-init-py"><span class="nav-number">1.3.3.3.</span> <span class="nav-text">web/init.py</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-Request对象"><span class="nav-number">1.3.4.</span> <span class="nav-text">4. Request对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-WTForms参数验证"><span class="nav-number">1.3.5.</span> <span class="nav-text">5. WTForms参数验证</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#使用pipenv引入WTForms"><span class="nav-number">1.3.5.1.</span> <span class="nav-text">使用pipenv引入WTForms</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#使用WTForms需要自定义一个类继承wtforms提供的Form类，然后定义参数校验规则"><span class="nav-number">1.3.5.2.</span> <span class="nav-text">使用WTForms需要自定义一个类继承wtforms提供的Form类，然后定义参数校验规则</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#使用WTForms"><span class="nav-number">1.3.5.3.</span> <span class="nav-text">使用WTForms</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-配置文件拆分"><span class="nav-number">1.3.6.</span> <span class="nav-text">6. 配置文件拆分</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#考虑以下几点："><span class="nav-number">1.3.6.1.</span> <span class="nav-text">考虑以下几点：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#下面来看修改完后的代码yushu-book-py"><span class="nav-number">1.3.6.2.</span> <span class="nav-text">下面来看修改完后的代码yushu_book.py</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#app-web-settings-py"><span class="nav-number">1.3.6.3.</span> <span class="nav-text">app/web/settings.py</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#app-web-secure-py"><span class="nav-number">1.3.6.4.</span> <span class="nav-text">app/web/secure.py</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#app-init-py"><span class="nav-number">1.3.6.5.</span> <span class="nav-text">app/init.py</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-数据表创建方式"><span class="nav-number">1.4.</span> <span class="nav-text">7. 数据表创建方式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-模块分成"><span class="nav-number">1.4.0.1.</span> <span class="nav-text">1.模块分成</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-数据表创建方式"><span class="nav-number">1.4.1.</span> <span class="nav-text">2.数据表创建方式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-database-first"><span class="nav-number">1.4.1.1.</span> <span class="nav-text">1.database first</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-model-first"><span class="nav-number">1.4.1.2.</span> <span class="nav-text">2.model first</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-code-first"><span class="nav-number">1.4.1.3.</span> <span class="nav-text">3.code first</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-ORM与Code-first的区别"><span class="nav-number">1.4.2.</span> <span class="nav-text">3.ORM与Code first的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#定义第一个模型类以及反向生成"><span class="nav-number">1.4.2.1.</span> <span class="nav-text">定义第一个模型类以及反向生成</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-在模型类中引入Flask-SqlAlchemy，并做相关声明"><span class="nav-number">1.4.2.2.</span> <span class="nav-text">1.在模型类中引入Flask_SqlAlchemy，并做相关声明</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-在app中插入Flask-SqlAlchemy对象"><span class="nav-number">1.4.2.3.</span> <span class="nav-text">2.在app中插入Flask_SqlAlchemy对象</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-书写配置文件"><span class="nav-number">1.4.2.4.</span> <span class="nav-text">3.书写配置文件</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">卡布奇诺@心情</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Python,Flask," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="图书数据库的基地址 12345678# 基地址http://t.yushu.im# 关键字搜索http://t.yushu.im/v2/book/search?q=&amp;#123;&amp;#125;&amp;amp;start=&amp;#123;&amp;#125;&amp;amp;count=&amp;#123;&amp;#125;# isbn搜索http://t.yushu.im/v2/book/search/isbn/&amp;#123;isbn&amp;#12">
+<meta name="keywords" content="Python,Flask">
+<meta property="og:type" content="article">
+<meta property="og:title" content="慕课网Flask高级编程实战-2.搜索书籍路由编写">
+<meta property="og:url" content="http://www.wujinyu.com/2018/09/11/Flask/Lesson for net Flask high-level programming practice - 2. Search routing to write books/index.html">
+<meta property="og:site_name" content="卡布奇诺">
+<meta property="og:description" content="图书数据库的基地址 12345678# 基地址http://t.yushu.im# 关键字搜索http://t.yushu.im/v2/book/search?q=&amp;#123;&amp;#125;&amp;amp;start=&amp;#123;&amp;#125;&amp;amp;count=&amp;#123;&amp;#125;# isbn搜索http://t.yushu.im/v2/book/search/isbn/&amp;#123;isbn&amp;#12">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p5x7w1vrd.bkt.clouddn.com/61d6f916cd2cbb4367252a3f96538ca2.jpg">
+<meta property="og:image" content="http://p5x7w1vrd.bkt.clouddn.com/7b864e073c2666ac70b82307d7734e3b.jpg">
+<meta property="og:image" content="http://p5x7w1vrd.bkt.clouddn.com/e0be648c7dbf4c769409d0207fa377c3.jpg">
+<meta property="og:image" content="http://p5x7w1vrd.bkt.clouddn.com/ec3f47fbc6f2f4e4ffaf79059314b9d7.jpg">
+<meta property="og:updated_time" content="2018-09-11T02:23:29.712Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="慕课网Flask高级编程实战-2.搜索书籍路由编写">
+<meta name="twitter:description" content="图书数据库的基地址 12345678# 基地址http://t.yushu.im# 关键字搜索http://t.yushu.im/v2/book/search?q=&amp;#123;&amp;#125;&amp;amp;start=&amp;#123;&amp;#125;&amp;amp;count=&amp;#123;&amp;#125;# isbn搜索http://t.yushu.im/v2/book/search/isbn/&amp;#123;isbn&amp;#12">
+<meta name="twitter:image" content="http://p5x7w1vrd.bkt.clouddn.com/61d6f916cd2cbb4367252a3f96538ca2.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.wujinyu.com/2018/09/11/Flask/Lesson for net Flask high-level programming practice - 2. Search routing to write books/"/>
+
+
+
+
+
+  <title>慕课网Flask高级编程实战-2.搜索书籍路由编写 | 卡布奇诺</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-21552344-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卡布奇诺</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生活心情</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-分类">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-归档">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-标签">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-关于">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/09/11/Flask/Lesson for net Flask high-level programming practice - 2. Search routing to write books/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">慕课网Flask高级编程实战-2.搜索书籍路由编写</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-11T15:01:17+08:00">
+                2018-09-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><code>图书数据库的基地址</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 基地址</span><br><span class="line">http://t.yushu.im</span><br><span class="line"># 关键字搜索</span><br><span class="line">http://t.yushu.im/v2/book/search?q=&#123;&#125;&amp;start=&#123;&#125;&amp;count=&#123;&#125;</span><br><span class="line"># isbn搜索</span><br><span class="line">http://t.yushu.im/v2/book/search/isbn/&#123;isbn&#125;</span><br><span class="line"># 豆瓣api</span><br><span class="line">https://api.douban.com/v2/book</span><br></pre></td></tr></table></figure>
+<p><code>截止2018你那9月11日，以上地址已经无法访问，此地址仅为项目演示地址</code></p>
+<h2 id="定义参数，判断查询参数q是否是isbn号"><a href="#定义参数，判断查询参数q是否是isbn号" class="headerlink" title="定义参数，判断查询参数q是否是isbn号"></a>定义参数，判断查询参数q是否是isbn号</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">@app.route(&quot;/search/q/&lt;page&gt;&quot;)</span><br><span class="line">def search():</span><br><span class="line">	&quot;&quot;&quot;</span><br><span class="line">	搜索书籍路由</span><br><span class="line">	:param q: 关键字 OR isbn</span><br><span class="line">	:param page: 页码</span><br><span class="line">	# isbn isbn13 由13个0-9在数字组成</span><br><span class="line">	# isbn10 由10表0-9表数字组组成，中间可能包含&apos; - &apos;</span><br><span class="line">	&quot;&quot;&quot;</span><br><span class="line">	isbn_or_key = &apos;key&apos;</span><br><span class="line">	</span><br><span class="line">	isbn_or_key = &apos;key&apos;</span><br><span class="line">    if len(q) == 13 and q.isdigit():</span><br><span class="line">        isbn_or_key = &apos;isbn&apos;</span><br><span class="line">    short_q = q.replace(&apos;-&apos;, &apos;&apos;)</span><br><span class="line">    if &apos;-&apos; in q and len(short_q) == 10 and short_q.isdigit():</span><br><span class="line">        isbn_or_key = &apos;isbn&apos;</span><br><span class="line">    pass</span><br></pre></td></tr></table></figure>
+<h3 id="要点解析"><a href="#要点解析" class="headerlink" title="要点解析"></a>要点解析</h3><ul>
+<li>判断字符串是否是数字，可以使用函数 <code>isdigit()</code></li>
+<li><code>in</code> 关键字可以判断一个字符串是否包含在另外一个字符串中</li>
+<li>多个逻辑循环原则：<ul>
+<li>尽量把判断结构为的假的放在前边，利用 逻辑判断的短路优势，可以减少资源消耗。</li>
+<li>需要查询数据库的尽量放在后边。</li>
+</ul>
+</li>
+</ul>
+<h2 id="简单重构"><a href="#简单重构" class="headerlink" title="简单重构"></a>简单重构</h2><h3 id="上面代码的缺点"><a href="#上面代码的缺点" class="headerlink" title="上面代码的缺点"></a>上面代码的缺点</h3><ul>
+<li>判断代码太多，使得代码很臃肿。而且不利于以后代码的复用</li>
+<li>代码可读性查，使后来者不能一眼看出主要功能。</li>
+</ul>
+<h3 id="重构后的代码"><a href="#重构后的代码" class="headerlink" title="重构后的代码"></a>重构后的代码</h3><h4 id="fisher-py"><a href="#fisher-py" class="headerlink" title="fisher.py"></a>fisher.py</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@app.route(&quot;/search/&lt;q&gt;/&lt;page&gt;&quot;)</span><br><span class="line">def search(q, page):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    搜索书籍路由</span><br><span class="line">    :param q: 关键字 OR isbn</span><br><span class="line">    :param page: 页码</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    isbn_or_key = is_isbn_or_key(q)</span><br></pre></td></tr></table></figure>
+<h4 id="helper-py"><a href="#helper-py" class="headerlink" title="helper.py"></a>helper.py</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">def is_isbn_or_key(word):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">        判断word是isbn号还是查询关键字key</span><br><span class="line">        isbn isbn13 由13个0-9在数字组成</span><br><span class="line">        isbn10 由10表0-9表数字组组成，中间可能包含&apos; - &apos;</span><br><span class="line">    :param word:</span><br><span class="line">    :return: key or isbn</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    isbn_or_key = &apos;key&apos;</span><br><span class="line">    if len(word) == 13 and word.isdigit():</span><br><span class="line">        isbn_or_key = &apos;isbn&apos;</span><br><span class="line">    short_word = word.replace(&apos;-&apos;, &apos;&apos;)</span><br><span class="line">    if &apos;-&apos; in word and len(short_word) == 10 and short_word.isdigit():</span><br><span class="line">        isbn_or_key = &apos;isbn&apos;</span><br><span class="line">    return isbn_or_key</span><br></pre></td></tr></table></figure>
+<h4 id="要点解析-1"><a href="#要点解析-1" class="headerlink" title="要点解析:"></a>要点解析:</h4><ul>
+<li>把判断 isbn 的代码隔离出去，新建 <code>helper.py</code> 文件，可以重复利用。</li>
+</ul>
+<h4 id="建议"><a href="#建议" class="headerlink" title="建议"></a>建议</h4><ul>
+<li><p>其他地方的代码多一点还可以接受，视图函数中不可以，因为视图函数是一个web项目的入口。所有人阅读都是从这里入手，应该把细节屏蔽掉，给阅读者一个选择。</p>
+</li>
+<li><p>看源码的技巧：先通读整体，了解整体过程，再回过头来了解细节，不要从一开始就深究每一个细节</p>
+</li>
+<li><p>过多的注释会让代码变的臃肿，尽量使用易懂的函数名来代替注释，保持代码的简洁性</p>
+</li>
+</ul>
+<h2 id="requests发送http请求及代码的简化手段"><a href="#requests发送http请求及代码的简化手段" class="headerlink" title="requests发送http请求及代码的简化手段"></a>requests发送http请求及代码的简化手段</h2><h3 id="http-py"><a href="#http-py" class="headerlink" title="http.py"></a>http.py</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">class HTTP:</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    封装 request 请求类</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    @staticmethod</span><br><span class="line">    def get(url, return_json=True):</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">       发送get请求</span><br><span class="line">       :param url: 请求路径</span><br><span class="line">       :param return_json: 是否返回json格式的结果</span><br><span class="line">       :return:</span><br><span class="line">       &quot;&quot;&quot;</span><br><span class="line">        # r 是对这次HTTP请求调用结果的一个封装，并不是我们直接想要的结果，而是想要返回的内容</span><br><span class="line">        r = requests.get(url)</span><br><span class="line">        if r.status_code != 200:</span><br><span class="line">            return &#123;&#125; if return_json else &apos;&apos;</span><br><span class="line">        return r.json() if return_json else r.text</span><br></pre></td></tr></table></figure>
+<h3 id="知识点："><a href="#知识点：" class="headerlink" title="知识点："></a>知识点：</h3><ul>
+<li>简化<code>if-else</code>语句的几种方式 <ul>
+<li>1.使用三元表达式 ；</li>
+<li>2.<code>if+return</code>；</li>
+<li>3.将<code>if-else</code>里的代码提取成函数</li>
+</ul>
+</li>
+<li><code>if+return</code>的理解：<ul>
+<li>把最后一句<code>return</code>前的<code>if+return</code> 全都理解为正常流程之外的一种特例情况的处理；</li>
+<li>多次<code>if-return</code>，提前结束一些逻辑分支，可以提高代码思维的清晰性 </li>
+</ul>
+</li>
+<li><code>requests</code>的一些说明：<ul>
+<li>1.<code>get()</code>发送<code>get</code>请求；</li>
+<li>2.返回结果<code>r.status_code</code> 获取返回状态吗；</li>
+<li>3.<code>r.json()</code>将返回结果序列化成<code>json</code>;</li>
+<li>4.<code>r.text</code> 将返回结果不做处理直接返回 </li>
+</ul>
+</li>
+</ul>
+<h2 id="requests-vs-urllib"><a href="#requests-vs-urllib" class="headerlink" title="requests vs urllib"></a>requests vs urllib</h2><h3 id="发送http请求的两种方法："><a href="#发送http请求的两种方法：" class="headerlink" title="发送http请求的两种方法："></a>发送http请求的两种方法：</h3><ul>
+<li>1.使用urllib(python内置)</li>
+<li>2.使用requests（需要使用pip3安装）</li>
+</ul>
+<h3 id="urllib的用法："><a href="#urllib的用法：" class="headerlink" title="urllib的用法："></a>urllib的用法：</h3><p><img src="http://p5x7w1vrd.bkt.clouddn.com/61d6f916cd2cbb4367252a3f96538ca2.jpg" alt=""></p>
+<h4 id="urllib缺点分析"><a href="#urllib缺点分析" class="headerlink" title="urllib缺点分析"></a>urllib缺点分析</h4><ul>
+<li>需要对url进行编码，并且有些字符不需要编码还要声明出来</li>
+<li>返回的结果是字节码，需要包装成字符串</li>
+<li>404的情况是通过异常的形式抛出，现在流行的restful，404已经不是一种异常了</li>
+</ul>
+<h2 id="从API获取数据"><a href="#从API获取数据" class="headerlink" title="从API获取数据"></a>从API获取数据</h2><h3 id="将具体调用HTTP请求，获取结果的业务代码封装到-YuShuBook中"><a href="#将具体调用HTTP请求，获取结果的业务代码封装到-YuShuBook中" class="headerlink" title="将具体调用HTTP请求，获取结果的业务代码封装到`YuShuBook中"></a>将具体调用<code>HTTP</code>请求，获取结果的业务代码封装到`YuShuBook中</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">class YuShuBook:</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    请求接口的定义类</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    search_by_isbn_url = &quot;http://t.yushu.im/v2/book/search/isbn/&#123;&#125;&quot;</span><br><span class="line"></span><br><span class="line">    search_by_key_url = &quot;http://t.yushu.im/v2/book/search?q=&#123;&#125;&amp;count=&#123;&#125;&amp;start=&#123;&#125;&quot;</span><br><span class="line"></span><br><span class="line">    @classmethod</span><br><span class="line">    def search_by_isbn(cls, isbn):</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        1.组装 search_by_isbn_url 地址</span><br><span class="line">        2.返回对地址的请求数据,默认返回 Json 数据</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        url = cls.search_by_isbn_url.format(isbn)</span><br><span class="line">        return HTTP.get(url)</span><br><span class="line"></span><br><span class="line">    @classmethod</span><br><span class="line">    def search_by_key(cls, q, count=15, start=0):</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        1.组装 search_by_key_url 地址</span><br><span class="line">        2.返回对地址的请求数据,默认返回 Json 数据</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        url = cls.search_by_key_url.format(q, count, start)</span><br><span class="line">        return HTTP.get(url)</span><br></pre></td></tr></table></figure>
+<h3 id="使用-json-dumps-序列表返回结果，在视图函数中进行返回，并声明状态码和返回类型-一个元组"><a href="#使用-json-dumps-序列表返回结果，在视图函数中进行返回，并声明状态码和返回类型-一个元组" class="headerlink" title="使用 json.dumps 序列表返回结果，在视图函数中进行返回，并声明状态码和返回类型(一个元组)"></a>使用 <code>json.dumps</code> 序列表返回结果，在视图函数中进行返回，并声明状态码和返回类型(一个元组)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">@app.route(&quot;/book/search/&lt;q&gt;/&lt;page&gt;&quot;)</span><br><span class="line">def search(q, page):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    搜索书籍路由</span><br><span class="line">    :param q: 关键字 OR isbn</span><br><span class="line">    :param page: 页码</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    isbn_or_key = is_isbn_or_key(q)</span><br><span class="line">    if isbn_or_key == &apos;isbn&apos;:</span><br><span class="line">        result = YuShuBook.search_by_isbn(q)</span><br><span class="line">    else:</span><br><span class="line">        result = YuShuBook.search_by_key(q)</span><br><span class="line"></span><br><span class="line">    return json.dumps(result), 200, &#123;&apos;content-type&apos;: &apos;application/json&apos;&#125;</span><br><span class="line">    #可以使用 flask 提供的 jsonify 包替代</span><br><span class="line">    #return jsonify(result)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>可以使用<code>flask</code>提供的<code>jsonify</code>替换麻烦的<code>json.dumps</code>和元组</p>
+</blockquote>
+<h2 id="将视图函数拆分到单独的模块中"><a href="#将视图函数拆分到单独的模块中" class="headerlink" title="将视图函数拆分到单独的模块中"></a>将视图函数拆分到单独的模块中</h2><h3 id="1-将试图函数都放在一个文件中有哪些不足："><a href="#1-将试图函数都放在一个文件中有哪些不足：" class="headerlink" title="1.将试图函数都放在一个文件中有哪些不足："></a>1.将试图函数都放在一个文件中有哪些不足：</h3><ul>
+<li><p>代码太长，不利于维护</p>
+</li>
+<li><p>从业务模型抽象的角度，不应该把他们都放在一个文件中。关于书籍相关的API就应该放在书籍模型的视图函数文件中，跟用户相关的API就应该放在用户模型相关的文件中</p>
+</li>
+<li><p>入口文件的意义比较独特，会启动web服务器以及做很多初始化的操作，就算要放在一个文件也不应该业务的操作放在入口文件中来</p>
+</li>
+</ul>
+<h3 id="2-尝试拆分模块"><a href="#2-尝试拆分模块" class="headerlink" title="2.尝试拆分模块"></a>2.尝试拆分模块</h3><h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><blockquote>
+<p>将试图函数抽离到单独的包中，然后在新的试图文件中引入flask.py来导入app核心对象。</p>
+<p>为了新的试图文件中的路由可以成功注册，再在flask.py中引入刚刚抽离出的试图模块</p>
+</blockquote>
+<h4 id="修改后的fisher-py"><a href="#修改后的fisher-py" class="headerlink" title="修改后的fisher.py"></a>修改后的fisher.py</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">from flask import Flask</span><br><span class="line"></span><br><span class="line"># 为了可以注册book.py中的路由</span><br><span class="line">from app.web import book</span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line">app.config.from_object(&quot;config&quot;)</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">app.run(host=app.config[&quot;HOST&quot;], debug=app.config[&quot;DEBUG&quot;], port=app.config[&quot;PORT&quot;])</span><br></pre></td></tr></table></figure>
+<h4 id="新增的book-py"><a href="#新增的book-py" class="headerlink" title="新增的book.py"></a>新增的book.py</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">from flask import jsonify</span><br><span class="line"></span><br><span class="line">from helper import is_isbn_or_key</span><br><span class="line">from yushu_book import YuShuBook</span><br><span class="line"></span><br><span class="line"># 为了让book.py模块可以使用app对象</span><br><span class="line">from fisher import app</span><br><span class="line"></span><br><span class="line">__author__ = &quot;Jason&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@app.route(&quot;/book/search/&lt;q&gt;/&lt;page&gt;&quot;)</span><br><span class="line">def search(q, page):</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">搜索书籍路由</span><br><span class="line">:param q: 关键字 OR isbn</span><br><span class="line">:param page: 页码</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">isbn_or_key = is_isbn_or_key(q)</span><br><span class="line">if isbn_or_key == &apos;isbn&apos;:</span><br><span class="line">result = YuShuBook.search_by_isbn(q)</span><br><span class="line">else:</span><br><span class="line">result = YuShuBook.search_by_key(q)</span><br><span class="line"></span><br><span class="line">return jsonify(result)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>但是这样做并不是正确的做法，结果表明，这样修改以后，访问<code>search api</code>会404</p>
+<p>为了知道为什么这样做不行，我们需要先刨铣一下<code>Flask路由机制</code>的原理</p>
+</blockquote>
+<h3 id="3-Flask路由机制"><a href="#3-Flask路由机制" class="headerlink" title="3.Flask路由机制"></a>3.Flask路由机制</h3><h4 id="flask路由机制"><a href="#flask路由机制" class="headerlink" title="flask路由机制"></a>flask路由机制</h4><p><img src="http://p5x7w1vrd.bkt.clouddn.com/7b864e073c2666ac70b82307d7734e3b.jpg" alt="flask路由机制"></p>
+<blockquote>
+<p>flask的基本思想是内部会维护一个字典。</p>
+<p>每一个<code>url</code>都会对应一个视图函数，但是不仅仅是这样。</p>
+<p>每一个<code>url</code>还会对应一个<code>endpoint</code>端点。用于反向构建URL（后面会讲解)</p>
+</blockquote>
+<blockquote>
+<p>flask的路由注册<code>app_url_rule(url=,view_func=,endpoint=)</code>会接受三个参数，</p>
+<p>前两个我们都知道了，第三个就是上面说的<code>endpoint</code>。他的默认值是<code>view_func</code>的名称。</p>
+<p>当然，<code>app.route(&#39;url&#39;,endpoint=)</code>也可以传入</p>
+</blockquote>
+<h4 id="flask-route的部分源码"><a href="#flask-route的部分源码" class="headerlink" title="flask route的部分源码"></a>flask route的部分源码</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">def route(self, rule, **options):</span><br><span class="line">    &quot;&quot;&quot;A decorator that is used to register a view function for a</span><br><span class="line">    given URL rule.  This does the same thing as :meth:`add_url_rule`</span><br><span class="line">    but is intended for decorator usage::</span><br><span class="line"></span><br><span class="line">        @app.route(&apos;/&apos;)</span><br><span class="line">        def index():</span><br><span class="line">            return &apos;Hello World&apos;</span><br><span class="line"></span><br><span class="line">    For more information refer to :ref:`url-route-registrations`.</span><br><span class="line"></span><br><span class="line">    :param rule: the URL rule as string</span><br><span class="line">    :param endpoint: the endpoint for the registered URL rule.  Flask</span><br><span class="line">                     itself assumes the name of the view function as</span><br><span class="line">                     endpoint</span><br><span class="line">    :param options: the options to be forwarded to the underlying</span><br><span class="line">                    :class:`~werkzeug.routing.Rule` object.  A change</span><br><span class="line">                    to Werkzeug is handling of method options.  methods</span><br><span class="line">                    is a list of methods this rule should be limited</span><br><span class="line">                    to (``GET``, ``POST`` etc.).  By default a rule</span><br><span class="line">                    just listens for ``GET`` (and implicitly ``HEAD``).</span><br><span class="line">                    Starting with Flask 0.6, ``OPTIONS`` is implicitly</span><br><span class="line">                    added and handled by the standard request handling.</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    #注册路由的装饰器函数</span><br><span class="line">    def decorator(f):</span><br><span class="line">        endpoint = options.pop(&apos;endpoint&apos;, None)</span><br><span class="line">        #实际是调用内部的 add_url_rule 函数</span><br><span class="line">        self.add_url_rule(rule, endpoint, f, **options)</span><br><span class="line">        return f</span><br><span class="line">    return decorator</span><br></pre></td></tr></table></figure>
+<p><img src="http://p5x7w1vrd.bkt.clouddn.com/e0be648c7dbf4c769409d0207fa377c3.jpg" alt=""></p>
+<blockquote>
+<p>通过端点调试可以发现，Flask内部由<code>url_map</code> 维护一个<code>url-&gt;endpoint</code> 的指向。</p>
+<p>由<code>view_functions</code> 记录 <code>endpoint</code>所指向视图函数的函数，</p>
+<p>这样请求进入到Flask内部，才能通过<code>Url</code>找到对应的视图函数</p>
+</blockquote>
+<h3 id="4-循环引入流程分析"><a href="#4-循环引入流程分析" class="headerlink" title="4. 循环引入流程分析"></a>4. 循环引入流程分析</h3><blockquote>
+<p>从上面的断点调试中发现，我们的<code>url_map</code>和<code>view_functions</code>中都已经维护了相关的信息。</p>
+<p>但是为什么还是会出现404的情况，这是因为<code>fisher.py</code>和<code>book.py</code>出现了循环引入的情况。</p>
+</blockquote>
+<p>下面看下<code>fisher.py</code>和<code>book.py</code>的具体流程图</p>
+<p><img src="http://p5x7w1vrd.bkt.clouddn.com/ec3f47fbc6f2f4e4ffaf79059314b9d7.jpg" alt=""></p>
+<blockquote>
+<p>图中有两种颜色的线：红色的线是<code>fisher</code>主执行文件被执行之后的执行路径；</p>
+<p>蓝色的线是book模块被导入之后循环导入的执行路径。</p>
+</blockquote>
+<ul>
+<li>1.主流程开始之后，首先到达<code>导入book</code>的语句。然后<code>进入book</code>模块中执行</li>
+<li>2.book模块开始之后，首先到达<code>导入fisher</code>的语句（循环导入），这个时候主流程暂时结束，重新执行fisher中的代码</li>
+<li>3.这时候又回到fisher中的导入book的语句，由于book已经被导入一次，所以不会再次导入，进入if语句，这个时候的name是book导入fisher时候的name:fisher，不是主流程main，所以if语句条件为false。蓝色线执行终止，重新回到2. book导入fisher的语句。</li>
+<li>4.继续向下执行book 中app.route注册路由的语句。然后book执行完，回到fisher主流程执行中。</li>
+<li>5.到达if语句，这个时候name为main。执行run方法，启动服务</li>
+</ul>
+<h4 id="回答流程图中的两个问题："><a href="#回答流程图中的两个问题：" class="headerlink" title="回答流程图中的两个问题："></a>回答流程图中的两个问题：</h4><ul>
+<li>问题1：因为都是由fisher引入book，一个模块只会引入另一个模块一次。所以只执行了一次book</li>
+<li>问题2：由于一次是主流程执行fisher文件；一次是由book模块导入 fisher。</li>
+</ul>
+<h3 id="5-找不到视图函数的最终解释和证明"><a href="#5-找不到视图函数的最终解释和证明" class="headerlink" title="5.找不到视图函数的最终解释和证明"></a>5.找不到视图函数的最终解释和证明</h3><blockquote>
+<p>整个流程中，出现了两次核心app对象的初始化，注册路由是在蓝色流程中初始化的app注册的。</p>
+<p>但是启动服务是红色流程中的app启动的</p>
+</blockquote>
+<blockquote>
+<p>book中注册路由所使用的app对象，是他自己所导入fisher模块的app对象（蓝色流程中），</p>
+<p>而不是红色主流程中所实例化的app对象</p>
+</blockquote>
+<h4 id="加入一些日志出数验证我们的结论。"><a href="#加入一些日志出数验证我们的结论。" class="headerlink" title="加入一些日志出数验证我们的结论。"></a>加入一些日志出数验证我们的结论。</h4><p><code>我们在app实例化，启动，注册路由是哪个地方加入日志信息，来观察一下</code></p>
+<h5 id="book-py"><a href="#book-py" class="headerlink" title="book.py"></a>book.py</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">print(&quot;id为&quot;+str(id(app))+&quot;的app注册路由&quot;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@app.route(&quot;/book/search/&lt;q&gt;/&lt;page&gt;&quot;)</span><br><span class="line">def search(q, page):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    搜索书籍路由</span><br><span class="line">    :param q: 关键字 OR isbn</span><br><span class="line">    :param page: 页码</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    isbn_or_key = is_isbn_or_key(q)</span><br><span class="line">    if isbn_or_key == &apos;isbn&apos;:</span><br><span class="line">    result = YuShuBook.search_by_isbn(q)</span><br><span class="line">    else:</span><br><span class="line">    result = YuShuBook.search_by_key(q)</span><br><span class="line">    </span><br><span class="line">    return jsonify(result)</span><br></pre></td></tr></table></figure>
+<h5 id="fisher-py-1"><a href="#fisher-py-1" class="headerlink" title="fisher.py"></a>fisher.py</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">app = Flask(__name__)</span><br><span class="line">print(&quot;id为&quot;+str(id(app))+&quot;的app实例化&quot;)</span><br><span class="line"></span><br><span class="line">app.config.from_object(&quot;config&quot;)</span><br><span class="line"></span><br><span class="line"># 为了可以注册book.py中的路由</span><br><span class="line">from app.web import book</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    print(&quot;id为&quot; + str(id(app)) + &quot;的app启动&quot;)</span><br><span class="line">    app.run(host=app.config[&quot;HOST&quot;], debug=app.config[&quot;DEBUG&quot;], port=app.config[&quot;PORT&quot;])</span><br></pre></td></tr></table></figure>
+<h5 id="执行结果"><a href="#执行结果" class="headerlink" title="执行结果"></a>执行结果</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">pydev debugger: process 63816 is connecting</span><br><span class="line"></span><br><span class="line">id为4350444824的app实例化</span><br><span class="line">id为4355159656的app实例化</span><br><span class="line">id为4355159656的app注册路由</span><br><span class="line">id为4350444824的app启动</span><br><span class="line">* Debugger is active!</span><br><span class="line">* Debugger PIN: 176-669-651</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>可以看到注册路由的app，和启动服务的app不是同一个app。</p>
+<p>并且最后启动的app是最先实例化的app，也就是红色主流程的app；</p>
+<p>而注册路由的app是后实例化的app，也就是由book导入fisher模块的蓝色流程的app</p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag"># Python</a>
+          
+            <a href="/tags/Flask/" rel="tag"># Flask</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/11/Flask/Lesson for net Flask high-level programming practice - 3. The blueprint, model and CodeFirst/" rel="next" title="慕课网Flask高级编程实战-3.蓝图、模型与CodeFirst">
+                <i class="fa fa-chevron-left"></i> 慕课网Flask高级编程实战-3.蓝图、模型与CodeFirst
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://ooky9xe9n.bkt.clouddn.com/avatar.png"
+                alt="卡布奇诺" />
+            
+              <p class="site-author-name" itemprop="name">卡布奇诺</p>
+              <p class="site-description motion-element" itemprop="description">记录编程中遇到的坑</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">165</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">102</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/aopao1" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:admin@wujinyu.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#定义参数，判断查询参数q是否是isbn号"><span class="nav-number">1.</span> <span class="nav-text">定义参数，判断查询参数q是否是isbn号</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#要点解析"><span class="nav-number">1.1.</span> <span class="nav-text">要点解析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单重构"><span class="nav-number">2.</span> <span class="nav-text">简单重构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#上面代码的缺点"><span class="nav-number">2.1.</span> <span class="nav-text">上面代码的缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重构后的代码"><span class="nav-number">2.2.</span> <span class="nav-text">重构后的代码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#fisher-py"><span class="nav-number">2.2.1.</span> <span class="nav-text">fisher.py</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#helper-py"><span class="nav-number">2.2.2.</span> <span class="nav-text">helper.py</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#要点解析-1"><span class="nav-number">2.2.3.</span> <span class="nav-text">要点解析:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#建议"><span class="nav-number">2.2.4.</span> <span class="nav-text">建议</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#requests发送http请求及代码的简化手段"><span class="nav-number">3.</span> <span class="nav-text">requests发送http请求及代码的简化手段</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#http-py"><span class="nav-number">3.1.</span> <span class="nav-text">http.py</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#知识点："><span class="nav-number">3.2.</span> <span class="nav-text">知识点：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#requests-vs-urllib"><span class="nav-number">4.</span> <span class="nav-text">requests vs urllib</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#发送http请求的两种方法："><span class="nav-number">4.1.</span> <span class="nav-text">发送http请求的两种方法：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#urllib的用法："><span class="nav-number">4.2.</span> <span class="nav-text">urllib的用法：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#urllib缺点分析"><span class="nav-number">4.2.1.</span> <span class="nav-text">urllib缺点分析</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#从API获取数据"><span class="nav-number">5.</span> <span class="nav-text">从API获取数据</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#将具体调用HTTP请求，获取结果的业务代码封装到-YuShuBook中"><span class="nav-number">5.1.</span> <span class="nav-text">将具体调用HTTP请求，获取结果的业务代码封装到`YuShuBook中</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-json-dumps-序列表返回结果，在视图函数中进行返回，并声明状态码和返回类型-一个元组"><span class="nav-number">5.2.</span> <span class="nav-text">使用 json.dumps 序列表返回结果，在视图函数中进行返回，并声明状态码和返回类型(一个元组)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#将视图函数拆分到单独的模块中"><span class="nav-number">6.</span> <span class="nav-text">将视图函数拆分到单独的模块中</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-将试图函数都放在一个文件中有哪些不足："><span class="nav-number">6.1.</span> <span class="nav-text">1.将试图函数都放在一个文件中有哪些不足：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-尝试拆分模块"><span class="nav-number">6.2.</span> <span class="nav-text">2.尝试拆分模块</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#思路"><span class="nav-number">6.2.1.</span> <span class="nav-text">思路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改后的fisher-py"><span class="nav-number">6.2.2.</span> <span class="nav-text">修改后的fisher.py</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#新增的book-py"><span class="nav-number">6.2.3.</span> <span class="nav-text">新增的book.py</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Flask路由机制"><span class="nav-number">6.3.</span> <span class="nav-text">3.Flask路由机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#flask路由机制"><span class="nav-number">6.3.1.</span> <span class="nav-text">flask路由机制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#flask-route的部分源码"><span class="nav-number">6.3.2.</span> <span class="nav-text">flask route的部分源码</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-循环引入流程分析"><span class="nav-number">6.4.</span> <span class="nav-text">4. 循环引入流程分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#回答流程图中的两个问题："><span class="nav-number">6.4.1.</span> <span class="nav-text">回答流程图中的两个问题：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-找不到视图函数的最终解释和证明"><span class="nav-number">6.5.</span> <span class="nav-text">5.找不到视图函数的最终解释和证明</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#加入一些日志出数验证我们的结论。"><span class="nav-number">6.5.1.</span> <span class="nav-text">加入一些日志出数验证我们的结论。</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#book-py"><span class="nav-number">6.5.1.1.</span> <span class="nav-text">book.py</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#fisher-py-1"><span class="nav-number">6.5.1.2.</span> <span class="nav-text">fisher.py</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#执行结果"><span class="nav-number">6.5.1.3.</span> <span class="nav-text">执行结果</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">卡布奇诺@心情</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
