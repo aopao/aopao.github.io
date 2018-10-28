@@ -271,6 +271,301 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/08/29/qrcode/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/29/qrcode/" itemprop="url">Python 生成二维码</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-29T09:28:17+08:00">
+                2018-08-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="安装-MYQR"><a href="#安装-MYQR" class="headerlink" title="安装 MYQR"></a>安装 MYQR</h2><p>Github：<a href="https://github.com/sylnsfar/qrcode" target="_blank" rel="noopener">https://github.com/sylnsfar/qrcode </a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install MyQR</span><br></pre></td></tr></table></figure>
+<h2 id="写代码："><a href="#写代码：" class="headerlink" title="写代码："></a>写代码：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">from MyQR import myqr</span><br><span class="line"></span><br><span class="line"># myqr.run(&apos;http://www.wujinyu.com&apos;)  #黑白图片</span><br><span class="line"></span><br><span class="line"># myqr.run(</span><br><span class="line">#     words=&apos;http://www.wujinyu.com&apos;,</span><br><span class="line">#     picture=&apos;./images/a.png&apos;,</span><br><span class="line">#     colorized=True,  #添加此参数可以生成彩色</span><br><span class="line">#     save_name=&apos;blog_cai.png&apos;,</span><br><span class="line"># )</span><br><span class="line"></span><br><span class="line">myqr.run(</span><br><span class="line">    words=&apos;http://www.wujinyu.com&apos;,</span><br><span class="line">    picture=&apos;./images/g.gif&apos;,</span><br><span class="line">    colorized=True,</span><br><span class="line">    save_name=&apos;blog.gif&apos;,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>详细参数：请查阅<a href="https://github.com/sylnsfar/qrcode/blob/master/README-cn.md" target="_blank" rel="noopener">https://github.com/sylnsfar/qrcode/blob/master/README-cn.md</a></p>
+<h2 id="命令行模式"><a href="#命令行模式" class="headerlink" title="命令行模式"></a>命令行模式</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 概括</span><br><span class="line">myqr 	Words</span><br><span class="line">		[-v &#123;1,2,3,...,40&#125;]</span><br><span class="line">		[-l &#123;L,M,Q,H&#125;]</span><br><span class="line">        [-n output-filename]</span><br><span class="line">		[-d output-directory]</span><br><span class="line">		[-p picture_file]</span><br><span class="line">		[-c]</span><br><span class="line">		[-con contrast]</span><br><span class="line">		[-bri brightness]</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/08/28/phpstorm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/28/phpstorm/" itemprop="url">phpstorm 配置</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-28T06:04:10+08:00">
+                2018-08-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/php/" itemprop="url" rel="index">
+                    <span itemprop="name">php</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="界面美化"><a href="#界面美化" class="headerlink" title="界面美化"></a>界面美化</h2><h3 id="enter-action-or-option-name"><a href="#enter-action-or-option-name" class="headerlink" title="enter action or option name"></a>enter action or option name</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">command+shift+a</span><br></pre></td></tr></table></figure>
+<h3 id="左侧折叠线"><a href="#左侧折叠线" class="headerlink" title="左侧折叠线"></a>左侧折叠线</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Editor -&gt; General -&gt; Code Folding</span><br><span class="line"></span><br><span class="line">show code folding outline  取消勾选  Apply</span><br></pre></td></tr></table></figure>
+<h3 id="顶部分割线"><a href="#顶部分割线" class="headerlink" title="顶部分割线"></a>顶部分割线</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Editor -&gt; General -&gt; Appearance</span><br><span class="line"></span><br><span class="line">show method separators  取消勾选  Apply</span><br></pre></td></tr></table></figure>
+<h3 id="右侧分割线"><a href="#右侧分割线" class="headerlink" title="右侧分割线"></a>右侧分割线</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Editor -&gt; General -&gt; Appearance</span><br><span class="line"></span><br><span class="line">show right margin(....)  取消勾选  Apply</span><br></pre></td></tr></table></figure>
+<h3 id="跳转文件"><a href="#跳转文件" class="headerlink" title="跳转文件"></a>跳转文件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Navigate -&gt; File 快捷键可以修改  Crtl+p</span><br><span class="line"></span><br><span class="line">设置中  keymaps</span><br></pre></td></tr></table></figure>
+<h3 id="查看类方法"><a href="#查看类方法" class="headerlink" title="查看类方法"></a>查看类方法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Navigate -&gt; File Structure 快捷键可以修改  Crtl+m</span><br><span class="line"></span><br><span class="line">设置中  keymaps</span><br></pre></td></tr></table></figure>
+<h3 id="快速切换"><a href="#快速切换" class="headerlink" title="快速切换"></a>快速切换</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Reacent File </span><br><span class="line"></span><br><span class="line">快捷键 Crtl+e</span><br><span class="line"></span><br><span class="line">设置中  keymaps</span><br></pre></td></tr></table></figure>
+<h3 id="Symbol-全局搜索方法"><a href="#Symbol-全局搜索方法" class="headerlink" title="Symbol 全局搜索方法"></a>Symbol 全局搜索方法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Symbol </span><br><span class="line"></span><br><span class="line">快捷键 Crtl+e</span><br><span class="line"></span><br><span class="line">设置中  keymaps</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/08/18/django-ckeditor/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1404,327 +1699,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/05/01/pip3-install-scrapy-error/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="卡布奇诺">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="卡布奇诺">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/01/pip3-install-scrapy-error/" itemprop="url">unsupported locale setting错误</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-01T09:33:07+08:00">
-                2018-05-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="解决方案："><a href="#解决方案：" class="headerlink" title="解决方案："></a>解决方案：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">export LC_ALL=&quot;en_US.UTF-8&quot; </span><br><span class="line">export LC_CTYPE=&quot;en_US.UTF-8&quot; </span><br><span class="line">sudo dpkg-reconfigure locales</span><br></pre></td></tr></table></figure>
-<h3 id="ModuleNotFoundError-No-module-named-39-twisted-persisted-39"><a href="#ModuleNotFoundError-No-module-named-39-twisted-persisted-39" class="headerlink" title="ModuleNotFoundError: No module named &#39;twisted.persisted&#39;"></a><code>ModuleNotFoundError: No module named &#39;twisted.persisted&#39;</code></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">1.pip uninstall twisted </span><br><span class="line"></span><br><span class="line">2.wget https://twistedmatrix.com/Releases/Twisted/17.9/Twisted-17.9.0.tar.bz2</span><br><span class="line"></span><br><span class="line">3.tar -xvf Twisted-17.9.0.tar.bz2</span><br><span class="line"></span><br><span class="line">4. cd Twisted-17.9.0</span><br><span class="line"></span><br><span class="line">5.python setup.py install</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/04/30/python-scrapy-setting/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="卡布奇诺">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="卡布奇诺">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/30/python-scrapy-setting/" itemprop="url">scrapy提升篇之配置</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-30T15:23:56+08:00">
-                2018-04-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="scrapy提升篇之配置"><a href="#scrapy提升篇之配置" class="headerlink" title="scrapy提升篇之配置"></a>scrapy提升篇之配置</h2><h3 id="增加并发"><a href="#增加并发" class="headerlink" title="增加并发"></a>增加并发</h3><blockquote>
-<p>并发是指同时处理的request的数量。其有全局限制和局部(每个网站)的限制。<br>Scrapy默认的全局并发限制对同时爬取大量网站的情况并不适用，因此您需要增加这个值。 增加多少取决于您的爬虫能占用多少CPU。 一般开始可以设置为 100 。不过最好的方式是做一些测试，获得Scrapy进程占取CPU与并发数的关系。 为了优化性能，您应该选择一个能使CPU占用率在80%-90%的并发数<br>在<code>setting.py</code>文件中写上<code>CONCURRENT_REQUESTS = 100</code>，scrapy中默认的并发数是32</p>
-</blockquote>
-<h3 id="降低log级别"><a href="#降低log级别" class="headerlink" title="降低log级别"></a>降低log级别</h3><blockquote>
-<p>当进行通用爬取时，一般您所注意的仅仅是爬取的速率以及遇到的错误。 Scrapy使用 INFO log级别来报告这些信息。为了减少CPU使用率(及记录log存储的要求), 在生产环境中进行通用爬取时您不应该使用 DEBUG log级别。 不过在开发的时候使用 DEBUG 应该还能接受。<br><code>setting.py</code>文件中设置<code>LOG_LEVEL = &#39;INFO&#39;</code></p>
-</blockquote>
-<h3 id="禁止cookies"><a href="#禁止cookies" class="headerlink" title="禁止cookies"></a>禁止cookies</h3><blockquote>
-<p>除非您 真的 需要，否则请禁止cookies。在进行通用爬取时cookies并不需要， (搜索引擎则忽略cookies)。禁止cookies能减少CPU使用率及Scrapy爬虫在内存中记录的踪迹，提高性能。<br><code>COOKIES_ENABLED = False</code></p>
-</blockquote>
-<h3 id="禁止重试"><a href="#禁止重试" class="headerlink" title="禁止重试"></a>禁止重试</h3><blockquote>
-<p>对失败的HTTP请求进行重试会减慢爬取的效率，尤其是当站点响应很慢(甚至失败)时， 访问这样的站点会造成超时并重试多次。这是不必要的，同时也占用了爬虫爬取其他站点的能力。<br><code>RETRY_ENABLED = False</code></p>
-</blockquote>
-<h3 id="减少下载超时"><a href="#减少下载超时" class="headerlink" title="减少下载超时"></a>减少下载超时</h3><blockquote>
-<p>如果您对一个非常慢的连接进行爬取(一般对通用爬虫来说并不重要)， 减小下载超时能让卡住的连接能被快速的放弃并解放处理其他站点的能力。<br><code>DOWNLOAD_TIMEOUT = 15</code>,其中15是设置的下载超时时间</p>
-</blockquote>
-<h3 id="禁止重定向"><a href="#禁止重定向" class="headerlink" title="禁止重定向"></a>禁止重定向</h3><blockquote>
-<p>除非您对跟进重定向感兴趣，否则请考虑关闭重定向。 当进行通用爬取时，一般的做法是保存重定向的地址，并在之后的爬取进行解析。 这保证了每批爬取的request数目在一定的数量， 否则重定向循环可能会导致爬虫在某个站点耗费过多资源。<br><code>REDIRECT_ENABLED = False</code></p>
-</blockquote>
-<h3 id="使用user-agent池"><a href="#使用user-agent池" class="headerlink" title="使用user_agent池"></a>使用user_agent池</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">from scrapy import log</span><br><span class="line">import random</span><br><span class="line">from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware</span><br><span class="line">class RotateUserAgentMiddleware(UserAgentMiddleware):</span><br><span class="line"># for more user agent strings,you can find it in http://www.useragentstring.com/pages/useragentstring.php</span><br><span class="line">user_agent_list = [</span><br><span class="line">    &quot;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 &quot;</span><br><span class="line">    &quot;(KHTML, like Gecko) Chrome/22.0.1207.1 Safari/537.1&quot;,</span><br><span class="line">    &quot;Mozilla/5.0 (X11; CrOS i686 2268.111.0) AppleWebKit/536.11 &quot;</span><br><span class="line">    &quot;(KHTML, like Gecko) Chrome/20.0.1132.57 Safari/536.11&quot;,</span><br><span class="line">    &quot;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.6 &quot;</span><br><span class="line">    &quot;(KHTML, like Gecko) Chrome/20.0.1092.0 Safari/536.6&quot;,</span><br><span class="line">    &quot;Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.6 &quot;</span><br><span class="line">    &quot;(KHTML, like Gecko) Chrome/20.0.1090.0 Safari/536.6&quot;,</span><br><span class="line">    &quot;Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.1 &quot;</span><br><span class="line">    &quot;(KHTML, like Gecko) Chrome/19.77.34.5 Safari/537.1&quot;,</span><br><span class="line">    &quot;Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/536.5 &quot;</span><br><span class="line">    &quot;(KHTML, like Gecko) Chrome/19.0.1084.9 Safari/536.5&quot;,</span><br><span class="line">    &quot;Mozilla/5.0 (Windows NT 6.0) AppleWebKit/536.5 &quot;</span><br><span class="line">    &quot;(KHTML, like Gecko) Chrome/19.0.1084.36 Safari/536.5&quot;,</span><br><span class="line">    &quot;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.3 &quot;</span><br><span class="line">    &quot;(KHTML, like Gecko) Chrome/19.0.1063.0 Safari/536.3&quot;,</span><br><span class="line">    &quot;Mozilla/5.0 (Windows NT 5.1) AppleWebKit/536.3 &quot;</span><br><span class="line">    &quot;(KHTML, like Gecko) Chrome/19.0.1063.0 Safari/536.3&quot;,</span><br><span class="line">    &quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_0) AppleWebKit/536.3 &quot;</span><br><span class="line">    &quot;(KHTML, like Gecko) Chrome/19.0.1063.0 Safari/536.3&quot;,</span><br><span class="line">    &quot;Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.3 &quot;</span><br><span class="line">    &quot;(KHTML, like Gecko) Chrome/19.0.1062.0 Safari/536.3&quot;,</span><br><span class="line">    &quot;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.3 &quot;</span><br><span class="line">    &quot;(KHTML, like Gecko) Chrome/19.0.1062.0 Safari/536.3&quot;,</span><br><span class="line">    &quot;Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.3 &quot;</span><br><span class="line">    &quot;(KHTML, like Gecko) Chrome/19.0.1061.1 Safari/536.3&quot;,</span><br><span class="line">    &quot;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.3 &quot;</span><br><span class="line">    &quot;(KHTML, like Gecko) Chrome/19.0.1061.1 Safari/536.3&quot;,</span><br><span class="line">    &quot;Mozilla/5.0 (Windows NT 6.1) AppleWebKit/536.3 &quot;</span><br><span class="line">    &quot;(KHTML, like Gecko) Chrome/19.0.1061.1 Safari/536.3&quot;,</span><br><span class="line">    &quot;Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.3 &quot;</span><br><span class="line">    &quot;(KHTML, like Gecko) Chrome/19.0.1061.0 Safari/536.3&quot;,</span><br><span class="line">    &quot;Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.24 &quot;</span><br><span class="line">    &quot;(KHTML, like Gecko) Chrome/19.0.1055.1 Safari/535.24&quot;,</span><br><span class="line">    &quot;Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/535.24 &quot;</span><br><span class="line">    &quot;(KHTML, like Gecko) Chrome/19.0.1055.1 Safari/535.24&quot;</span><br><span class="line">]</span><br><span class="line">def process_request(self, request, spider):</span><br><span class="line">    ua = random.choice(self.user_agent_list)</span><br><span class="line">    if ua:</span><br><span class="line">        # 显示当前使用的useragent</span><br><span class="line">        print &quot;********Current UserAgent:%s************&quot; % ua</span><br><span class="line">        # 记录</span><br><span class="line">        log.msg(&apos;Current UserAgent: &apos; + ua)</span><br><span class="line">        request.headers.setdefault(&apos;User-Agent&apos;, ua)</span><br></pre></td></tr></table></figure>
-<h3 id="爬虫请求常见的错误"><a href="#爬虫请求常见的错误" class="headerlink" title="爬虫请求常见的错误"></a>爬虫请求常见的错误</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">200：请求成功 处理方式：获得响应的内容，进行处理</span><br><span class="line">201：请求完成，结果是创建了新资源。新创建资源的 URI 可在响应的实体中得到 处理方式：爬虫中不会遇到</span><br><span class="line">202：请求被接受，但处理尚未完成 处理方式：阻塞等待</span><br><span class="line">204：服务器端已经实现了请求，但是没有返回新的信 息。如果客户是用户代理，则无须为此更新自身的文档视图。 处理方式：丢弃</span><br><span class="line">300：该状态码不被 HTTP/1.0 的应用程序直接使用， 只是作为 3XX 类型回应的默认解释。存在多个可用的被请求资源。 处理方式：若程序中能够处理，则进行进一步处理，如果程序中不能处理，则丢弃</span><br><span class="line">301：请求到的资源都会分配一个永久的 URL，这样就可以在将来通过该 URL 来访问此资源 处理方式：重定向到分配的 URL</span><br><span class="line">302：请求到的资源在一个不同的 URL 处临时保存 处理方式：重定向到临时的 URL</span><br><span class="line">304 请求的资源未更新 处理方式：丢弃</span><br><span class="line">400 非法请求 处理方式：丢弃</span><br><span class="line">401 未授权 处理方式：丢弃</span><br><span class="line">403 禁止 处理方式：丢弃</span><br><span class="line">404 没有找到 处理方式：丢弃</span><br><span class="line">5XX 回应代码以“5”开头的状态码表示服务器端发现自己出现错误，不能继续执行请求 处理方式：丢弃</span><br></pre></td></tr></table></figure>
-<h3 id="使用ip代理池"><a href="#使用ip代理池" class="headerlink" title="使用ip代理池"></a>使用ip代理池</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">import random  </span><br><span class="line">import scrapy</span><br><span class="line">import logging</span><br><span class="line">class proxMiddleware(object):</span><br><span class="line">#proxy_list=[&#123;&apos;http&apos;: &apos;http://123.157.146.116:8123&apos;&#125;, &#123;&apos;http&apos;: &apos;http://116.55.16.233:8998&apos;&#125;, &#123;&apos;http&apos;: &apos;http://115.85.233.94:80&apos;&#125;, &#123;&apos;http&apos;: &apos;http://180.76.154.5:8888&apos;&#125;, &#123;&apos;http&apos;: &apos;http://139.213.135.81:80&apos;&#125;, &#123;&apos;http&apos;: &apos;http://124.88.67.14:80&apos;&#125;, &#123;&apos;http&apos;: &apos;http://106.46.136.90:808&apos;&#125;, &#123;&apos;http&apos;: &apos;http://106.46.136.226:808&apos;&#125;, &#123;&apos;http&apos;: &apos;http://124.88.67.21:843&apos;&#125;, &#123;&apos;http&apos;: &apos;http://113.245.84.253:8118&apos;&#125;, &#123;&apos;http&apos;: &apos;http://124.88.67.10:80&apos;&#125;, &#123;&apos;http&apos;: &apos;http://171.38.141.12:8123&apos;&#125;, &#123;&apos;http&apos;: &apos;http://124.88.67.52:843&apos;&#125;, &#123;&apos;http&apos;: &apos;http://106.46.136.237:808&apos;&#125;, &#123;&apos;http&apos;: &apos;http://106.46.136.105:808&apos;&#125;, &#123;&apos;http&apos;: &apos;http://106.46.136.190:808&apos;&#125;, &#123;&apos;http&apos;: &apos;http://106.46.136.186:808&apos;&#125;, &#123;&apos;http&apos;: &apos;http://101.81.120.58:8118&apos;&#125;, &#123;&apos;http&apos;: &apos;http://106.46.136.250:808&apos;&#125;, &#123;&apos;http&apos;: &apos;http://106.46.136.8:808&apos;&#125;, &#123;&apos;http&apos;: &apos;http://111.78.188.157:8998&apos;&#125;, &#123;&apos;http&apos;: &apos;http://106.46.136.139:808&apos;&#125;, &#123;&apos;http&apos;: &apos;http://101.53.101.172:9999&apos;&#125;, &#123;&apos;http&apos;: &apos;http://27.159.125.68:8118&apos;&#125;, &#123;&apos;http&apos;: &apos;http://183.32.88.133:808&apos;&#125;, &#123;&apos;http&apos;: &apos;http://171.38.37.193:8123&apos;&#125;]</span><br><span class="line">proxy_list=[</span><br><span class="line">    &quot;http://180.76.154.5:8888&quot;,</span><br><span class="line">    &quot;http://14.109.107.1:8998&quot;,</span><br><span class="line">    &quot;http://106.46.136.159:808&quot;,</span><br><span class="line">    &quot;http://175.155.24.107:808&quot;,</span><br><span class="line">    &quot;http://124.88.67.10:80&quot;,</span><br><span class="line">    &quot;http://124.88.67.14:80&quot;,</span><br><span class="line">    &quot;http://58.23.122.79:8118&quot;,</span><br><span class="line">    &quot;http://123.157.146.116:8123&quot;,</span><br><span class="line">    &quot;http://124.88.67.21:843&quot;,</span><br><span class="line">    &quot;http://106.46.136.226:808&quot;,</span><br><span class="line">    &quot;http://101.81.120.58:8118&quot;,</span><br><span class="line">    &quot;http://180.175.145.148:808&quot;]</span><br><span class="line">def process_request(self,request,spider):</span><br><span class="line">    # if not request.meta[&apos;proxies&apos;]:</span><br><span class="line">    ip = random.choice(self.proxy_list)</span><br><span class="line">    print ip</span><br><span class="line">    #print &apos;ip=&apos; %ip</span><br><span class="line">    request.meta[&apos;proxy&apos;] = ip</span><br></pre></td></tr></table></figure>
-<h3 id="设置延迟"><a href="#设置延迟" class="headerlink" title="设置延迟"></a>设置延迟</h3><blockquote>
-<p><code>DOWMLOAD_DELY=3</code>,设置延迟下载可以避免被发现</p>
-</blockquote>
-<h3 id="启用调试工具-命令行调试"><a href="#启用调试工具-命令行调试" class="headerlink" title="启用调试工具 命令行调试"></a>启用调试工具 命令行调试</h3><blockquote>
-<p><code>scrapy shell url</code> 查看网页，不过这种方式可能对于要请求头的网页不行，对于一般的网页还是可以的<br><code>scrapy view shell</code> 用来查看动态加载的网页，如果查看的网页用了动态加载，那么用这个命令行打开的网页就是不完整的，肯定缺少了什么</p>
-</blockquote>
-<h3 id="编辑器中的调试"><a href="#编辑器中的调试" class="headerlink" title="编辑器中的调试"></a>编辑器中的调试</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from scrapy.shell import inspect_response</span><br><span class="line">def paser(self,response):</span><br><span class="line">    inspect_response(response,self)     #当程序运行到这里就会跳出终端，并且在终端出现调试命令，当然这个可以随便写</span><br></pre></td></tr></table></figure>
-<h3 id="暂停和恢复爬虫"><a href="#暂停和恢复爬虫" class="headerlink" title="暂停和恢复爬虫"></a>暂停和恢复爬虫</h3><blockquote>
-<p>初学者最头疼的事情就是没有处理好异常，当爬虫爬到一半的时候突然因为错误而中断了，但是这时又不能从中断的地方开始继续爬，顿时感觉心里日了狗，但是这里有一个方法可以暂时的存储你爬的状态，当爬虫中断的时候继续打开后依然可以从中断的地方爬，不过虽说持久化可以有效的处理，但是要注意的是当使用cookie临时的模拟登录状态的时候要注意cookie的有效期<br>只需要在<code>setting.py中JOB_DIR=file_name</code>其中填的是你的文件目录，注意这里的目录不允许共享，只能存储单独的一个spdire的运行状态，如果你不想在从中断的地方开始运行，只需要将这个文件夹删除即可<br>当然还有其他的放法：<code>scrapy crawl somespider -s JOBDIR=crawls/somespider-1</code>，这个是在终端启动爬虫的时候调用的，可以通过<code>ctr+c</code>中断，恢复还是输入上面的命令</p>
-</blockquote>
-<h3 id="不按照robots-txt"><a href="#不按照robots-txt" class="headerlink" title="不按照robots.txt"></a>不按照robots.txt</h3><blockquote>
-<p><code>ROBOTSTXT_OBEY = False</code></p>
-</blockquote>
-<h3 id="配置请求头"><a href="#配置请求头" class="headerlink" title="配置请求头"></a>配置请求头</h3><blockquote>
-<p>ROBOTSTXT_OBEY = False</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">DEFAULT_REQUEST_HEADERS=&#123;&#123;</span><br><span class="line">    &apos;Accept&apos;: &apos;text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&apos;,</span><br><span class="line">    &apos;Accept-Language&apos;: &apos;en&apos;,</span><br><span class="line">    &apos;User-Agent&apos;:&apos;......&apos;   #在此处设置</span><br><span class="line">&#125;&#125;</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1779,7 +1753,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">165</span>
+                  <span class="site-state-item-count">167</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Python,Flask," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="flask中经典错误 working outside application context在上节我们通过db.create_all(app=app)的方式解决了working outside application context的错误，下面我们来深究，这个错误出现的具体原因是什么。 首先来个测试代码：1234567891011from flask import Flask, current_a">
+<meta name="keywords" content="Python,Flask">
+<meta property="og:type" content="article">
+<meta property="og:title" content="慕课网Flask高级编程实战-4.flask核心机制">
+<meta property="og:url" content="http://www.wujinyu.com/2018/09/11/Flask/Lesson for net Flask high-level programming of actual combat - 4. Flask core mechanism/index.html">
+<meta property="og:site_name" content="卡布奇诺">
+<meta property="og:description" content="flask中经典错误 working outside application context在上节我们通过db.create_all(app=app)的方式解决了working outside application context的错误，下面我们来深究，这个错误出现的具体原因是什么。 首先来个测试代码：1234567891011from flask import Flask, current_a">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p5x7w1vrd.bkt.clouddn.com/016bbcb276db50f42531bd254537844b.jpg">
+<meta property="og:image" content="http://p5x7w1vrd.bkt.clouddn.com/b8d0d618ed844b3be610fcb66e2bbf32.jpg">
+<meta property="og:image" content="http://p5x7w1vrd.bkt.clouddn.com/688942a112661943cc86384b3692a700.jpg">
+<meta property="og:image" content="http://p5x7w1vrd.bkt.clouddn.com/c0d876a4bc4a02f9538ed7397ab7ea74.jpg">
+<meta property="og:image" content="http://p5x7w1vrd.bkt.clouddn.com/694c4dfd7d3e980f796129c624153a1e.jpg">
+<meta property="og:updated_time" content="2018-09-11T04:59:15.315Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="慕课网Flask高级编程实战-4.flask核心机制">
+<meta name="twitter:description" content="flask中经典错误 working outside application context在上节我们通过db.create_all(app=app)的方式解决了working outside application context的错误，下面我们来深究，这个错误出现的具体原因是什么。 首先来个测试代码：1234567891011from flask import Flask, current_a">
+<meta name="twitter:image" content="http://p5x7w1vrd.bkt.clouddn.com/016bbcb276db50f42531bd254537844b.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.wujinyu.com/2018/09/11/Flask/Lesson for net Flask high-level programming of actual combat - 4. Flask core mechanism/"/>
+
+
+
+
+
+  <title>慕课网Flask高级编程实战-4.flask核心机制 | 卡布奇诺</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-21552344-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卡布奇诺</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生活心情</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-分类">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-归档">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-标签">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-关于">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.wujinyu.com/2018/09/11/Flask/Lesson for net Flask high-level programming of actual combat - 4. Flask core mechanism/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卡布奇诺">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ooky9xe9n.bkt.clouddn.com/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卡布奇诺">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">慕课网Flask高级编程实战-4.flask核心机制</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-11T15:01:17+08:00">
+                2018-09-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="flask中经典错误-working-outside-application-context"><a href="#flask中经典错误-working-outside-application-context" class="headerlink" title="flask中经典错误 working outside application context"></a>flask中经典错误 working outside application context</h2><p>在上节我们通过<code>db.create_all(app=app)</code>的方式解决了<code>working outside application context</code>的错误，下面我们来深究，这个错误出现的具体原因是什么。</p>
+<h3 id="首先来个测试代码："><a href="#首先来个测试代码：" class="headerlink" title="首先来个测试代码："></a>首先来个测试代码：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">from flask import Flask, current_app</span><br><span class="line"></span><br><span class="line">__author__ = &quot;Jason&quot;</span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line"># 断点调试这里显示current_app=[LocalProxy]&lt;LocalProxy unbound&gt;</span><br><span class="line">a = current_app</span><br><span class="line"></span><br><span class="line"># RuntimeError: Working outside of application context.</span><br><span class="line">b = current_app.config[&quot;DEBUG&quot;]</span><br></pre></td></tr></table></figure>
+<p>我们通过<code>current_app</code>获取配置，看似没有问题的代码，却抛出了同样的异常。</p>
+<p>通过断点调试发现<code>current_app</code>并不是Flask对象，而是一个<code>unbound</code>的<code>LocalProxy</code>。</p>
+<p>回想我们之前的<code>request</code>对象，其实也是个<code>LocalProxy</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># context locals</span><br><span class="line">_request_ctx_stack = LocalStack()</span><br><span class="line">_app_ctx_stack = LocalStack()</span><br><span class="line">current_app = LocalProxy(_find_app)</span><br><span class="line">request = LocalProxy(partial(_lookup_req_object, &apos;request&apos;))</span><br><span class="line">session = LocalProxy(partial(_lookup_req_object, &apos;session&apos;))</span><br><span class="line">g = LocalProxy(partial(_lookup_app_object, &apos;g&apos;))</span><br></pre></td></tr></table></figure>
+<p>那么这里为什么会抛出这个异常呢，想要回答这个问题，就需要深入理解这个<code>LocalProxy</code>。我们在下一小节进行介绍</p>
+<h2 id="AppContext、RequestContext、Flask与Request之间的关系"><a href="#AppContext、RequestContext、Flask与Request之间的关系" class="headerlink" title="AppContext、RequestContext、Flask与Request之间的关系"></a>AppContext、RequestContext、Flask与Request之间的关系</h2><h3 id="1-定位AppContext、RequestContext"><a href="#1-定位AppContext、RequestContext" class="headerlink" title="1.定位AppContext、RequestContext"></a>1.定位AppContext、RequestContext</h3><p><code>Flask</code>有两个上下文，应用上下文-<code>AppContext</code>和请求上下文-<code>RequestContext</code>。他们本质都是对象，是一种封装。应用上下文是对<code>Flask</code>的封装，请求上下文是对<code>Request</code>的封装</p>
+<p>下面我们来通过源码，了解一下这两个上下文。<br><code>Flask</code>源码的全貌，是在<code>External Libraries/site-pacages/flask</code>下</p>
+<p><img src="http://p5x7w1vrd.bkt.clouddn.com/016bbcb276db50f42531bd254537844b.jpg" alt=""></p>
+<p><code>Flask</code>是一个非常好的微框架，里面的源码并不多，大部分都是注释，这给我们可以很方便的阅读源码.</p>
+<p>我们要看的两个上下文在<code>ctx.py</code>（context的缩写）中，其中的<code>AppContext</code>就是应用上下文，<code>RequestContext</code>就是请求上下文</p>
+<p><img src="http://p5x7w1vrd.bkt.clouddn.com/b8d0d618ed844b3be610fcb66e2bbf32.jpg" alt=""></p>
+<p>阅读<code>AppContext</code>和<code>RequestContext</code>的构造函数，发现他们都将核心对象<code>app</code>作为了他们的一个属性</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">def __init__(self, app):</span><br><span class="line">	self.app = app</span><br><span class="line">	self.url_adapter = app.create_url_adapter(None)</span><br><span class="line">	self.g = app.app_ctx_globals_class()</span><br><span class="line">	</span><br><span class="line">	# Like request context, app contexts can be pushed multiple times</span><br><span class="line">	# but there a basic &quot;refcount&quot; is enough to track them.</span><br><span class="line">	self._refcnt = 0</span><br></pre></td></tr></table></figure>
+<p><strong>并且他们都有相同的四个方法</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">def push(self):</span><br><span class="line">...</span><br><span class="line">def pop(self, exc=_sentinel):</span><br><span class="line">...</span><br><span class="line">def __enter__(self):</span><br><span class="line">...</span><br><span class="line">def __exit__(self, exc_type, exc_value, tb):</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<h3 id="2-为什么需要上下文"><a href="#2-为什么需要上下文" class="headerlink" title="2.为什么需要上下文"></a>2.为什么需要上下文</h3><p>为什么需要上下文，我们之间操作<code>Flask</code>的核心对象<code>app</code>不可以吗？</p>
+<p>这是一个设计思想。有时候呢，我们不光需要这个核心对象<code>app</code>，还需要他外部的一些东西，这个时候，我们可以把他们统一结合封装到一起，组装成一个新的上下文对象，并且在这个对象之上，可以提供一些新的方法，如我们上面所提到的<code>push</code>、<code>pop</code>等</p>
+<h3 id="3-对AppContext、RequestContext、Flask与Request的意义做出一个解释"><a href="#3-对AppContext、RequestContext、Flask与Request的意义做出一个解释" class="headerlink" title="3.对AppContext、RequestContext、Flask与Request的意义做出一个解释"></a>3.对AppContext、RequestContext、Flask与Request的意义做出一个解释</h3><ul>
+<li><p>Flask：核心对象，核心对象里承载了各种各样的功能，比如保存配置信息，再比如注册路由试图函数等</p>
+</li>
+<li><p>AppContext：对Flask的封装，并且增加了一些额外的参数</p>
+</li>
+<li><p>Request：保存了请求信息，比如url的参数，url的全路径等信息</p>
+</li>
+<li><p>RequestContext：对Request的封装</p>
+</li>
+</ul>
+<p>我们在实际编码过程中，可能是需要<code>Flask</code>或者<code>Request</code>的信息的，但是这并不代表我们应该直接导入这两个对象获取相关信息，</p>
+<p>正确的做法是从<code>AppContext</code>，<code>RequestContext</code>中间接的获得我们需要的信息</p>
+<p>即使这样，我们也没有必要导入<code>Context</code>去使用上下文，这就回到了<code>current_app</code>和<code>request</code>这些<code>LocalProxy</code>，他们提供了间接操作上下文对象的能力，使用了代理模式</p>
+<h2 id="详解flask上下文与出入栈"><a href="#详解flask上下文与出入栈" class="headerlink" title="详解flask上下文与出入栈"></a>详解flask上下文与出入栈</h2><h3 id="Flask工作原理"><a href="#Flask工作原理" class="headerlink" title="Flask工作原理"></a>Flask工作原理</h3><p><img src="http://p5x7w1vrd.bkt.clouddn.com/688942a112661943cc86384b3692a700.jpg" alt=""></p>
+<ul>
+<li><p>当一个请求进入<code>Flask</code>框架，首先会实例化一个<code>Request Context</code>，这个上下文封装了请求的信息在<code>Request</code>中，并将这个上下文推入到一个栈<code>(_request_ctx_stack/_app_ctx_strack)</code>的结构中，即之前将的<code>push</code>方法</p>
+</li>
+<li><p><code>RequestContext</code>在入<code>_request_ctx_stack</code>之前，首先会检查<code>_app_ctx_strack</code>是否为空，如果为空，则会把一个<code>AppContext</code>的对象入栈，然后再将这个请求入栈到<code>_request_ctx_stack</code>中</p>
+</li>
+<li><p>我们的<code>current_app</code>和<code>request</code>对象都是永远指向<code>_app_ctx_strack/_request_ctx_stack</code>的栈顶元素，也就是分别指向了两个上下文，如果这两个值是空的，那么<code>LocalProxy</code>就会出现<code>unbound</code>的状态</p>
+</li>
+<li><p>当请求结束的时候，这个请求会出栈-pop</p>
+</li>
+</ul>
+<p><strong>回到我们之前的测试代码，如果要想让我们的测试代码正常运行，就需要手动将一个AppContext入栈。</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">from flask import Flask, current_app</span><br><span class="line"></span><br><span class="line">__author__ = &quot;Jason&quot;</span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line"># 获取AppContext，里面的代码很简单，就是：return AppContext(self)</span><br><span class="line">ctx = app.app_context()</span><br><span class="line"># 将AppContext入栈</span><br><span class="line">ctx.push()</span><br><span class="line"># 断点调试这里显示current_app=[LocalProxy]&lt;LocalProxy unbound&gt;</span><br><span class="line">a = current_app</span><br><span class="line"></span><br><span class="line"># RuntimeError: Working outside of application context.</span><br><span class="line">b = current_app.config[&quot;DEBUG&quot;]</span><br><span class="line">print(b)</span><br></pre></td></tr></table></figure>
+<p><strong>注意</strong></p>
+<p>虽然<code>current_app</code>和<code>request</code>指向的是两个上下文，但是他们返回的却是Flask核心独享和<code>Request</code>对象。下面来看下这部分的源码</p>
+<p><strong>globals.py</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># globals.py中实例化LocalProxy获取current_app的代码中，传入了一个_find_app方法</span><br><span class="line">current_app = LocalProxy(_find_app)</span><br><span class="line"></span><br><span class="line">def _find_app():</span><br><span class="line"># 取栈顶元素</span><br><span class="line">top = _app_ctx_stack.top</span><br><span class="line">if top is None:</span><br><span class="line">raise RuntimeError(_app_ctx_err_msg)</span><br><span class="line"># 获取ctx中的app对象</span><br><span class="line">return top.app</span><br></pre></td></tr></table></figure>
+<p>从源码中可以看到，他获取的是app核心对象。</p>
+<h2 id="flask上下文与with语句"><a href="#flask上下文与with语句" class="headerlink" title="flask上下文与with语句"></a>flask上下文与with语句</h2><p>我们上一小节通过手动将app推入栈，弹出栈的方式，解决了<code>working outside application context</code>的问题。实际上更经典的做法是使用with语句来完成。</p>
+<p><strong>首先使用with语句替换之前的代码</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line">with app.app_context():</span><br><span class="line">a = current_app</span><br><span class="line">b = current_app.config[&quot;DEBUG&quot;]</span><br></pre></td></tr></table></figure>
+<p><strong>什么时候可以使用with语句：</strong></p>
+<ul>
+<li><p>1.实现了上下文协议的对象，可以使用with语句</p>
+</li>
+<li><p>2.对于实现了上下文协议的对象，我们通常称为上下文管理员</p>
+</li>
+<li><p>3.通过实现<strong>enter</strong>和<strong>exit</strong>来实现上下文协议</p>
+</li>
+<li><p>4.上下文表达式必须返回一个上下文管理器</p>
+</li>
+</ul>
+<p>对于上面一段代码来说，<code>AppContext</code>就是上下文管理器；<code>app.app_context()</code>就是上下文表达式。<strong>enter</strong>中做了push操作，<code>__exit__</code>中做了pop操作。<br>所以只要进入with语句，<code>current_app</code>就是有值的，一旦离开了with语句，<code>current_app</code><br>就会弹出，然后就又没有值了（又变成了unbound）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">def __enter__(self):</span><br><span class="line">	self.push()</span><br><span class="line">	return self</span><br><span class="line"></span><br><span class="line">def __exit__(self, exc_type, exc_value, tb):</span><br><span class="line">	self.pop(exc_value)</span><br><span class="line">	</span><br><span class="line">	if BROKEN_PYPY_CTXMGR_EXIT and exc_type is not None:</span><br><span class="line">		reraise(exc_type, exc_value, tb)</span><br></pre></td></tr></table></figure>
+<p><strong>通过数据库的链接和释放来理解with语句的具体含义</strong></p>
+<p>连接数据库的操作步骤：</p>
+<ul>
+<li>1.连接数据库</li>
+<li>2.sql或者其他的业务逻辑</li>
+<li>3.释放资源</li>
+</ul>
+<p>如果上面的第二部分出错，那么第三部分的释放资源就不会被执行，资源就会一直被占用。</p>
+<p>解决这个问题的通常做法是使用<code>try-except-finally</code><br>但是在<code>finally</code>中更优雅的方式就是使用<code>with</code>语句中。</p>
+<p>我们可以把连接数据库的操作写在上下文管理器的<code>__enter__</code>方法里面，把业务代码写在with语句的代码块里面，把释放资源的语句写在<code>__exit__</code>里面。</p>
+<p><strong>读写文件的具体例子</strong></p>
+<p>一般的写法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">try:</span><br><span class="line">	f = open(r&apos;/Users/test.txt&apos;)</span><br><span class="line">	print(f.read())</span><br><span class="line">finally:</span><br><span class="line">	f.close()</span><br></pre></td></tr></table></figure>
+<p>使用with语句的写法:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">with open(r&apos;/Users/test.txt&apos;) as f:</span><br><span class="line">	print(f.read())</span><br></pre></td></tr></table></figure>
+<p>注意上面的with语句后面的as 返回的并不是上下文管理器，他实际上是<strong>enter</strong>方法返回的一个值,</p>
+<p><img src="http://p5x7w1vrd.bkt.clouddn.com/c0d876a4bc4a02f9538ed7397ab7ea74.jpg" alt=""></p>
+<p>上面一段代码我们在<strong>enter</strong>中返回了一个a，所以下面as 后的obj_A就是1</p>
+<p><strong>exit方法详解</strong></p>
+<p>注意我们编写的测试代码，运行时会报错的，错误原因是<code>exit</code>方法接受的参数数量不够。<br><code>exit</code>方法的作用不只是释放资源，还有处理异常，所以exit方法还要多接受<code>exc_type</code>,<code>exc_value</code>,<code>tb</code>三个参数。这三个参数在没有异常发生的时候回传控制，如果有异常的话，这三个参数分别是异常类型，异常消息，和详细的异常堆栈信息</p>
+<p><code>exit</code>方法还需要返回一个<code>boolean</code>类型的值，如果返回<code>True</code>，那么外部就不会抛出异常，如果返回<code>False</code>，那么还会在外部抛出异常，如果什么都不返回，按照<code>False</code>处理。<code>Flask</code>提供了一种非常灵活的方式，可以让我们选择在with语句内部还是外部处理异常<br><img src="http://p5x7w1vrd.bkt.clouddn.com/694c4dfd7d3e980f796129c624153a1e.jpg" alt=""></p>
+<p><strong>4.6 阅读源码解决db.create_all的问题</strong></p>
+<p>对于Flask来说，文档更适合中高级的开发者，而对于新手不是特别友好。所以以不变应万变。我们可以遇到问题的时候，可以通过阅读源码的时候来解决。</p>
+<p>下面我们来看下在第三章的时候，为什么我们的<code>flask_sqlalchemy</code>已经注册了app对象，但是<code>create_all</code>方法还是需要传入app参数，不传就会报错</p>
+<p><strong>首先看一下init_app方法的源码</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">def init_app(self, app):</span><br><span class="line">	&quot;&quot;&quot;This callback can be used to initialize an application for the</span><br><span class="line">	use with this database setup. Never use a database in the context</span><br><span class="line">	of an application not initialized that way or connections will</span><br><span class="line">	leak.</span><br><span class="line">	&quot;&quot;&quot;</span><br><span class="line">	# 首先是尝试获取app中的配置，如果没有找到则发出警告</span><br><span class="line">	if (</span><br><span class="line">	&apos;SQLALCHEMY_DATABASE_URI&apos; not in app.config and</span><br><span class="line">	# 如果有多个数据库，需要配置这个选项</span><br><span class="line">	&apos;SQLALCHEMY_BINDS&apos; not in app.config</span><br><span class="line">	):</span><br><span class="line">		warnings.warn(</span><br><span class="line">		&apos;Neither SQLALCHEMY_DATABASE_URI nor SQLALCHEMY_BINDS is set. &apos;</span><br><span class="line">		&apos;Defaulting SQLALCHEMY_DATABASE_URI to &quot;sqlite:///:memory:&quot;.&apos;</span><br><span class="line">		)</span><br><span class="line">	</span><br><span class="line">	# 防御性编程，给dict设置一些默认值</span><br><span class="line">	# setdefault是dict的默认值</span><br><span class="line">	app.config.setdefault(&apos;SQLALCHEMY_DATABASE_URI&apos;, &apos;sqlite:///:memory:&apos;)</span><br><span class="line">	app.config.setdefault(&apos;SQLALCHEMY_BINDS&apos;, None)</span><br><span class="line">	app.config.setdefault(&apos;SQLALCHEMY_NATIVE_UNICODE&apos;, None)</span><br><span class="line">	app.config.setdefault(&apos;SQLALCHEMY_ECHO&apos;, False)</span><br><span class="line">	app.config.setdefault(&apos;SQLALCHEMY_RECORD_QUERIES&apos;, None)</span><br><span class="line">	app.config.setdefault(&apos;SQLALCHEMY_POOL_SIZE&apos;, None)</span><br><span class="line">	app.config.setdefault(&apos;SQLALCHEMY_POOL_TIMEOUT&apos;, None)</span><br><span class="line">	app.config.setdefault(&apos;SQLALCHEMY_POOL_RECYCLE&apos;, None)</span><br><span class="line">	app.config.setdefault(&apos;SQLALCHEMY_MAX_OVERFLOW&apos;, None)</span><br><span class="line">	app.config.setdefault(&apos;SQLALCHEMY_COMMIT_ON_TEARDOWN&apos;, False)</span><br><span class="line">	track_modifications = app.config.setdefault(</span><br><span class="line">	&apos;SQLALCHEMY_TRACK_MODIFICATIONS&apos;, None</span><br><span class="line">	)</span><br><span class="line">	</span><br><span class="line">	if track_modifications is None:</span><br><span class="line">		warnings.warn(FSADeprecationWarning(</span><br><span class="line">		&apos;SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhead and &apos;</span><br><span class="line">		&apos;will be disabled by default in the future. Set it to True &apos;</span><br><span class="line">		&apos;or False to suppress this warning.&apos;</span><br><span class="line">		))</span><br><span class="line">	</span><br><span class="line">	app.extensions[&apos;sqlalchemy&apos;] = _SQLAlchemyState(self)</span><br><span class="line">	</span><br><span class="line">	@app.teardown_appcontext</span><br><span class="line">	def shutdown_session(response_or_exc):</span><br><span class="line">		if app.config[&apos;SQLALCHEMY_COMMIT_ON_TEARDOWN&apos;]:</span><br><span class="line">			if response_or_exc is None:</span><br><span class="line">				self.session.commit()</span><br><span class="line">				</span><br><span class="line">				self.session.remove()</span><br><span class="line">	return response_or_exc</span><br></pre></td></tr></table></figure>
+<p><strong>create_app 方法的源码</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">def _execute_for_all_tables(self, app, bind, operation, skip_tables=False):</span><br><span class="line">	app = self.get_app(app)</span><br><span class="line">	</span><br><span class="line">	if bind == &apos;__all__&apos;:</span><br><span class="line">		binds = [None] + list(app.config.get(&apos;SQLALCHEMY_BINDS&apos;) or ())</span><br><span class="line">	elif isinstance(bind, string_types) or bind is None:</span><br><span class="line">		binds = [bind]</span><br><span class="line">	else:</span><br><span class="line">		binds = bind</span><br><span class="line">	</span><br><span class="line">	for bind in binds:</span><br><span class="line">		extra = &#123;&#125;</span><br><span class="line">		if not skip_tables:</span><br><span class="line">			tables = self.get_tables_for_bind(bind)</span><br><span class="line">			extra[&apos;tables&apos;] = tables</span><br><span class="line">			op = getattr(self.Model.metadata, operation)</span><br><span class="line">		op(bind=self.get_engine(app, bind), **extra)</span><br><span class="line">	</span><br><span class="line">	def create_all(self, bind=&apos;__all__&apos;, app=None):</span><br><span class="line">		&quot;&quot;&quot;Creates all tables.</span><br><span class="line">		</span><br><span class="line">		.. versionchanged:: 0.12</span><br><span class="line">		Parameters were added</span><br><span class="line">		&quot;&quot;&quot;</span><br><span class="line">		self._execute_for_all_tables(app, bind, &apos;create_all&apos;)</span><br></pre></td></tr></table></figure>
+<p>可以看到<code>create_all</code>方法调用了<code>_execute_for_all_tables</code>私有方法，<code>_execute_for_all_tables</code>里面第一行的<code>get_app</code>方法用来获取一个<code>app</code>核心对象</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">def get_app(self, reference_app=None):</span><br><span class="line">&quot;&quot;&quot;Helper method that implements the logic to look up an</span><br><span class="line">application.&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line"># 如果关键字参数的app不为空，就返回参数的app</span><br><span class="line">if reference_app is not None:</span><br><span class="line">return reference_app</span><br><span class="line"># 如果current_app不为空，则返回current_app</span><br><span class="line">if current_app:</span><br><span class="line">return current_app._get_current_object()</span><br><span class="line"># 如果对象的app属性不为空，则返回对象的app属性</span><br><span class="line">if self.app is not None:</span><br><span class="line">return self.app</span><br><span class="line"></span><br><span class="line">raise RuntimeError(</span><br><span class="line">&apos;No application found. Either work inside a view function or push&apos;</span><br><span class="line">&apos; an application context. See&apos;</span><br><span class="line">&apos; http://flask-sqlalchemy.pocoo.org/contexts/.&apos;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>所以通过三个判断，我们可以总结出三个不同的方法来解决我们遇到的问题。</p>
+<p>1.在<code>create_all</code> 中传入关键字参数<code>app</code>。也就是我们之前用过的。</p>
+<p>2.向堆栈中推入一条<code>app_context</code>，使得<code>current_app</code>不为空。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">with app.app_context():</span><br><span class="line">	db.create_all()</span><br></pre></td></tr></table></figure>
+<p>3.在初始化<code>flask_sqlalchemy</code>对象的时候，传入<code>app</code>参数。</p>
+<p>具体选取哪种方式，是根据情况而定的，比如我们当前的情况，就不合适使用第三种方法，因为我们的<code>flask_sqlalchemy</code>对象是在<code>models</code>中的<code>book.py</code>中的，如果用第三种方式，还需要在这里导入<code>app</code>对象。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag"># Python</a>
+          
+            <a href="/tags/Flask/" rel="tag"># Flask</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/11/Flask/1/" rel="next" title="慕课网Flask高级编程实战-知识点思维导图">
+                <i class="fa fa-chevron-left"></i> 慕课网Flask高级编程实战-知识点思维导图
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/11/Flask/Lesson for net Flask high-level programming of actual combat - mind mapping knowledge points/" rel="prev" title="慕课网Flask高级编程实战-知识点思维导图">
+                慕课网Flask高级编程实战-知识点思维导图 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://ooky9xe9n.bkt.clouddn.com/avatar.png"
+                alt="卡布奇诺" />
+            
+              <p class="site-author-name" itemprop="name">卡布奇诺</p>
+              <p class="site-description motion-element" itemprop="description">记录编程中遇到的坑</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">167</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">102</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/aopao1" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:admin@wujinyu.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#flask中经典错误-working-outside-application-context"><span class="nav-number">1.</span> <span class="nav-text">flask中经典错误 working outside application context</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#首先来个测试代码："><span class="nav-number">1.1.</span> <span class="nav-text">首先来个测试代码：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AppContext、RequestContext、Flask与Request之间的关系"><span class="nav-number">2.</span> <span class="nav-text">AppContext、RequestContext、Flask与Request之间的关系</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-定位AppContext、RequestContext"><span class="nav-number">2.1.</span> <span class="nav-text">1.定位AppContext、RequestContext</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-为什么需要上下文"><span class="nav-number">2.2.</span> <span class="nav-text">2.为什么需要上下文</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-对AppContext、RequestContext、Flask与Request的意义做出一个解释"><span class="nav-number">2.3.</span> <span class="nav-text">3.对AppContext、RequestContext、Flask与Request的意义做出一个解释</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#详解flask上下文与出入栈"><span class="nav-number">3.</span> <span class="nav-text">详解flask上下文与出入栈</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Flask工作原理"><span class="nav-number">3.1.</span> <span class="nav-text">Flask工作原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#flask上下文与with语句"><span class="nav-number">4.</span> <span class="nav-text">flask上下文与with语句</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">卡布奇诺@心情</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
